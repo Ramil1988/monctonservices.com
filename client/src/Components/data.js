@@ -121,7 +121,7 @@ export const items = {
     latinName: "Citrus limon caeruleum",
     description:
       "Fantastical, mythological item. Exists only in other universes",
-    imageSrc: "/assets/blue-lemon.jpg",
+    imageSrc: "/assets/Fitness.jpg",
     countryOfOrigin: "Valhalla",
     sellerId: "bob",
     price: 400,

@@ -7,10 +7,10 @@ const ListOfItems = ({ data }) => {
       <List>
         {data.map((item) => {
           return (
-            <ItemDiv>
+            <ItemDiv key={item.id}>
               <Link to={`/items/${item.id}`}>
-                <Fruit src={item.imageSrc}></Fruit>
-                <Divider></Divider>
+                <Fruit src={item.imageSrc} alt={item.name} />
+                <Divider />
                 <ItemName>{item.name}</ItemName>
               </Link>
             </ItemDiv>
@@ -31,12 +31,12 @@ const ItemDiv = styled.div`
   border-radius: 16px;
   border-color: black;
   padding: 30px;
-  width: 10%;
   font-family: "Raleway", sans-serif;
   box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02),
     0 6.7px 5.3px rgba(0, 0, 0, 0.028), 0 12.5px 10px rgba(0, 0, 0, 0.035),
     0 1.3px 17.9px rgba(0, 0, 0, 0.182), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
     0 100px 80px rgba(0, 0, 0, 0.07);
+
   & p {
     font-size: 20px;
     font-style: italic;
@@ -50,6 +50,11 @@ const ItemDiv = styled.div`
 
   &:hover {
     transform: scale(1.1);
+  }
+
+  @media screen and (max-width: 768px) {
+    margin: 10px;
+    padding: 20px;
   }
 `;
 
@@ -76,6 +81,11 @@ const Fruit = styled.img`
   height: 90px;
   border-radius: 16px;
   margin: 20px;
+
+  @media screen and (max-width: 768px) {
+    height: 60px;
+    margin: 10px;
+  }
 `;
 
 export default ListOfItems;
