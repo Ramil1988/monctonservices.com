@@ -20,6 +20,7 @@ const Homepage = (props) => {
       const userData = {
         userId: user.sub,
         name: user.name,
+        nickname: user.nickname,
         email: user.email,
       };
 
