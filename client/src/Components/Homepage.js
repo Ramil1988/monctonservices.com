@@ -7,9 +7,42 @@ import SearchBar from "./SearchBar";
 import ListOfItems from "./ListOfItems";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useContext, useEffect, useState } from "react";
 
 const Homepage = (props) => {
   const allFruits = Object.values(props.items);
+  const { user } = useAuth0();
+  console.log(user);
+
+  const saveUser = async () => {
+    try {
+      const userData = {
+        userId: user.sub,
+        name: user.name,
+        email: user.email,
+      };
+
+      const response = await fetch("/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: userData }),
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Error saving user:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      saveUser();
+    }
+  }, [user]);
 
   return (
     <>
