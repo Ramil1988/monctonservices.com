@@ -8,7 +8,7 @@ const ListOfItems = ({ data }) => {
         {data.map((item) => {
           return (
             <ItemDiv key={item.id}>
-              <Link to={`/items/${item.id}`}>
+              <Link to={`companies/${item.id}`}>
                 <Fruit src={item.imageSrc} alt={item.name} />
                 <Divider />
                 <ItemName>{item.name}</ItemName>

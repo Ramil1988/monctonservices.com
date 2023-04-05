@@ -1,234 +1,80 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 const RatingTable = () => {
-  const [data, setData] = useState([]);
-  const [place, setPlace] = useState("");
-  const [name, setName] = useState("");
-  const [rating, setRating] = useState("");
-  const [reviews, setReviews] = useState("");
-  const [editIndex, setEditIndex] = useState(null);
+  const { serviceType } = useParams();
+  const [companies, setCompanies] = useState([]);
 
-  const handleAdd = () => {
-    const newData = [...data, { place, name, rating, reviews }];
-    setData(newData);
-    setPlace("");
-    setName("");
-    setRating("");
-    setReviews("");
-  };
+  useEffect(() => {
+    fetchCompaniesByServiceType(serviceType);
+  }, [serviceType]);
 
-  const handleDelete = (index) => {
-    const newData = [...data];
-    newData.splice(index, 1);
-    setData(newData);
-  };
-
-  const handleEdit = (index) => {
-    setEditIndex(index);
-    const itemToEdit = data[index];
-    setPlace(itemToEdit.place);
-    setName(itemToEdit.name);
-    setRating(itemToEdit.rating);
-    setReviews(itemToEdit.reviews);
-  };
-
-  const handleSave = (index) => {
-    const newData = [...data];
-    newData[index] = { place, name, rating, reviews };
-    setData(newData);
-    setPlace("");
-    setName("");
-    setRating("");
-    setReviews("");
-    setEditIndex(null);
+  const fetchCompaniesByServiceType = async (serviceType) => {
+    try {
+      const response = await fetch(`/companies/${serviceType}`);
+      const data = await response.json();
+      const companies = data.data;
+      const sortedCompanies = companies.sort((a, b) => {
+        return b.reviews.length - a.reviews.length;
+      }); // Sort companies in descending order of review count
+      setCompanies(sortedCompanies);
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+    }
   };
 
   return (
-    <TableWrapper>
-      <Table>
-        <TableHead>
-          <TableHeadRow>
-            <TableHeadCell>Place</TableHeadCell>
-            <TableHeadCell>Name</TableHeadCell>
-            <TableHeadCell>Overall rating</TableHeadCell>
-            <TableHeadCell>Reviews</TableHeadCell>
-          </TableHeadRow>
-        </TableHead>
-        <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                {editIndex === index ? (
-                  <Input
-                    type="number"
-                    value={place}
-                    onChange={(event) => setPlace(event.target.value)}
-                  />
-                ) : (
-                  item.place
-                )}
-              </TableCell>
-              <TableCell>
-                {editIndex === index ? (
-                  <Input
-                    type="text"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                ) : (
-                  item.name
-                )}
-              </TableCell>
-              <TableCell>
-                {editIndex === index ? (
-                  <Input
-                    type="number"
-                    value={rating}
-                    onChange={(event) => setRating(event.target.value)}
-                  />
-                ) : (
-                  item.rating
-                )}
-              </TableCell>
-              <TableCell>
-                {editIndex === index ? (
-                  <Input
-                    type="number"
-                    value={reviews}
-                    onChange={(event) => setReviews(event.target.value)}
-                  />
-                ) : (
-                  item.reviews
-                )}
-              </TableCell>
-              <TableCell>
-                {editIndex === index ? (
-                  <Button onClick={() => handleSave(index)}>Save</Button>
-                ) : (
-                  <Button onClick={() => handleEdit(index)}>Edit</Button>
-                )}
-              </TableCell>
-              <TableCell>
-                <Button onClick={() => handleDelete(index)}>Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-          <TableRow>
-            <TableCell>
-              <Input
-                type="number"
-                value={place}
-                onChange={(event) => setPlace(event.target.value)}
-                placeholder="Place"
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                type="text"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="Name"
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                type="number"
-                value={rating}
-                onChange={(event) => setRating(event.target.value)}
-                placeholder="Overall rating"
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                type="number"
-                value={reviews}
-                onChange={(event) => setReviews(event.target.value)}
-                placeholder="Reviews"
-              />
-            </TableCell>
-            <TableCell>
-              <Button onClick={handleAdd}>Add</Button>
-            </TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableWrapper>
+    <Table>
+      <thead>
+        <tr>
+          <Th>Place</Th>
+          <Th>Name</Th>
+          <Th>Overall Rating</Th>
+          <Th>Reviews</Th>
+        </tr>
+      </thead>
+      <tbody>
+        {companies.map((company, index) => {
+          const averageRating = (
+            company.reviews.reduce((sum, review) => sum + review.grade, 0) /
+            company.reviews.length
+          ).toFixed(1);
+
+          return (
+            <tr key={company._id}>
+              <Td>{index + 1}</Td>
+              <Td>
+                <Link to={`/company/${company._id}`}>{company.name}</Link>
+              </Td>
+              <Td>{averageRating}</Td>
+              <Td>{company.reviews.length}</Td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </Table>
   );
 };
-
-const TableWrapper = styled.div`
-  margin: 20px;
-  background-color: #f5f5f5;
-  padding: 20px;
-`;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  border: 1px solid #d8d8d8;
 `;
 
-const TableHead = styled.thead`
-  background-color: #204c84;
-  color: #fff;
-`;
-
-const TableHeadRow = styled.tr``;
-
-const TableHeadCell = styled.th`
-  padding: 10px;
+const Th = styled.th`
   text-align: left;
-  font-weight: bold;
-  text-align: center;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #d8d8d8;
 `;
 
-const TableBody = styled.tbody``;
-
-const TableRow = styled.tr`
-  text-align: center;
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  &:hover {
-    background-color: #ddd;
-  }
-`;
-
-const TableCell = styled.td`
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-`;
-
-const Input = styled.input`
-  padding: 5px;
-  margin-right: 10px;
-  border-radius: 5px;
-  border: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-
-  &:focus {
-    outline: none;
-    border-color: #204c84;
-  }
-`;
-
-const Button = styled.button`
-  padding: 5px;
-  background-color: #204c84;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background-color: #fff;
-    color: #204c84;
-    border: 1px solid #204c84;
-  }
+const Td = styled.td`
+  text-align: left;
+  padding: 16px;
+  border: 1px solid #d8d8d8;
 `;
 
 export default RatingTable;

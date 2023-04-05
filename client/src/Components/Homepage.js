@@ -2,7 +2,6 @@ import logo from "../Pictures/logo.png";
 import styled from "styled-components";
 import { keyframes } from "styled-components";
 import { NavLink } from "react-router-dom";
-import RatingTable from "./RatingTable";
 import SearchBar from "./SearchBar";
 import ListOfItems from "./ListOfItems";
 import LoginButton from "./LoginButton";
@@ -60,7 +59,6 @@ const Homepage = (props) => {
       <MainWrapper>
         <SloganText>We are helping you to choose the best service!</SloganText>
         <ListOfItems data={allFruits} />
-        <RatingTable />
       </MainWrapper>
     </>
   );
