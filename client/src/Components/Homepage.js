@@ -10,9 +10,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useContext, useEffect, useState } from "react";
 
 const Homepage = (props) => {
-  const allFruits = Object.values(props.items);
+  const allItems = Object.values(props.items);
   const { user } = useAuth0();
-  console.log(user);
+ 
 
   const saveUser = async () => {
     try {
@@ -32,7 +32,6 @@ const Homepage = (props) => {
       });
 
       const result = await response.json();
-      console.log(result);
     } catch (error) {
       console.error("Error saving user:", error);
     }
@@ -58,7 +57,7 @@ const Homepage = (props) => {
       </Header>
       <MainWrapper>
         <SloganText>We are helping you to choose the best service!</SloganText>
-        <ListOfItems data={allFruits} />
+        <ListOfItems data={allItems} />
       </MainWrapper>
     </>
   );

@@ -18,7 +18,7 @@ const LoginButton = () => {
 
   return (
     <LoginIconWrapper
-      to={isAuthenticated ? `/Profile/${encodeURIComponent(user.name)}` : null}
+      to={isAuthenticated ? `/Profile/${encodeURIComponent(user.sub)}` : null}
       onClick={handleLoginClick}
     >
       <FaUserIcon />

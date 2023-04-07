@@ -3,23 +3,6 @@ import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useContext, useEffect, useState } from "react";
 
-const reviews = [
-  {
-    id: 1,
-    provider: "Plumbing Services Inc.",
-    rating: 4.5,
-    comment:
-      "Excellent service! The plumber arrived on time and was able to fix the issue quickly.",
-  },
-  {
-    id: 2,
-    provider: "Fitness Center",
-    rating: 3.0,
-    comment:
-      "The gym was too crowded and some of the equipment was not working properly.",
-  },
-];
-
 const bookmarks = [
   { id: 1, provider: "Plumbing Services Inc." },
   { id: 2, provider: "Fitness Center" },
@@ -28,20 +11,38 @@ const bookmarks = [
 
 const Profile = () => {
   const { user } = useAuth0();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    fetchUserReviews();
+  }, []);
+
+  const fetchUserReviews = async () => {
+    try {
+      const response = await fetch(`/user/reviews/${user.sub}`);
+      const data = await response.json();
+      setReviews(data.data);
+    } catch (error) {
+      console.error("Error fetching user reviews:", error);
+    }
+  };
+
+  if (user) {
+    console.log(user.sub);
+  } else {
+    console.log("User is not defined");
+  }
 
   return (
     <ProfileWrapper>
-      <Name>
-        {user.given_name} {} {user.family_name}{" "}
-      </Name>
-
+      <Name>{user.name}</Name>
       <ReviewsWrapper>
         <h3>Reviews</h3>
         {reviews.map((review) => (
-          <Review key={review.id}>
+          <Review key={review._id}>
             <ReviewProvider>{review.provider}</ReviewProvider>
-            <ReviewRating>{review.rating}</ReviewRating>
-            <ReviewComment>{review.comment}</ReviewComment>
+            <ReviewRating>{review.grade}</ReviewRating>
+            <ReviewComment>{review.text}</ReviewComment>
           </Review>
         ))}
       </ReviewsWrapper>

@@ -90,7 +90,7 @@ const createUser = async (req, res) => {
 const createReview = async (req, res) => {
   try {
     const { companyId } = req.params;
-    const { date, title, text, user, grade } = req.body;
+    const { date, title, text, grade } = req.body;
 
     await client.connect();
 
@@ -99,7 +99,6 @@ const createReview = async (req, res) => {
       date: date,
       title: title,
       text: text,
-      user: user,
       grade: grade,
     };
 
@@ -361,6 +360,37 @@ const getUserById = async (req, res) => {
   }
 };
 
+const getUserReviews = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await client.connect();
+    const user = await users.findOne({ _id: id });
+
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+        data: null,
+      });
+    }
+
+    const validReviews = user.Reviews.filter((review) => review !== null);
+
+    res.status(200).json({
+      status: 200,
+      message: "User reviews fetched successfully.",
+      data: validReviews,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Error fetching user reviews.",
+      data: error,
+    });
+  }
+};
+
 const updateCompany = async (req, res) => {
   try {
     const { id } = req.params;
@@ -504,6 +534,66 @@ const updateReview = async (req, res) => {
   }
 };
 
+const updateUserReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await client.connect();
+
+    const { date, title, text, grade } = req.body;
+
+    console.log("Received data:", req.body);
+
+    const user = await users.findOne({ _id: id });
+    console.log("User found:", user);
+
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+        data: null,
+      });
+    }
+
+    const review = {
+      _id: uuidv4(),
+      date: date,
+      title: title,
+      text: text,
+      grade: grade,
+    };
+
+    const userResult = await users.updateOne(
+      { _id: user._id },
+      { $push: { Reviews: review } }
+    );
+
+    await client.close();
+
+    if (userResult.modifiedCount === 0) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+        data: null,
+      });
+    }
+
+    return res.status(201).json({
+      status: 201,
+      message: `Review ${title} has been successfully added.`,
+      review: review,
+    });
+  } catch (error) {
+    console.error("Error adding review:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while adding the review.",
+      data: null,
+    });
+  }
+};
+
 const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
@@ -611,9 +701,11 @@ module.exports = {
   getReviewById,
   getAllUsers,
   getUserById,
+  getUserReviews,
   updateCompany,
   updateUser,
   updateReview,
+  updateUserReview,
   deleteReview,
   deleteCompany,
   deleteUser,

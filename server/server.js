@@ -16,8 +16,10 @@ const {
   getReviewById,
   getAllUsers,
   getUserById,
+  getUserReviews,
   updateCompany,
   updateUser,
+  updateUserReview,
   updateReview,
   deleteReview,
   deleteCompany,
@@ -44,11 +46,13 @@ express()
   .get("/review/:id", getReviewById)
   .get("/allUsers", getAllUsers)
   .get("/user/:id", getUserById)
+  .get("/user/reviews/:id", getUserReviews)
 
   // PATCH REST endpoints
   .patch("/company/:id", updateCompany)
   .patch("/user/:id", updateUser)
   .patch("/review/:id", updateReview)
+  .patch("/user/reviews/:id", updateUserReview)
 
   //DELETE REST endpoints
   .delete("/review/:id", deleteReview)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import Dialog from "@mui/material/Dialog";
@@ -8,12 +8,31 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import { UserContext } from "./UserContext";
+import { NavLink } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Company = () => {
   const { companyId } = useParams();
   const [company, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const { user, isAuthenticated } = useContext(UserContext);
+  const { loginWithRedirect } = useAuth0();
+
+  if (user) {
+    console.log(user.sub);
+  } else {
+    console.log("User is not defined");
+  }
+
+  const handleLoginClick = () => {
+    if (!isAuthenticated) {
+      loginWithRedirect({
+        appState: { returnTo: `/company/${companyId}` },
+      });
+    }
+  };
 
   useEffect(() => {
     fetchCompanyById(companyId);
@@ -35,9 +54,10 @@ const Company = () => {
       date: e.target.date.value,
       title: e.target.title.value,
       text: e.target.text.value,
-      user: e.target.user.value,
       grade: parseInt(e.target.grade.value, 10),
     };
+
+    console.log("Review data:", reviewData); // Log the review data
 
     try {
       const response = await fetch(`/company/review/${companyId}`, {
@@ -51,6 +71,17 @@ const Company = () => {
         setCompany(updatedCompany);
         setOpen(false);
         setShowConfirmation(true);
+
+        if (user) {
+          const userResponse = await fetch(`/user/reviews/${user.sub}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ review: reviewData }), // Send review data as an object property
+          });
+          if (!userResponse.ok) {
+            console.error("Error updating user review");
+          }
+        }
       } else {
         console.error("Error submitting review");
       }
@@ -89,15 +120,31 @@ const Company = () => {
         <Image src={company.image} alt={company.name} />
         <Address>{company.address}</Address>
         <Reviews>
-          {company.reviews.map((review) => (
-            <Review key={review._id}>
-              <Rating>{review.grade}</Rating>
-              <Comment>{review.text}</Comment>
-            </Review>
-          ))}
+          {company.reviews && company.reviews.length > 0 ? (
+            company.reviews.map((review) => (
+              <Review key={review._id}>
+                <Rating>{review.grade}</Rating>
+                <Comment>{review.text}</Comment>
+              </Review>
+            ))
+          ) : (
+            <p>No reviews found.</p>
+          )}
         </Reviews>
       </Content>
-      <Button onClick={() => setOpen(true)}>Add Review</Button>
+      {isAuthenticated ? (
+        <Button onClick={() => setOpen(true)}>Add Review</Button>
+      ) : (
+        <NavLinkStyled
+          to={
+            isAuthenticated ? `/Profile/${encodeURIComponent(user.name)}` : null
+          }
+          onClick={handleLoginClick}
+        >
+          Add Review
+        </NavLinkStyled>
+      )}
+
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add Review</DialogTitle>
         <form onSubmit={handleSubmit}>
@@ -129,15 +176,6 @@ const Company = () => {
                   fullWidth
                   multiline
                   rows={4}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <StyledTextField
-                  label="User"
-                  name="user"
-                  type="text"
-                  fullWidth
                   required
                 />
               </Grid>
@@ -223,6 +261,28 @@ const Comment = styled.div`
 const StyledTextField = styled(TextField)`
   && {
     margin-bottom: 16px;
+  }
+`;
+
+const NavLinkStyled = styled(NavLink)`
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  padding: 6px 16px;
+  min-width: 64px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.75;
+  text-transform: uppercase;
+  background-color: #e0e0e0;
+
+  &:hover {
+    background-color: #d5d5d5;
   }
 `;
 
