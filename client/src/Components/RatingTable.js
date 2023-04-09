@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import Spinner from "./Spinner";
 
 const RatingTable = () => {
   const { serviceType } = useParams();
@@ -24,6 +25,14 @@ const RatingTable = () => {
       console.error("Error fetching companies:", error);
     }
   };
+
+  if (companies.length === 0) {
+    return (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
+    );
+  }
 
   return (
     <Table>
@@ -57,6 +66,13 @@ const RatingTable = () => {
     </Table>
   );
 };
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+`;
 
 const Table = styled.table`
   width: 100%;

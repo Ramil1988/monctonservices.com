@@ -1,14 +1,13 @@
-import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaUser } from "react-icons/fa";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 const LoginButton = () => {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
-  const { user } = useContext(UserContext);
+  const { loginWithRedirect, isLoading: auth0IsLoading } = useAuth0();
+  const { currentUser, isAuthenticated } = useContext(UserContext);
 
   const handleLoginClick = () => {
     if (!isAuthenticated) {
@@ -18,7 +17,11 @@ const LoginButton = () => {
 
   return (
     <LoginIconWrapper
-      to={isAuthenticated ? `/Profile/${encodeURIComponent(user.sub)}` : null}
+      to={
+        isAuthenticated && currentUser
+          ? `/Profile/${encodeURIComponent(currentUser.sub)}`
+          : null
+      }
       onClick={handleLoginClick}
     >
       <FaUserIcon />

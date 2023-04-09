@@ -8,10 +8,12 @@ import Profile from "./Profile";
 import CompanyList from "./List";
 import RatingTable from "./RatingTable";
 import Company from "./Company";
+import Header from "./Header";
 
 const App = () => {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path="/" element={<Homepage items={serviceTypes} />} />
         <Route

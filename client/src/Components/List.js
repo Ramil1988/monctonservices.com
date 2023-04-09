@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import Spinner from "./Spinner";
 
 const CompanyList = () => {
   const [companies, setCompanies] = useState([]);
@@ -18,7 +19,7 @@ const CompanyList = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading companies...</div>;
+    return <Spinner />;
   }
 
   return (

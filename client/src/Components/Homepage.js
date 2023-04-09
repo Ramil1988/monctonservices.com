@@ -1,24 +1,25 @@
-import logo from "../Pictures/logo.png";
 import styled from "styled-components";
 import { keyframes } from "styled-components";
-import { NavLink } from "react-router-dom";
-import SearchBar from "./SearchBar";
-import ListOfItems from "./ListOfItems";
-import LoginButton from "./LoginButton";
-import LogoutButton from "./LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
+import ListOfItems from "./ListOfItems";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
   const { user } = useAuth0();
- 
+
+  useEffect(() => {
+    if (user) {
+      console.log("Auth0 user:", user); // Log the user object
+      saveUser();
+    }
+  }, [user]);
 
   const saveUser = async () => {
     try {
       const userData = {
         userId: user.sub,
-        name: user.name,
+        name: user.given_name,
         nickname: user.nickname,
         email: user.email,
       };
@@ -31,30 +32,14 @@ const Homepage = (props) => {
         body: JSON.stringify({ user: userData }),
       });
 
-      const result = await response.json();
+      await response.json();
     } catch (error) {
       console.error("Error saving user:", error);
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      saveUser();
-    }
-  }, [user]);
-
   return (
     <>
-      <Header>
-        <Logo to={`/`} onClick={window.location.reload}>
-          <img src={logo} alt="Logo" />
-        </Logo>
-        <SearchWrapper>
-          <SearchBar />
-        </SearchWrapper>
-        <LoginButton />
-        <LogoutButton />
-      </Header>
       <MainWrapper>
         <SloganText>We are helping you to choose the best service!</SloganText>
         <ListOfItems data={allItems} />
@@ -62,22 +47,6 @@ const Homepage = (props) => {
     </>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-`;
-
-const Logo = styled(NavLink)`
-  display: block;
-  & img {
-    width: 350px;
-    margin: 20px;
-  }
-`;
-
-const LoginIconWrapper = styled(NavLink)``;
 
 const MainWrapper = styled.div`
   padding: 20px;
@@ -115,13 +84,6 @@ const SloganText = styled.h1`
   white-space: nowrap;
   animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
   animation-fill-mode: forwards;
-`;
-
-const SearchWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 export default Homepage;

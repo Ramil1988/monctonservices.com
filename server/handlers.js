@@ -16,6 +16,8 @@ const database = client.db("MonctonServicesCom");
 const companies = database.collection("companies");
 const users = database.collection("users");
 
+client.connect();
+
 const createCompany = async (req, res) => {
   try {
     const { serviceType, name, address, image } = req.body;
@@ -52,64 +54,65 @@ const createCompany = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  const { userId, name, nickname, email } = req.body;
+
   try {
-    const { user } = req.body;
+    const existingUser = await users.findOne({ _id: userId });
 
-    await client.connect();
+    if (existingUser) {
+      res.status(200).json({ success: true, data: existingUser });
+    } else {
+      const newUser = {
+        _id: userId,
+        name: name,
+        nickname: nickname,
+        email: email,
+        reviews: [],
+        favorites: [],
+      };
 
-    const newUser = {
-      _id: user.userId,
-      name: user.name,
-      nickname: user.nickname,
-      email: user.email,
+      const result = await users.insertOne(newUser);
+      const insertedId = result.insertedId;
 
-      Reviews: [],
-      Favorites: [],
-    };
+      const savedUser = await users.findOne({ _id: insertedId });
 
-    const result = await users.insertOne(newUser);
-
-    await client.close();
-
-    return res.status(201).json({
-      status: 201,
-      message: "User successfully created.",
-      user: newUser,
-    });
+      res.status(201).json({ success: true, data: savedUser });
+    }
   } catch (error) {
     console.error("Error creating user:", error);
-    await client.close();
-    return res.status(500).json({
-      status: 500,
-      message: "An error occurred while creating the user.",
-      data: null,
-    });
+    res.status(500).json({ success: false, message: "Error creating user" });
   }
 };
 
 const createReview = async (req, res) => {
   try {
     const { companyId } = req.params;
-    const { date, title, text, grade } = req.body;
+    const { userId, date, title, text, grade } = req.body;
 
     await client.connect();
 
     const review = {
       _id: uuidv4(),
+      userId: userId,
       date: date,
       title: title,
       text: text,
       grade: grade,
     };
 
-    const result = await companies.updateOne(
+    const companyResult = await companies.updateOne(
       { _id: companyId },
+      { $push: { reviews: review } }
+    );
+
+    const userResult = await users.updateOne(
+      { _id: userId },
       { $push: { reviews: review } }
     );
 
     await client.close();
 
-    if (result.modifiedCount === 0) {
+    if (companyResult.modifiedCount === 0) {
       return res.status(404).json({
         status: 404,
         message: "Company not found.",

@@ -37,7 +37,7 @@ express()
   .post("/company", createCompany)
   .post("/company/review/:companyId", createReview)
   .post("/users/login", createUser)
-
+ 
   // GET REST endpoints
   .get("/allCompanies", getAllCompanies)
   .get("/companies/:serviceType", getCompaniesByServiceType)

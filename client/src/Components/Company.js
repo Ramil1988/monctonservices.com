@@ -11,17 +11,18 @@ import Grid from "@mui/material/Grid";
 import { UserContext } from "./UserContext";
 import { NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import Spinner from "./Spinner";
 
 const Company = () => {
   const { companyId } = useParams();
   const [company, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const { user, isAuthenticated } = useContext(UserContext);
+  const { currentUser, isAuthenticated } = useContext(UserContext);
   const { loginWithRedirect } = useAuth0();
 
-  if (user) {
-    console.log(user.sub);
+  if (currentUser) {
+    console.log(currentUser.sub);
   } else {
     console.log("User is not defined");
   }
@@ -51,6 +52,7 @@ const Company = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const reviewData = {
+      userId: currentUser.sub, // Add user ID here
       date: e.target.date.value,
       title: e.target.title.value,
       text: e.target.text.value,
@@ -71,17 +73,6 @@ const Company = () => {
         setCompany(updatedCompany);
         setOpen(false);
         setShowConfirmation(true);
-
-        if (user) {
-          const userResponse = await fetch(`/user/reviews/${user.sub}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ review: reviewData }), // Send review data as an object property
-          });
-          if (!userResponse.ok) {
-            console.error("Error updating user review");
-          }
-        }
       } else {
         console.error("Error submitting review");
       }
@@ -91,7 +82,11 @@ const Company = () => {
   };
 
   if (!company) {
-    return <div>Loading...</div>;
+    return (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
+    );
   }
 
   if (showConfirmation) {
@@ -137,7 +132,9 @@ const Company = () => {
       ) : (
         <NavLinkStyled
           to={
-            isAuthenticated ? `/Profile/${encodeURIComponent(user.name)}` : null
+            isAuthenticated
+              ? `/Profile/${encodeURIComponent(currentUser.name)}`
+              : null
           }
           onClick={handleLoginClick}
         >
@@ -202,6 +199,13 @@ const Company = () => {
     </Wrapper>
   );
 };
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+`;
 
 const Wrapper = styled.div`
   max-width: 800px;
