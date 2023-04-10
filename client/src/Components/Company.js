@@ -56,6 +56,7 @@ const Company = () => {
     const reviewData = {
       userId: currentUser.sub,
       userName: currentUser.nickname,
+      company: company.name,
       date: e.target.date.value,
       title: e.target.title.value,
       text: e.target.text.value,
@@ -82,6 +83,32 @@ const Company = () => {
     } catch (error) {
       console.error("Error submitting review:", error);
     }
+  };
+
+  const handleAddFavoriteClick = async () => {
+    if (currentUser) {
+      try {
+        const response = await fetch(`/user/favorite/${currentUser.sub}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            companyId: companyId,
+            companyName: company.name,
+          }),
+        });
+
+        if (response.ok) {
+          setNotification("Company added to favorites");
+        } else {
+          console.error("Error adding favorite");
+        }
+      } catch (error) {
+        console.error("Error adding favorite:", error);
+      }
+    } else {
+      setNotification("Please log in to add a company to favorites");
+    }
+    setTimeout(() => setNotification(null), 3000);
   };
 
   if (!company) {
@@ -130,21 +157,10 @@ const Company = () => {
           )}
         </Reviews>
       </Content>
-      {isAuthenticated ? (
-        <Button onClick={() => setOpen(true)}>Add Review</Button>
-      ) : (
-        <NavLinkStyled
-          to={
-            isAuthenticated
-              ? `/Profile/${encodeURIComponent(currentUser.name)}`
-              : null
-          }
-          onClick={handleAddReviewClick}
-        >
-          Add Review
-        </NavLinkStyled>
-      )}
-
+      <ButtonContainer>
+        <Button onClick={handleAddReviewClick}>Add Review</Button>
+        <Button onClick={handleAddFavoriteClick}>Add to Favorites</Button>
+      </ButtonContainer>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add Review</DialogTitle>
         <form onSubmit={handleSubmit}>
@@ -279,26 +295,11 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-const NavLinkStyled = styled(NavLink)`
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  display: inline-block;
-  padding: 6px 16px;
-  min-width: 64px;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.75;
-  text-transform: uppercase;
-  background-color: #e0e0e0;
-
-  &:hover {
-    background-color: #d5d5d5;
-  }
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 20px;
 `;
 
 const Notification = styled.div`

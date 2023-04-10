@@ -92,7 +92,7 @@ const createUser = async (req, res) => {
 const createReview = async (req, res) => {
   try {
     const { companyId } = req.params;
-    const { userId, userName, date, title, text, grade } = req.body;
+    const { userId, userName, company, date, title, text, grade } = req.body;
 
     await client.connect();
 
@@ -100,6 +100,7 @@ const createReview = async (req, res) => {
       _id: uuidv4(),
       userId: userId,
       userName: userName,
+      company: company,
       date: date,
       title: title,
       text: text,
@@ -137,6 +138,44 @@ const createReview = async (req, res) => {
     return res.status(500).json({
       status: 500,
       message: "An error occurred while adding the review.",
+      data: null,
+    });
+  }
+};
+
+const createFavorite = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { companyId, companyName } = req.body;
+
+    await client.connect();
+
+    const userResult = await users.updateOne(
+      { _id: userId },
+      { $addToSet: { favorites: { _id: companyId, name: companyName } } }
+    );
+
+    await client.close();
+
+    if (userResult.modifiedCount === 0) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: `Company ${companyName} has been successfully added to favorites.`,
+      data: null,
+    });
+  } catch (error) {
+    console.error("Error adding favorite:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while adding the favorite.",
       data: null,
     });
   }
@@ -383,7 +422,7 @@ const getUserReviews = async (req, res) => {
       });
     }
 
-    const validReviews = user.Reviews.filter((review) => review !== null);
+    const validReviews = user.reviews.filter((review) => review !== null);
 
     res.status(200).json({
       status: 200,
@@ -395,6 +434,40 @@ const getUserReviews = async (req, res) => {
       status: 500,
       message: "Error fetching user reviews.",
       data: error,
+    });
+  }
+};
+
+const getUserFavorites = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    await client.connect();
+    const user = await users.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+        data: null,
+      });
+    }
+
+    const validFavorites = user.favorites.filter(
+      (favorite) => favorite !== null
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: "User favorites fetched successfully.",
+      data: validFavorites,
+    });
+  } catch (error) {
+    console.error("Error fetching user favorites:", error);
+    res.status(500).json({
+      status: 500,
+      message: "Error fetching user favorites.",
+      data: { error: error.message },
     });
   }
 };
@@ -699,8 +772,9 @@ const deleteReview = async (req, res) => {
 
 module.exports = {
   createCompany,
-  createReview,
   createUser,
+  createReview,
+  createFavorite,
   getAllCompanies,
   getCompaniesByServiceType,
   getCompanyById,
@@ -709,6 +783,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   getUserReviews,
+  getUserFavorites,
   updateCompany,
   updateUser,
   updateReview,

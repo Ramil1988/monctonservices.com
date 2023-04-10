@@ -2,13 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
+import { NavLink } from "react-router-dom";
 
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
   const [reviews, setReviews] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     fetchUserReviews();
+    fetchUserFavorites();
   }, []);
 
   const fetchUserReviews = async () => {
@@ -18,6 +21,17 @@ const Profile = () => {
       setReviews(data.data.reviews);
     } catch (error) {
       console.error("Error fetching user reviews:", error);
+    }
+  };
+
+  const fetchUserFavorites = async () => {
+    try {
+      const response = await fetch(`/user/${currentUser.sub}`);
+      const data = await response.json();
+      setFavorites(data.data.favorites);
+      console.log(favorites);
+    } catch (error) {
+      console.error("Error fetching user favorites:", error);
     }
   };
 
@@ -41,12 +55,14 @@ const Profile = () => {
             </Review>
           ))}
       </ReviewsWrapper>
-
       <BookmarksWrapper>
-        <h3>Bookmarks</h3>
-        {/* {bookmarks.map((bookmark) => (
-          <Bookmark key={bookmark.id}>{bookmark.provider}</Bookmark>
-        ))} */}
+        <h3>Favorites</h3>
+        {favorites &&
+          favorites.map((favorite) => (
+            <NavLink to={`/company/${favorite._id}`} key={favorite._id}>
+              <Bookmark>{favorite.name}</Bookmark>
+            </NavLink>
+          ))}
       </BookmarksWrapper>
     </ProfileWrapper>
   );

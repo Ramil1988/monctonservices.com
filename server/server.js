@@ -7,8 +7,9 @@ const PORT = 4000;
 
 const {
   createCompany,
-  createReview,
   createUser,
+  createReview,
+  createFavorite,
   getAllCompanies,
   getCompaniesByServiceType,
   getCompanyById,
@@ -17,6 +18,7 @@ const {
   getAllUsers,
   getUserById,
   getUserReviews,
+  getUserFavorites,
   updateCompany,
   updateUser,
   updateReview,
@@ -37,6 +39,7 @@ express()
   .post("/company", createCompany)
   .post("/company/review/:companyId", createReview)
   .post("/user/login", createUser)
+  .post("/user/favorite/:userId", createFavorite)
 
   // GET REST endpoints
   .get("/allCompanies", getAllCompanies)
@@ -47,6 +50,7 @@ express()
   .get("/allUsers", getAllUsers)
   .get("/user/:id", getUserById)
   .get("/user/reviews/:id", getUserReviews)
+  .get("/user/favorites/:userId", getUserFavorites)
 
   // PATCH REST endpoints
   .patch("/company/:id", updateCompany)
