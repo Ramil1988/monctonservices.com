@@ -10,8 +10,9 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { UserContext } from "./UserContext";
 import { NavLink } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import Spinner from "./Spinner";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Company = () => {
   const { companyId } = useParams();
@@ -19,7 +20,7 @@ const Company = () => {
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { currentUser, isAuthenticated } = useContext(UserContext);
-  const { loginWithRedirect } = useAuth0();
+  const [notification, setNotification] = useState(null);
 
   if (currentUser) {
     console.log(currentUser.sub);
@@ -27,11 +28,12 @@ const Company = () => {
     console.log("User is not defined");
   }
 
-  const handleLoginClick = () => {
-    if (!isAuthenticated) {
-      loginWithRedirect({
-        appState: { returnTo: `/company/${companyId}` },
-      });
+  const handleAddReviewClick = () => {
+    if (currentUser) {
+      setOpen(true);
+    } else {
+      setNotification("Please log in to leave a review");
+      setTimeout(() => setNotification(null), 3000);
     }
   };
 
@@ -52,7 +54,8 @@ const Company = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const reviewData = {
-      userId: currentUser.sub, // Add user ID here
+      userId: currentUser.sub,
+      userName: currentUser.nickname,
       date: e.target.date.value,
       title: e.target.title.value,
       text: e.target.text.value,
@@ -136,7 +139,7 @@ const Company = () => {
               ? `/Profile/${encodeURIComponent(currentUser.name)}`
               : null
           }
-          onClick={handleLoginClick}
+          onClick={handleAddReviewClick}
         >
           Add Review
         </NavLinkStyled>
@@ -196,6 +199,14 @@ const Company = () => {
           </DialogActions>
         </form>
       </Dialog>
+      {notification && (
+        <Notification>
+          <NotificationText>{notification}</NotificationText>
+          <CloseButton onClick={() => setNotification(null)}>
+            <CloseIcon />
+          </CloseButton>
+        </Notification>
+      )}
     </Wrapper>
   );
 };
@@ -288,6 +299,33 @@ const NavLinkStyled = styled(NavLink)`
   &:hover {
     background-color: #d5d5d5;
   }
+`;
+
+const Notification = styled.div`
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  background-color: #4caf50;
+  color: white;
+  font-size: 20px;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  opacity: 70%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const CloseButton = styled(IconButton)`
+  color: white;
+  margin-left: 8px;
+  padding: 8px;
+  margin-top: -8px;
+`;
+
+const NotificationText = styled.div`
+  margin-right: 20px;
 `;
 
 export default Company;

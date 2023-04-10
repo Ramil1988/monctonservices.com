@@ -20,9 +20,10 @@ const {
   updateCompany,
   updateUser,
   updateReview,
-  deleteReview,
   deleteCompany,
   deleteUser,
+  deleteAllReviewsForCompany,
+  deleteReview,
 } = require("./handlers");
 
 express()
@@ -53,8 +54,10 @@ express()
   .patch("/review/:id", updateReview)
 
   //DELETE REST endpoints
-  .delete("/review/:id", deleteReview)
+
   .delete("/company/:id", deleteCompany)
   .delete("/user/:id", deleteUser)
+  .delete("/allReviews/company/:id", deleteAllReviewsForCompany)
+  .delete("/review/:id", deleteReview)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

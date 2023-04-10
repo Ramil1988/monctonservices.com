@@ -92,13 +92,14 @@ const createUser = async (req, res) => {
 const createReview = async (req, res) => {
   try {
     const { companyId } = req.params;
-    const { userId, date, title, text, grade } = req.body;
+    const { userId, userName, date, title, text, grade } = req.body;
 
     await client.connect();
 
     const review = {
       _id: uuidv4(),
       userId: userId,
+      userName: userName,
       date: date,
       title: title,
       text: text,
@@ -208,6 +209,7 @@ const getCompanyById = async (req, res) => {
     const { id } = req.params;
 
     await client.connect();
+
     const company = await companies.findOne({ _id: id });
 
     await client.close();
@@ -216,22 +218,19 @@ const getCompanyById = async (req, res) => {
       return res.status(404).json({
         status: 404,
         message: "Company not found.",
-        data: null,
       });
     }
 
     return res.status(200).json({
       status: 200,
-      message: "Company retrieved successfully.",
       data: company,
     });
   } catch (error) {
-    console.error("Error fetching company by ID:", error);
+    console.error("Error getting company by ID:", error);
     await client.close();
     return res.status(500).json({
       status: 500,
-      message: "An error occurred while fetching the company by ID.",
-      data: null,
+      message: "An error occurred while fetching the company.",
     });
   }
 };
@@ -339,10 +338,9 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
 
-
     await client.connect();
     const user = await users.findOne({ _id: id });
-    console.log(id)
+    console.log(id);
 
     await client.close();
 
@@ -544,41 +542,6 @@ const updateReview = async (req, res) => {
   }
 };
 
-const deleteReview = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    await client.connect();
-
-    const { value: updatedCompany } = await companies.findOneAndUpdate(
-      { "reviews._id": id },
-      { $pull: { reviews: { _id: id } } },
-      { returnOriginal: false }
-    );
-
-    await client.close();
-
-    if (!updatedCompany) {
-      return res.status(404).json({
-        status: 404,
-        message: "Review not found.",
-      });
-    }
-
-    return res.status(200).json({
-      status: 200,
-      message: "Review deleted successfully.",
-    });
-  } catch (error) {
-    console.error("Error deleting review:", error);
-    await client.close();
-    return res.status(500).json({
-      status: 500,
-      message: "An error occurred while deleting the review.",
-    });
-  }
-};
-
 const deleteCompany = async (req, res) => {
   try {
     const { id } = req.params;
@@ -640,6 +603,100 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const deleteAllReviewsForCompany = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await client.connect();
+
+    // Find all reviews related to the specified company
+    const companyReviews = await companies.findOne(
+      { _id: id },
+      { projection: { reviews: 1 } }
+    );
+
+    if (!companyReviews) {
+      return res.status(404).json({
+        status: 404,
+        message: "Company not found.",
+      });
+    }
+
+    // Extract review IDs
+    const reviewIds = companyReviews.reviews.map((review) => review._id);
+
+    // Delete all reviews from the specified company
+    const { value: updatedCompany } = await companies.findOneAndUpdate(
+      { _id: id },
+      { $set: { reviews: [] } },
+      { returnOriginal: false }
+    );
+
+    // Delete all reviews related to the specified company from all users
+    await users.updateMany(
+      { "reviews._id": { $in: reviewIds } },
+      { $pull: { reviews: { _id: { $in: reviewIds } } } }
+    );
+
+    await client.close();
+
+    return res.status(200).json({
+      status: 200,
+      message: "All reviews for the company deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting all reviews for the company:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while deleting all reviews for the company.",
+    });
+  }
+};
+
+const deleteReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await client.connect();
+
+    // Delete review from company
+    const { value: updatedCompany } = await companies.findOneAndUpdate(
+      { "reviews._id": id },
+      { $pull: { reviews: { _id: id } } },
+      { returnOriginal: false }
+    );
+
+    // Delete review from user
+    const { value: updatedUser } = await users.findOneAndUpdate(
+      { "reviews._id": id },
+      { $pull: { reviews: { _id: id } } },
+      { returnOriginal: false }
+    );
+
+    await client.close();
+
+    if (!updatedCompany || !updatedUser) {
+      return res.status(404).json({
+        status: 404,
+        message: "Review not found.",
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Review deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while deleting the review.",
+    });
+  }
+};
+
 module.exports = {
   createCompany,
   createReview,
@@ -655,7 +712,8 @@ module.exports = {
   updateCompany,
   updateUser,
   updateReview,
-  deleteReview,
   deleteCompany,
   deleteUser,
+  deleteAllReviewsForCompany,
+  deleteReview,
 };
