@@ -119,7 +119,7 @@ const Company = () => {
             company.reviews.map((review) => (
               <Review key={review._id}>
                 <Rating>{review.grade}</Rating>
-                <Comment>{review.text}</Comment>
+                <Comment>{review.title}</Comment>
               </Review>
             ))
           ) : (

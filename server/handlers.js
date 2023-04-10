@@ -54,7 +54,9 @@ const createCompany = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { userId, name, nickname, email } = req.body;
+  const { user } = req.body;
+  const { userId, name, nickname, email } = user;
+  await client.connect();
 
   try {
     const existingUser = await users.findOne({ _id: userId });
@@ -72,9 +74,12 @@ const createUser = async (req, res) => {
       };
 
       const result = await users.insertOne(newUser);
+      console.log("Received user data:", result);
+
       const insertedId = result.insertedId;
 
       const savedUser = await users.findOne({ _id: insertedId });
+      await client.close();
 
       res.status(201).json({ success: true, data: savedUser });
     }
@@ -334,8 +339,10 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
 
+
     await client.connect();
     const user = await users.findOne({ _id: id });
+    console.log(id)
 
     await client.close();
 
@@ -537,66 +544,6 @@ const updateReview = async (req, res) => {
   }
 };
 
-const updateUserReview = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    await client.connect();
-
-    const { date, title, text, grade } = req.body;
-
-    console.log("Received data:", req.body);
-
-    const user = await users.findOne({ _id: id });
-    console.log("User found:", user);
-
-    if (!user) {
-      return res.status(404).json({
-        status: 404,
-        message: "User not found.",
-        data: null,
-      });
-    }
-
-    const review = {
-      _id: uuidv4(),
-      date: date,
-      title: title,
-      text: text,
-      grade: grade,
-    };
-
-    const userResult = await users.updateOne(
-      { _id: user._id },
-      { $push: { Reviews: review } }
-    );
-
-    await client.close();
-
-    if (userResult.modifiedCount === 0) {
-      return res.status(404).json({
-        status: 404,
-        message: "User not found.",
-        data: null,
-      });
-    }
-
-    return res.status(201).json({
-      status: 201,
-      message: `Review ${title} has been successfully added.`,
-      review: review,
-    });
-  } catch (error) {
-    console.error("Error adding review:", error);
-    await client.close();
-    return res.status(500).json({
-      status: 500,
-      message: "An error occurred while adding the review.",
-      data: null,
-    });
-  }
-};
-
 const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
@@ -708,7 +655,6 @@ module.exports = {
   updateCompany,
   updateUser,
   updateReview,
-  updateUserReview,
   deleteReview,
   deleteCompany,
   deleteUser,

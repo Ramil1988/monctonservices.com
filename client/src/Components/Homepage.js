@@ -1,42 +1,9 @@
 import styled from "styled-components";
 import { keyframes } from "styled-components";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
 import ListOfItems from "./ListOfItems";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
-  const { user } = useAuth0();
-
-  useEffect(() => {
-    if (user) {
-      console.log("Auth0 user:", user); // Log the user object
-      saveUser();
-    }
-  }, [user]);
-
-  const saveUser = async () => {
-    try {
-      const userData = {
-        userId: user.sub,
-        name: user.given_name,
-        nickname: user.nickname,
-        email: user.email,
-      };
-
-      const response = await fetch("/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: userData }),
-      });
-
-      await response.json();
-    } catch (error) {
-      console.error("Error saving user:", error);
-    }
-  };
 
   return (
     <>

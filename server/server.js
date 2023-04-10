@@ -19,7 +19,6 @@ const {
   getUserReviews,
   updateCompany,
   updateUser,
-  updateUserReview,
   updateReview,
   deleteReview,
   deleteCompany,
@@ -36,8 +35,8 @@ express()
   // POST REST endpoints
   .post("/company", createCompany)
   .post("/company/review/:companyId", createReview)
-  .post("/users/login", createUser)
- 
+  .post("/user/login", createUser)
+
   // GET REST endpoints
   .get("/allCompanies", getAllCompanies)
   .get("/companies/:serviceType", getCompaniesByServiceType)
@@ -52,7 +51,6 @@ express()
   .patch("/company/:id", updateCompany)
   .patch("/user/:id", updateUser)
   .patch("/review/:id", updateReview)
-  .patch("/user/reviews/:id", updateUserReview)
 
   //DELETE REST endpoints
   .delete("/review/:id", deleteReview)
