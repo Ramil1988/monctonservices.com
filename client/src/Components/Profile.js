@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { NavLink } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
@@ -29,9 +31,29 @@ const Profile = () => {
       const response = await fetch(`/user/${currentUser.sub}`);
       const data = await response.json();
       setFavorites(data.data.favorites);
-      console.log(favorites);
     } catch (error) {
       console.error("Error fetching user favorites:", error);
+    }
+  };
+
+  const handleRemoveFavoriteClick = async (companyId) => {
+    console.log(companyId);
+    try {
+      const response = await fetch(`/user/remove-favorite/${currentUser.sub}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          companyId: companyId,
+        }),
+      });
+
+      if (response.ok) {
+        fetchUserFavorites(); // Refresh the favorites list
+      } else {
+        console.error("Error removing favorite");
+      }
+    } catch (error) {
+      console.error("Error removing favorite:", error);
     }
   };
 
@@ -59,9 +81,16 @@ const Profile = () => {
         <h3>Favorites</h3>
         {favorites &&
           favorites.map((favorite) => (
-            <NavLink to={`/company/${favorite._id}`} key={favorite._id}>
-              <Bookmark>{favorite.name}</Bookmark>
-            </NavLink>
+            <FavoriteContainer key={favorite._id}>
+              <NavLink to={`/company/${favorite._id}`}>
+                <Bookmark>{favorite.name}</Bookmark>
+              </NavLink>
+              <RemoveFavoriteButton
+                onClick={() => handleRemoveFavoriteClick(favorite._id)}
+              >
+                <CloseIcon />
+              </RemoveFavoriteButton>
+            </FavoriteContainer>
           ))}
       </BookmarksWrapper>
     </ProfileWrapper>
@@ -113,6 +142,19 @@ const BookmarksWrapper = styled.div`
 const Bookmark = styled.div`
   margin-bottom: 1rem;
   font-weight: 600;
+`;
+
+const FavoriteContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+`;
+
+const RemoveFavoriteButton = styled(IconButton)`
+  color: #e74c3c;
+  padding: 0;
 `;
 
 export default Profile;

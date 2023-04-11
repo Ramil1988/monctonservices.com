@@ -20,7 +20,7 @@ client.connect();
 
 const createCompany = async (req, res) => {
   try {
-    const { serviceType, name, address, image } = req.body;
+    const { serviceType, name, address, phoneNumber, image } = req.body;
 
     await client.connect();
 
@@ -29,6 +29,7 @@ const createCompany = async (req, res) => {
       serviceType: serviceType,
       name: name,
       address: address,
+      phoneNumber: phoneNumber,
       image: image,
       reviews: [],
     };
@@ -665,6 +666,7 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     await client.connect();
+    console.log(id);
 
     const result = await users.deleteOne({ _id: id });
 
@@ -785,6 +787,58 @@ const deleteReview = async (req, res) => {
   }
 };
 
+const removeFavorite = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { companyId } = req.body;
+
+    await client.connect();
+
+    const user = await users.findOne({ _id: userId });
+
+    if (!user) {
+      await client.close();
+      console.log("User not found");
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+      });
+    }
+
+    const favoriteCompany = user.favorites.find(
+      (favorite) => favorite._id === companyId
+    );
+
+    if (!favoriteCompany) {
+      await client.close();
+      console.log("Company not in favorites");
+      return res.status(404).json({
+        status: 404,
+        message: "User not found or company not in favorites.",
+      });
+    }
+
+    const userResult = await users.updateOne(
+      { _id: userId },
+      { $pull: { favorites: { _id: companyId } } }
+    );
+
+    await client.close();
+
+    return res.status(200).json({
+      status: 200,
+      message: `Company ${favoriteCompany.name} has been successfully removed from favorites.`,
+    });
+  } catch (error) {
+    console.error("Error removing favorite:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while removing the favorite.",
+    });
+  }
+};
+
 module.exports = {
   createCompany,
   createUser,
@@ -806,4 +860,5 @@ module.exports = {
   deleteUser,
   deleteAllReviewsForCompany,
   deleteReview,
+  removeFavorite,
 };

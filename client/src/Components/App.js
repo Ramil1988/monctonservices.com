@@ -1,8 +1,6 @@
 import React from "react";
 import { serviceTypes } from "./serviceTypes";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Homepage from "./Homepage";
 import Profile from "./Profile";
 import CompanyList from "./List";

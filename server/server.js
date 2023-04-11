@@ -26,6 +26,7 @@ const {
   deleteUser,
   deleteAllReviewsForCompany,
   deleteReview,
+  removeFavorite,
 } = require("./handlers");
 
 express()
@@ -40,6 +41,7 @@ express()
   .post("/company/review/:companyId", createReview)
   .post("/user/login", createUser)
   .post("/user/favorite/:userId", createFavorite)
+  .post("/user/remove-favorite/:userId", removeFavorite)
 
   // GET REST endpoints
   .get("/allCompanies", getAllCompanies)

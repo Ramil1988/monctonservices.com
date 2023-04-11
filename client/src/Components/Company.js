@@ -144,6 +144,7 @@ const Company = () => {
       <Content>
         <Image src={company.image} alt={company.name} />
         <Address>{company.address}</Address>
+        <Address>{company.phoneNumber}</Address>
         <Reviews>
           {company.reviews && company.reviews.length > 0 ? (
             company.reviews.map((review) => (
