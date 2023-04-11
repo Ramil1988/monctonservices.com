@@ -9,7 +9,6 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { UserContext } from "./UserContext";
-import { NavLink } from "react-router-dom";
 import Spinner from "./Spinner";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,7 +18,7 @@ const Company = () => {
   const [company, setCompany] = useState(null);
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const [notification, setNotification] = useState(null);
 
   if (currentUser) {
@@ -92,6 +91,7 @@ const Company = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            userId: currentUser.sub,
             companyId: companyId,
             companyName: company.name,
           }),
@@ -99,8 +99,8 @@ const Company = () => {
 
         if (response.ok) {
           setNotification("Company added to favorites");
-        } else {
-          console.error("Error adding favorite");
+        } else if (response.status === 409) {
+          setNotification("The company is already in your favorites");
         }
       } catch (error) {
         console.error("Error adding favorite:", error);

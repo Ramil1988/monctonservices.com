@@ -145,25 +145,40 @@ const createReview = async (req, res) => {
 
 const createFavorite = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const { companyId, companyName } = req.body;
+    const { userId, companyId, companyName } = req.body; // Update this line
 
     await client.connect();
 
-    const userResult = await users.updateOne(
-      { _id: userId },
-      { $addToSet: { favorites: { _id: companyId, name: companyName } } }
-    );
+    const user = await users.findOne({ _id: userId });
 
-    await client.close();
-
-    if (userResult.modifiedCount === 0) {
+    if (!user) {
+      await client.close();
       return res.status(404).json({
         status: 404,
         message: "User not found.",
         data: null,
       });
     }
+
+    const alreadyAdded = user.favorites.some(
+      (favorite) => favorite._id === companyId
+    );
+
+    if (alreadyAdded) {
+      await client.close();
+      return res.status(409).json({
+        status: 409,
+        message: "The company is already in the user's favorites.",
+        data: null,
+      });
+    }
+
+    await users.updateOne(
+      { _id: userId },
+      { $addToSet: { favorites: { _id: companyId, name: companyName } } }
+    );
+
+    await client.close();
 
     return res.status(200).json({
       status: 200,
