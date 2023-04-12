@@ -82,7 +82,7 @@ const LoginIconWrapper = styled(NavLink)`
   margin: 20px;
   margin-left: 20px;
   cursor: pointer;
-  color: #204c84;
+  color: black;
 
   &:hover {
     transform: scale(1.1);

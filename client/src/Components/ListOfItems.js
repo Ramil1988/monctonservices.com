@@ -22,6 +22,7 @@ const ListOfItems = ({ data }) => {
 };
 
 const ItemDiv = styled.div`
+  width: 150px;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -49,7 +50,8 @@ const ItemDiv = styled.div`
   }
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    cursor: pointer;
   }
 
   @media screen and (max-width: 768px) {
@@ -60,7 +62,7 @@ const ItemDiv = styled.div`
 
 const ItemName = styled.h1`
   text-decoration: none;
-  color: #204c84;
+  color: black;
   font-size: 20px;
 `;
 

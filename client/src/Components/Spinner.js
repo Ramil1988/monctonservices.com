@@ -18,9 +18,9 @@ const SpinnerWrapper = styled.div`
   display: inline-block;
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(0, 0, 0, 0.1);
+  border: 3px solid black;
   border-radius: 50%;
-  border-top-color: #3498db;
+  border-top-color: white;
   animation: ${rotate} 1s linear infinite;
 `;
 

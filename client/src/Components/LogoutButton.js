@@ -23,7 +23,7 @@ const LogoutButton = () => {
 
 const StyledButton = styled.button`
   background-color: #fff;
-  color: #204c84;
+  color: black;
   border: none;
   padding: 8px;
   font-size: 1rem;

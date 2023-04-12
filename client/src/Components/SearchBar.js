@@ -49,7 +49,7 @@ const SearchInput = styled.input`
   height: 30px;
   font-size: 20px;
   border: 2px solid;
-  border-color: #204c84;
+  border-color: black;
 
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -75,7 +75,7 @@ const SearchButton = styled.button`
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
-  background-color: #204c84;
+  background-color: black;
   color: white;
   font-size: 16px;
   cursor: pointer;

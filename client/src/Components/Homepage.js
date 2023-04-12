@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { keyframes } from "styled-components";
 import ListOfItems from "./ListOfItems";
+import PopularServices from "./PopularServices";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
@@ -10,6 +11,8 @@ const Homepage = (props) => {
       <MainWrapper>
         <SloganText>What are you looking for?</SloganText>
         <ListOfItems data={allItems} />
+        <PopularServicesText>Popular Services</PopularServicesText>
+        <PopularServices />
       </MainWrapper>
     </>
   );
@@ -17,8 +20,7 @@ const Homepage = (props) => {
 
 const MainWrapper = styled.div`
   padding: 20px;
-
-  background: linear-gradient(to bottom, #204c84, rgba(20, 78, 137, 0.3));
+  background: lightgray;
   transition: background 0.5s;
 `;
 
@@ -36,14 +38,13 @@ const blinkCursor = keyframes`
     border-color: transparent;
   }
   50% {
-    border-color: #204c84;
+    border-color: black;
   }
 `;
 
 const SloganText = styled.h1`
   margin-bottom: 50px;
-  color: white;
-  font-style: italic;
+  color: black;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
@@ -51,6 +52,16 @@ const SloganText = styled.h1`
   white-space: nowrap;
   animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
   animation-fill-mode: forwards;
+`;
+
+const PopularServicesText = styled.h1`
+  margin-bottom: 50px;
+  color: black;
+  font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 export default Homepage;

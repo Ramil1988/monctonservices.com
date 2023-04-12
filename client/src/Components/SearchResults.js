@@ -44,6 +44,18 @@ const SearchResults = () => {
     return groups;
   };
 
+  const highlightMatches = (text, searchValue) => {
+    const regex = new RegExp(`(${searchValue})`, "gi");
+    const parts = text.split(regex);
+    return parts.map((part, index) => {
+      return part.toLowerCase() === searchValue.toLowerCase() ? (
+        <HighlightedText key={index}>{part}</HighlightedText>
+      ) : (
+        part
+      );
+    });
+  };
+
   const renderList = () => {
     const groupedMatches = groupCompaniesByType(
       matches.slice(
@@ -59,7 +71,7 @@ const SearchResults = () => {
         renderedItems.push(
           <StyledLi key={company._id}>
             <NavLink to={`/company/${company._id}`}>
-              {company.name} - {company.serviceType}
+              {highlightMatches(company.name, value)} - {company.serviceType}
             </NavLink>
           </StyledLi>
         );
@@ -104,22 +116,20 @@ const SearchResults = () => {
 };
 
 const StyledSearchWrapper = styled.div`
-  width: 100%;
+  width: 97%;
   height: 100%;
-  margin: 0 auto;
   padding: 20px;
-  background: #204c84;
+  background: lightgray;
   transition: background 0.5s;
 
   & h1 {
-    color: white;
+    color: black;
   }
 `;
 
 const StyledUl = styled.ul`
   list-style: none;
   padding: 0;
-  height: 50vh;
 `;
 
 const StyledLi = styled.li`
@@ -131,7 +141,7 @@ const StyledLi = styled.li`
   }
   & a {
     text-decoration: none;
-    color: white;
+    color: black;
   }
 `;
 
@@ -140,7 +150,7 @@ const StyledType = styled.li`
   margin-top: 10px;
   font-size: 20px;
   padding: 5px 10px;
-  color: white;
+  color: black;
   border: 2px solid white;
   display: inline-block;
   margin-right: 10px;
@@ -154,16 +164,16 @@ const StyledInputsuggestion = styled.input`
   border: 1px solid gray;
   margin-right: 15px;
   &:focus {
-    outline-color: blue;
+    outline-color: black;
   }
 `;
 
 const StyledClearButton = styled.button`
   background-color: white;
-  color: #204c84;
+  color: black;
   border-radius: 5px;
   padding: 10px 20px;
-  border: 1px solid blue;
+  border: 1px solid black;
   transition: color 0.2s ease-in-out;
 
   &:hover {
@@ -178,8 +188,8 @@ const StyledPagination = styled.div`
 `;
 
 const StyledPageButton = styled.button`
-  background-color: ${({ active }) => (active ? "white" : "#204c84")};
-  color: ${({ active }) => (active ? "#204c84" : "white")};
+  background-color: ${({ active }) => (active ? "black" : "white")};
+  color: ${({ active }) => (active ? "white" : "black")};
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -192,6 +202,12 @@ const StyledPageButton = styled.button`
   &:hover {
     transform: scale(1.1);
   }
+`;
+
+const HighlightedText = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: underline;
 `;
 
 export default SearchResults;

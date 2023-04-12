@@ -19,11 +19,17 @@ export const serviceTypes = {
     name: "Fitness",
     imageSrc: "/assets/Fitness.jpg",
   },
-  banks: {
-    id: "banks",
-    name: "Banks",
-    imageSrc: "/assets/Banks.jpg",
+  autodealership: {
+    id: "autodealership",
+    name: "Auto dealerships",
+    imageSrc: "/assets/AutoDealers.jpg",
   },
+
+  // banks: {
+  //   id: "banks",
+  //   name: "Banks",
+  //   imageSrc: "/assets/Banks.jpg",
+  // },
 
   // plumbing: {
   //   id: "plumbing",
@@ -39,11 +45,6 @@ export const serviceTypes = {
   //   id: "autorepair",
   //   name: "Auto Repair",
   //   imageSrc: "/assets/AutoRepair.jpg",
-  // },
-  // autodealers: {
-  //   id: "autodealers",
-  //   name: "Auto Dealers",
-  //   imageSrc: "/assets/AutoDealers.jpg",
   // },
   // insurance: {
   //   id: "insurance",

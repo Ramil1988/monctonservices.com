@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../Pictures/logo.png";
+import logo from "../Pictures/logo-black.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
@@ -66,7 +66,7 @@ const InnerWrapper = styled.div`
     margin-left: 1.5rem;
     font-size: 1.2rem;
     font-weight: 600;
-    color: #204c84;
+    color: black;
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -74,6 +74,17 @@ const InnerWrapper = styled.div`
 
     &:hover {
       transform: scale(1.1);
+    }
+
+    &:after {
+      display: block;
+      content: "";
+      border-bottom: solid 3px white;
+      transform: scaleX(0);
+      transition: transform 500ms ease-in-out;
+    }
+    &:hover:after {
+      transform: scaleX(1);
     }
   }
 `;
@@ -107,7 +118,7 @@ const UserName = styled.div`
   margin-right: 1rem;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #204c84;
+  color: black;
 `;
 
 export default Header;

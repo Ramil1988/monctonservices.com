@@ -2,24 +2,6 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-const services = [
-  { name: "Plumbing", category: "Home" },
-  { name: "Home repair", category: "Home" },
-  { name: "Home cleaning", category: "Home" },
-
-  { name: "Auto Repair", category: "Automotive" },
-  { name: "Auto Dealers", category: "Automotive" },
-
-  { name: "Beauty salons", category: "Health and beauty" },
-  { name: "Fitness Training", category: "Health and beauty" },
-  { name: "Legal services", category: "Business services" },
-  { name: "Banks", category: "Business" },
-  { name: "IT services", category: "Business" },
-  { name: "Tourism", category: "Entertainments" },
-
-  { name: "Vet clinics", category: "Pet care" },
-];
-
 const ListOfServices = () => {
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -55,15 +37,6 @@ const ListOfServices = () => {
   );
 };
 
-const categories = [
-  "Home",
-  "Automotive",
-  "Health and beauty",
-  "Business",
-  "Entertainments",
-  "Pet care",
-];
-
 const ListOfServicesWrapper = styled.div`
   position: relative;
 `;
@@ -86,12 +59,12 @@ const Category = styled.div`
   cursor: pointer;
   font-size: 20px;
   font-weight: 600;
-  color: #204c84;
+  color: black;
   transition: all 0.2s ease-in-out;
 
   &:hover {
     color: #fff;
-    background-color: #204c84;
+    background-color: black;
     transform: scale(1.1);
   }
 `;

@@ -7,6 +7,7 @@ import RatingTable from "./RatingTable";
 import Company from "./Company";
 import Header from "./Header";
 import SearchResults from "./SearchResults";
+import Footer from "./test";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="companies/:serviceType" element={<RatingTable />} />
         <Route path="company/:companyId" element={<Company />} />
         <Route path="/searchresults" element={<SearchResults />} />
+        <Route path="/test" element={<Footer />} />
       </Routes>
     </BrowserRouter>
   );
