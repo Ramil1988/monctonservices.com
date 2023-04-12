@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { FaSearch } from "react-icons/fa";
+import { FaHome, FaBook, FaSearch } from "react-icons/fa";
 
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
@@ -18,13 +18,23 @@ const Header = () => {
         <Logo to={`/`} onClick={window.location.reload}>
           <img src={logo} alt="Logo" />
         </Logo>
+        <div className="nav-links">
+          <NavLink className="nav-link" to="/" exact>
+            <StyledIcon as={FaHome} />
+            Home
+          </NavLink>
+          <NavLink className="nav-link" to="/about">
+            <StyledIcon as={FaBook} />
+            About
+          </NavLink>
+          <NavLink className="nav-link" to="/searchresults">
+            <StyledIcon as={FaSearch} />
+            Search
+          </NavLink>
+        </div>
         <UserWrapper>
           {currentUser && <UserName>Hello, {currentUser.name}</UserName>}
-          <SearchWrapper>
-            <NavLink to="/searchresults">
-              <SearchIcon />
-            </NavLink>
-          </SearchWrapper>
+          <SearchWrapper></SearchWrapper>
           <LoginButton />
           {currentUser && <LogoutButton />}
         </UserWrapper>
@@ -35,7 +45,7 @@ const Header = () => {
 
 const Wrapper = styled.header`
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 2px 4px rgba(1, 2, 0, 0.1);
   width: 100%;
 `;
 
@@ -46,6 +56,26 @@ const InnerWrapper = styled.div`
   margin: 0 auto;
   padding: 15px 20px;
   max-width: 1200px;
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-link {
+    margin-left: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #204c84;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 `;
 
 const Logo = styled(NavLink)`
@@ -63,11 +93,9 @@ const SearchWrapper = styled.div`
   justify-content: center;
 `;
 
-const SearchIcon = styled(FaSearch)`
-  font-size: 24px;
-  cursor: pointer;
-  margin-left: 10px;
-  color: #204c84;
+const StyledIcon = styled.span`
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
 `;
 
 const UserWrapper = styled.div`

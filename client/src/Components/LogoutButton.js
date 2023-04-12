@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
+import { FaSignOutAlt } from "react-icons/fa";
 
 const LogoutButton = () => {
   const { logout } = useAuth0();
@@ -12,24 +13,36 @@ const LogoutButton = () => {
     logoutUser();
   };
 
-  return <StyledButton onClick={handleLogout}>Log Out</StyledButton>;
+  return (
+    <StyledButton onClick={handleLogout}>
+      <StyledIcon />
+      <span>Log out</span>
+    </StyledButton>
+  );
 };
 
 const StyledButton = styled.button`
-  background-color: #204c84;
-  color: #ffffff;
+  background-color: #fff;
+  color: #204c84;
   border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
+  padding: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background-color: #163959;
+    transform: scale(1.1);
   }
+`;
+
+const StyledIcon = styled(FaSignOutAlt)`
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
 `;
 
 export default LogoutButton;

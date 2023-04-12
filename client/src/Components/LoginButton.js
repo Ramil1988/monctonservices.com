@@ -84,7 +84,9 @@ const LoginIconWrapper = styled(NavLink)`
   cursor: pointer;
   color: #204c84;
 
- 
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const FaUserIcon = styled(FaUser)``;

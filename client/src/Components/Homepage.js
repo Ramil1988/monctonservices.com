@@ -8,7 +8,7 @@ const Homepage = (props) => {
   return (
     <>
       <MainWrapper>
-        <SloganText>We are helping you to choose the best service!</SloganText>
+        <SloganText>What are you looking for?</SloganText>
         <ListOfItems data={allItems} />
       </MainWrapper>
     </>

@@ -9,7 +9,7 @@ const ListOfItems = ({ data }) => {
           return (
             <ItemDiv key={item.id}>
               <Link to={`companies/${item.id}`}>
-                <Fruit src={item.imageSrc} alt={item.name} />
+                <Item src={item.imageSrc} alt={item.name} />
                 <Divider />
                 <ItemName>{item.name}</ItemName>
               </Link>
@@ -77,7 +77,7 @@ const Divider = styled.div`
   margin: auto;
 `;
 
-const Fruit = styled.img`
+const Item = styled.img`
   height: 90px;
   border-radius: 16px;
   margin: 20px;
