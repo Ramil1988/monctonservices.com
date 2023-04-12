@@ -5,12 +5,12 @@ import { FaSearch } from "react-icons/fa";
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = () => {
-    onSearch(searchTerm);
-  };
-
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    onSearch(searchTerm);
   };
 
   return (
@@ -22,6 +22,7 @@ const SearchBar = ({ onSearch }) => {
         onChange={handleInputChange}
         placeholder="What are you looking for?"
       />
+      <SearchButton onClick={handleSearchClick}>Search</SearchButton>
     </SearchBarWrapper>
   );
 };
@@ -67,6 +68,20 @@ const SearchIcon = styled(FaSearch)`
     font-size: 20px;
     left: 0;
     margin-left: 10px;
+  }
+`;
+
+const SearchButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #204c84;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #16324f;
   }
 `;
 

@@ -80,16 +80,11 @@ const LoginButton = () => {
 const LoginIconWrapper = styled(NavLink)`
   font-size: 24px;
   margin: 20px;
-  margin-left: 120px;
+  margin-left: 20px;
   cursor: pointer;
   color: #204c84;
 
-  &:hover {
-    color: #fff;
-    background-color: #204c84;
-    border-radius: 50%;
-    padding: 5px;
-  }
+ 
 `;
 
 const FaUserIcon = styled(FaUser)``;

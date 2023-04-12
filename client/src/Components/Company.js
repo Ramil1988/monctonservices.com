@@ -4,14 +4,14 @@ import styled from "styled-components";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
+import DialogActions from "@mui/material/DialogActions"; 
+import Button from "@mui/material/Button"; //
+import TextField from "@mui/material/TextField"; //
+import Grid from "@mui/material/Grid"; //
 import { UserContext } from "./UserContext";
 import Spinner from "./Spinner";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton"; //
+import CloseIcon from "@mui/icons-material/Close"; 
 
 const Company = () => {
   const { companyId } = useParams();

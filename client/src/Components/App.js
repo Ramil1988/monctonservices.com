@@ -3,10 +3,10 @@ import { serviceTypes } from "./serviceTypes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage";
 import Profile from "./Profile";
-import CompanyList from "./List";
 import RatingTable from "./RatingTable";
 import Company from "./Company";
 import Header from "./Header";
+import SearchResults from "./SearchResults";
 
 const App = () => {
   return (
@@ -18,9 +18,9 @@ const App = () => {
           path="/Profile/:profileId"
           element={<Profile items={serviceTypes} />}
         />
-        <Route path="/all" element={<CompanyList items={serviceTypes} />} />
         <Route path="companies/:serviceType" element={<RatingTable />} />
         <Route path="company/:companyId" element={<Company />} />
+        <Route path="/searchresults" element={<SearchResults />} />
       </Routes>
     </BrowserRouter>
   );
