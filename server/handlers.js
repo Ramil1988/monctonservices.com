@@ -36,8 +36,6 @@ const createCompany = async (req, res) => {
 
     await companies.insertOne(company);
 
-    await client.close();
-
     return res.status(201).json({
       status: 201,
       message: `Company ${name} successfully created.`,
@@ -80,7 +78,6 @@ const createUser = async (req, res) => {
       const insertedId = result.insertedId;
 
       const savedUser = await users.findOne({ _id: insertedId });
-      await client.close();
 
       res.status(201).json({ success: true, data: savedUser });
     }
@@ -117,8 +114,6 @@ const createReview = async (req, res) => {
       { _id: userId },
       { $push: { reviews: review } }
     );
-
-    await client.close();
 
     if (companyResult.modifiedCount === 0) {
       return res.status(404).json({
@@ -179,8 +174,6 @@ const createFavorite = async (req, res) => {
       { $addToSet: { favorites: { _id: companyId, name: companyName } } }
     );
 
-    await client.close();
-
     return res.status(200).json({
       status: 200,
       message: `Company ${companyName} has been successfully added to favorites.`,
@@ -202,8 +195,6 @@ const getAllCompanies = async (req, res) => {
     await client.connect();
 
     const allCompanies = await companies.find().toArray();
-
-    await client.close();
 
     return res.status(200).json({
       status: 200,
@@ -232,8 +223,6 @@ const getCompaniesByServiceType = async (req, res) => {
     const matchingCompanies = await companies
       .find({ serviceType: formattedServiceType })
       .toArray();
-
-    await client.close();
 
     if (matchingCompanies.length === 0) {
       return res.status(404).json({
@@ -266,8 +255,6 @@ const getCompanyById = async (req, res) => {
     await client.connect();
 
     const company = await companies.findOne({ _id: id });
-
-    await client.close();
 
     if (!company) {
       return res.status(404).json({
@@ -303,8 +290,6 @@ const getAllReviews = async (req, res) => {
       }))
     );
 
-    await client.close();
-
     return res.status(200).json({
       status: 200,
       message: "All reviews retrieved successfully.",
@@ -330,8 +315,6 @@ const getReviewById = async (req, res) => {
     const companies = database.collection("companies");
 
     const companyWithReview = await companies.findOne({ "reviews._id": id });
-
-    await client.close();
 
     if (!companyWithReview) {
       return res.status(404).json({
@@ -396,8 +379,6 @@ const getUserById = async (req, res) => {
     await client.connect();
     const user = await users.findOne({ _id: id });
     console.log(id);
-
-    await client.close();
 
     if (!user) {
       return res.status(404).json({
@@ -509,8 +490,6 @@ const updateCompany = async (req, res) => {
       { returnOriginal: false }
     );
 
-    await client.close();
-
     if (!updatedCompany) {
       return res.status(404).json({
         status: 404,
@@ -554,8 +533,6 @@ const updateUser = async (req, res) => {
       { $set: updatedFields },
       { returnOriginal: false }
     );
-
-    await client.close();
 
     if (!updatedUser) {
       return res.status(404).json({
@@ -601,8 +578,6 @@ const updateReview = async (req, res) => {
       { returnOriginal: false }
     );
 
-    await client.close();
-
     if (!updatedCompany) {
       return res.status(404).json({
         status: 404,
@@ -638,8 +613,6 @@ const deleteCompany = async (req, res) => {
     await client.connect();
     const result = await companies.deleteOne({ _id: id });
 
-    await client.close();
-
     if (result.deletedCount === 0) {
       return res.status(404).json({
         status: 404,
@@ -669,8 +642,6 @@ const deleteUser = async (req, res) => {
     console.log(id);
 
     const result = await users.deleteOne({ _id: id });
-
-    await client.close();
 
     if (result.deletedCount === 0) {
       return res.status(404).json({
@@ -712,17 +683,14 @@ const deleteAllReviewsForCompany = async (req, res) => {
       });
     }
 
-    // Extract review IDs
     const reviewIds = companyReviews.reviews.map((review) => review._id);
 
-    // Delete all reviews from the specified company
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { _id: id },
       { $set: { reviews: [] } },
       { returnOriginal: false }
     );
 
-    // Delete all reviews related to the specified company from all users
     await users.updateMany(
       { "reviews._id": { $in: reviewIds } },
       { $pull: { reviews: { _id: { $in: reviewIds } } } }
@@ -750,14 +718,12 @@ const deleteReview = async (req, res) => {
 
     await client.connect();
 
-    // Delete review from company
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { "reviews._id": id },
       { $pull: { reviews: { _id: id } } },
       { returnOriginal: false }
     );
 
-    // Delete review from user
     const { value: updatedUser } = await users.findOneAndUpdate(
       { "reviews._id": id },
       { $pull: { reviews: { _id: id } } },
@@ -822,8 +788,6 @@ const removeFavorite = async (req, res) => {
       { _id: userId },
       { $pull: { favorites: { _id: companyId } } }
     );
-
-    await client.close();
 
     return res.status(200).json({
       status: 200,

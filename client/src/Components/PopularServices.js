@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { serviceTypes } from "./serviceTypes";
+import { AiFillStar } from "react-icons/ai";
 
 const PopularServices = () => {
   const [servicesData, setServicesData] = useState([]);
@@ -50,16 +51,32 @@ const PopularServices = () => {
         <ServiceBox key={service.id}>
           <ServiceTitle>{service.name}</ServiceTitle>
           <TopCompanies>
-            {service.topCompanies.map((company, index) => (
-              <Company key={company._id}>
-                <Name to={`/company/${company._id}`}>
-                  <CompanyName> {company.name}</CompanyName>
-                </Name>
-                <CompanyReviews>
-                  {company.reviews.length} reviews
-                </CompanyReviews>
-              </Company>
-            ))}
+            {service.topCompanies.map((company, index) => {
+              const averageGrade = company.reviews.length
+                ? (
+                    company.reviews.reduce(
+                      (sum, review) => sum + review.grade,
+                      0
+                    ) / company.reviews.length
+                  ).toFixed(1)
+                : 0;
+              return (
+                <Company key={company._id}>
+                  <Wrapper>
+                    <Name to={`/company/${company._id}`}>
+                      <CompanyName>{company.name}</CompanyName>
+                    </Name>
+                    <AverageGrade>
+                      <AiFillStar />
+                      {averageGrade}
+                    </AverageGrade>
+                  </Wrapper>
+                  <CompanyReviews>
+                    {company.reviews.length} reviews
+                  </CompanyReviews>
+                </Company>
+              );
+            })}
           </TopCompanies>
         </ServiceBox>
       ))}
@@ -105,11 +122,19 @@ const TopCompanies = styled.ul`
   margin-bottom: 5px;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
+
 const Company = styled.li`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  margin-bottom: 15px;
 `;
 
 const CompanyName = styled.span`
@@ -125,6 +150,19 @@ const Name = styled(Link)`
 
   &:hover {
     background-color: lightblue;
+  }
+`;
+
+const AverageGrade = styled.span`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  margin-right: 5px;
+
+  svg {
+    color: gold;
+    margin-right: 2px;
   }
 `;
 

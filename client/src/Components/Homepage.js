@@ -1,23 +1,43 @@
 import styled from "styled-components";
 import { keyframes } from "styled-components";
+import { useState, useEffect } from "react";
 import ListOfItems from "./ListOfItems";
 import PopularServices from "./PopularServices";
+import Reviews from "./Reviews";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    fetchAllReviews();
+  }, []);
+
+  const fetchAllReviews = async () => {
+    try {
+      const response = await fetch("/allReviews");
+      const data = await response.json();
+      setReviews(data.data);
+    } catch (error) {
+      console.error("Error fetching all reviews:", error);
+    }
+  };
+
+  console.log(reviews);
 
   return (
     <>
       <MainWrapper>
         <SloganText>What are you looking for?</SloganText>
         <ListOfItems data={allItems} />
-        <PopularServicesText>Popular Services</PopularServicesText>
+        <BigText>Popular Services</BigText>
         <PopularServices />
+        <BigText>Recent reviews</BigText>
+        <Reviews reviews={reviews} />
       </MainWrapper>
     </>
   );
 };
-
 const MainWrapper = styled.div`
   padding: 20px;
   background: lightgray;
@@ -43,7 +63,7 @@ const blinkCursor = keyframes`
 `;
 
 const SloganText = styled.h1`
-  margin-bottom: 50px;
+  margin: 30px 20px;
   color: black;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -54,10 +74,10 @@ const SloganText = styled.h1`
   animation-fill-mode: forwards;
 `;
 
-const PopularServicesText = styled.h1`
-  margin-bottom: 50px;
+const BigText = styled.h1`
+  margin: 40px 20px;
   color: black;
-  font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
   overflow: hidden;

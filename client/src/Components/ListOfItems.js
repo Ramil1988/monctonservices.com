@@ -27,7 +27,7 @@ const ItemDiv = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 50px;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
   background-color: white;
   border-radius: 16px;
   border-color: black;
