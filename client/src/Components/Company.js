@@ -4,14 +4,14 @@ import styled from "styled-components";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions"; 
+import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button"; //
 import TextField from "@mui/material/TextField"; //
 import Grid from "@mui/material/Grid"; //
 import { UserContext } from "./UserContext";
 import Spinner from "./Spinner";
 import IconButton from "@mui/material/IconButton"; //
-import CloseIcon from "@mui/icons-material/Close"; 
+import CloseIcon from "@mui/icons-material/Close";
 
 const Company = () => {
   const { companyId } = useParams();
@@ -20,12 +20,6 @@ const Company = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { currentUser } = useContext(UserContext);
   const [notification, setNotification] = useState(null);
-
-  if (currentUser) {
-    console.log(currentUser.sub);
-  } else {
-    console.log("User is not defined");
-  }
 
   const handleAddReviewClick = () => {
     if (currentUser) {
@@ -62,8 +56,6 @@ const Company = () => {
       grade: parseInt(e.target.grade.value, 10),
     };
 
-    console.log("Review data:", reviewData); // Log the review data
-
     try {
       const response = await fetch(`/company/review/${companyId}`, {
         method: "POST",
@@ -94,6 +86,7 @@ const Company = () => {
             userId: currentUser.sub,
             companyId: companyId,
             companyName: company.name,
+            serviceType: company.serviceType,
           }),
         });
 

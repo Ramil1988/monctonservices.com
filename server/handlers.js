@@ -73,7 +73,6 @@ const createUser = async (req, res) => {
       };
 
       const result = await users.insertOne(newUser);
-      console.log("Received user data:", result);
 
       const insertedId = result.insertedId;
 
@@ -141,7 +140,7 @@ const createReview = async (req, res) => {
 
 const createFavorite = async (req, res) => {
   try {
-    const { userId, companyId, companyName } = req.body; // Update this line
+    const { userId, companyId, companyName, serviceType } = req.body;
 
     await client.connect();
 
@@ -171,7 +170,15 @@ const createFavorite = async (req, res) => {
 
     await users.updateOne(
       { _id: userId },
-      { $addToSet: { favorites: { _id: companyId, name: companyName } } }
+      {
+        $addToSet: {
+          favorites: {
+            _id: companyId,
+            name: companyName,
+            serviceType: serviceType,
+          },
+        },
+      }
     );
 
     return res.status(200).json({
@@ -378,7 +385,6 @@ const getUserById = async (req, res) => {
 
     await client.connect();
     const user = await users.findOne({ _id: id });
-    console.log(id);
 
     if (!user) {
       return res.status(404).json({
@@ -639,7 +645,7 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     await client.connect();
-    console.log(id);
+ 
 
     const result = await users.deleteOne({ _id: id });
 
@@ -764,7 +770,6 @@ const removeFavorite = async (req, res) => {
 
     if (!user) {
       await client.close();
-      console.log("User not found");
       return res.status(404).json({
         status: 404,
         message: "User not found.",
@@ -777,7 +782,6 @@ const removeFavorite = async (req, res) => {
 
     if (!favoriteCompany) {
       await client.close();
-      console.log("Company not in favorites");
       return res.status(404).json({
         status: 404,
         message: "User not found or company not in favorites.",

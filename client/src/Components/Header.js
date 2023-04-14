@@ -87,13 +87,30 @@ const InnerWrapper = styled.div`
       transform: scaleX(1);
     }
   }
+
+  @media (max-width: 1070px) {
+    .nav-links {
+      margin-top: 0;
+    }
+
+    .nav-link {
+      margin-left: 0;
+      margin-right: 1.5rem;
+    }
+  }
 `;
 
 const Logo = styled(NavLink)`
   display: block;
+
   & img {
     width: 400px;
     margin: 0 -80px;
+
+    @media (max-width: 871px) {
+      width: 150px;
+      margin: 0;
+    }
   }
 `;
 
@@ -112,6 +129,12 @@ const StyledIcon = styled.span`
 const UserWrapper = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 1070px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
 `;
 
 const UserName = styled.div`
@@ -119,6 +142,10 @@ const UserName = styled.div`
   font-size: 1.2rem;
   font-weight: 600;
   color: black;
+
+  @media (max-width: 1070px) {
+    display: none;
+  }
 `;
 
 export default Header;

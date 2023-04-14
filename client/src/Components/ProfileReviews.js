@@ -1,18 +1,9 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const Reviews = ({ reviews }) => {
-  const [recentReviews, setRecentReviews] = useState([]);
-
-  useEffect(() => {
-    const sortedReviews = [...reviews].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
-    setRecentReviews(sortedReviews.slice(0, 9));
-  }, [reviews]);
-
+const ProfileReviews = ({ reviews }) => {
   const [startIndex, setStartIndex] = useState(0);
 
   const handlePrevious = () => {
@@ -22,10 +13,12 @@ const Reviews = ({ reviews }) => {
   };
 
   const handleNext = () => {
-    setStartIndex(startIndex === recentReviews.length - 3 ? 0 : startIndex + 3);
+    if (startIndex < reviews.length - 3) {
+      setStartIndex(startIndex + 3);
+    }
   };
 
-  const visibleReviews = recentReviews.slice(startIndex, startIndex + 3);
+  const visibleReviews = reviews.slice(startIndex, startIndex + 3);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -46,9 +39,8 @@ const Reviews = ({ reviews }) => {
           <Review key={review._id}>
             <StyledLink to={`/review/${review._id}`}>
               <ReviewTitle>{review.title}</ReviewTitle>
-              <ReviewAuthor>By {review.userName}</ReviewAuthor>
               <ReviewDate>On {formatDate(review.date)}</ReviewDate>
-              <ReviewCompany>Company: {review.companyName}</ReviewCompany>
+              <ReviewCompany>Company: {review.company}</ReviewCompany>
               <ReviewGrade>
                 <AiFillStar />
                 {review.grade}
@@ -57,7 +49,10 @@ const Reviews = ({ reviews }) => {
           </Review>
         ))}
       </ReviewsContainer>
-      <ReviewNavigation onClick={handleNext}>
+      <ReviewNavigation
+        disabled={startIndex >= reviews.length - 3}
+        onClick={handleNext}
+      >
         <AiOutlineRight />
       </ReviewNavigation>
     </ReviewsWrapper>
@@ -73,7 +68,8 @@ const ReviewsWrapper = styled.div`
 
 const ReviewsContainer = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 50px;
+  margin: 0px 20px;
 `;
 
 const Review = styled.div`
@@ -88,6 +84,16 @@ const Review = styled.div`
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: calc(33.33% - 20px);
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.028), 0 12.5px 10px rgba(0, 0, 0, 0.035),
+    0 1.3px 17.9px rgba(0, 0, 0, 0.182), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+    0 100px 80px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -111,11 +117,6 @@ const ReviewTitle = styled.h2`
   margin-bottom: 10px;
 `;
 
-const ReviewAuthor = styled.p`
-  font-size: 16px;
-  margin-bottom: 5px;
-`;
-
 const ReviewDate = styled.div`
   font-size: 14px;
   text-align: right;
@@ -125,7 +126,7 @@ const ReviewDate = styled.div`
 
 const ReviewCompany = styled.p`
   font-size: 16px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 `;
 
 const ReviewGrade = styled.div`
@@ -154,4 +155,4 @@ const ReviewNavigation = styled.button`
   }
 `;
 
-export default Reviews;
+export default ProfileReviews;

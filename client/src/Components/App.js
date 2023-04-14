@@ -7,6 +7,7 @@ import RatingTable from "./RatingTable";
 import Company from "./Company";
 import Header from "./Header";
 import SearchResults from "./SearchResults";
+import Review from "./Review";
 import Footer from "./test";
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="company/:companyId" element={<Company />} />
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/test" element={<Footer />} />
+        <Route path="/review/:id" element={<Review />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { keyframes } from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import ProfileReviews from "./ProfileReviews";
 
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
@@ -20,7 +22,10 @@ const Profile = () => {
     try {
       const response = await fetch(`/user/${currentUser.sub}`);
       const data = await response.json();
-      setReviews(data.data.reviews);
+      const sortedReviews = data.data.reviews.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
+      setReviews(sortedReviews);
     } catch (error) {
       console.error("Error fetching user reviews:", error);
     }
@@ -36,8 +41,9 @@ const Profile = () => {
     }
   };
 
-  const handleRemoveFavoriteClick = async (companyId) => {
-    console.log(companyId);
+  const handleRemoveFavoriteClick = async (event, companyId) => {
+    event.stopPropagation();
+  
     try {
       const response = await fetch(`/user/remove-favorite/${currentUser.sub}`, {
         method: "POST",
@@ -48,7 +54,7 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        fetchUserFavorites(); // Refresh the favorites list
+        fetchUserFavorites();
       } else {
         console.error("Error removing favorite");
       }
@@ -57,42 +63,42 @@ const Profile = () => {
     }
   };
 
-  if (currentUser) {
-    console.log(currentUser.sub);
-  } else {
-    console.log("User is not defined");
-  }
-
   return (
     <ProfileWrapper>
-      <Name>{currentUser.name}</Name>
-      <ReviewsWrapper>
-        <h3>Reviews</h3>
-        {reviews &&
-          reviews.map((review) => (
-            <Review key={review._id}>
-              <ReviewProvider>{review.provider}</ReviewProvider>
-              <ReviewRating>{review.grade}</ReviewRating>
-              <ReviewComment>{review.title}</ReviewComment>
-            </Review>
-          ))}
-      </ReviewsWrapper>
-      <BookmarksWrapper>
-        <h3>Favorites</h3>
-        {favorites &&
-          favorites.map((favorite) => (
-            <FavoriteContainer key={favorite._id}>
-              <NavLink to={`/company/${favorite._id}`}>
-                <Bookmark>{favorite.name}</Bookmark>
-              </NavLink>
-              <RemoveFavoriteButton
-                onClick={() => handleRemoveFavoriteClick(favorite._id)}
-              >
-                <CloseIcon />
-              </RemoveFavoriteButton>
-            </FavoriteContainer>
-          ))}
-      </BookmarksWrapper>
+      <Name>
+        <span>Nice to see you again</span> {currentUser.name}!
+      </Name>
+      <SectionWrapper>
+        <h2>Your Reviews</h2>
+        <ProfileReviews reviews={reviews} />
+      </SectionWrapper>
+      <SectionWrapper>
+        <h2>Favorites</h2>
+        <FavoriteGrid>
+          {favorites &&
+            favorites.map((favorite) => (
+              <FavoriteContainer key={favorite._id}>
+                <Bookmark>
+                  <HeaderWrapper>
+                    <StyledNavLink to={`/company/${favorite._id}`}>
+                      <FavoriteName>{favorite.name}</FavoriteName>
+                    </StyledNavLink>
+                    <RemoveFavoriteButton
+                      onClick={(event) =>
+                        handleRemoveFavoriteClick(event, favorite._id)
+                      }
+                    >
+                      <CloseIcon />
+                    </RemoveFavoriteButton>
+                  </HeaderWrapper>
+                  <StyledNavLink to={`/company/${favorite._id}`}>
+                    <FavoriteType>{favorite.serviceType}</FavoriteType>
+                  </StyledNavLink>
+                </Bookmark>
+              </FavoriteContainer>
+            ))}
+        </FavoriteGrid>
+      </SectionWrapper>
     </ProfileWrapper>
   );
 };
@@ -100,61 +106,116 @@ const Profile = () => {
 const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
+const typing = keyframes`
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+`;
+
+const blinkCursor = keyframes`
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: black;
+  }
+`;
 const Name = styled.h2`
-  font-size: 2rem;
+  font-size: 1.8rem;
+  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-weight: 700;
+  line-height: 44px;
   margin-bottom: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
+  animation-fill-mode: forwards;
+
+  & span {
+    font-style: italic;
+  }
 `;
 
-const ReviewsWrapper = styled.div`
+const SectionWrapper = styled.div`
   margin-bottom: 2rem;
+  width: 100%;
 `;
 
-const Review = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-`;
+const FavoriteGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 1.5rem;
+  padding: 1rem;
 
-const ReviewProvider = styled.div`
-  font-weight: 600;
-  margin-right: 1rem;
-  color: #3498db;
-`;
-
-const ReviewRating = styled.div`
-  font-weight: 600;
-  color: #e67e22;
-  margin-right: 1rem;
-`;
-
-const ReviewComment = styled.div`
-  flex: 1;
-`;
-
-const BookmarksWrapper = styled.div`
-  margin-bottom: 2rem;
-`;
-
-const Bookmark = styled.div`
-  margin-bottom: 1rem;
-  font-weight: 600;
+  @media (min-width: 1000px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 const FavoriteContainer = styled.div`
+  margin-right: 1.5rem;
+`;
+
+const StyledNavLink = styled(Link)`
+  font-size: 1rem;
+  color: black;
+  text-decoration: none;
+  position: relative;
+`;
+
+const Bookmark = styled.div`
+  position: relative;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  width: 100%;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+`;
+
+const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-bottom: 1rem;
 `;
 
 const RemoveFavoriteButton = styled(IconButton)`
   color: #e74c3c;
   padding: 0;
+  background-color: #fff;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+`;
+
+const FavoriteName = styled.h3`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const FavoriteType = styled.p`
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-style: italic;
 `;
 
 export default Profile;

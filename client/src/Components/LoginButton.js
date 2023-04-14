@@ -34,7 +34,6 @@ const LoginButton = () => {
 
   useEffect(() => {
     if (currentUser) {
-      console.log("Auth0 user:", currentUser); // Log the user object
       checkUser();
     }
   }, [currentUser]);
@@ -47,8 +46,6 @@ const LoginButton = () => {
         nickname: currentUser.nickname,
         email: currentUser.email,
       };
-
-      console.log("User data:", userData);
 
       const response = await fetch("/user/login", {
         method: "POST",

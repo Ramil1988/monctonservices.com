@@ -23,8 +23,6 @@ const Homepage = (props) => {
     }
   };
 
-  console.log(reviews);
-
   return (
     <>
       <MainWrapper>
