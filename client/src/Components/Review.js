@@ -1,17 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Spinner from "./Spinner";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import ReviewUpdateForm from "./ReviewUpdateForm";
+import { UserContext } from "./UserContext";
 
 const Review = () => {
   const [review, setReview] = useState(null);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useContext(UserContext);
+  const [author, setAuthor] = useState(false);
+
+  console.log(currentUser);
 
   useEffect(() => {
     fetchReviewById();
-  }, []);
+  }, [review]);
+
+  useEffect(() => {
+    const isAuthor = () => {
+      return currentUser && review && currentUser.sub === review.userId;
+    };
+
+    if (review) {
+      setAuthor(isAuthor());
+    }
+  }, [review, currentUser]);
 
   const fetchReviewById = async () => {
     try {
@@ -25,6 +42,47 @@ const Review = () => {
 
   const goBack = () => {
     navigate(-1);
+  };
+
+  const handleUpdate = () => {
+    setShowUpdateForm(!showUpdateForm);
+  };
+
+  const handleDelete = async () => {
+    // Perform API call to delete review
+    // Show a confirmation message and navigate back to the previous page
+  };
+
+  const handleUpdateSubmit = async (updatedData) => {
+    const result = await updateReviewById(id, updatedData);
+    if (result && result.status === 200) {
+      setReview(result.data);
+      alert("Review updated successfully!");
+    } else {
+      alert("Failed to update review.");
+    }
+  };
+
+  const updateReviewById = async (id, updateData) => {
+    try {
+      const response = await fetch(`/review/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      const data = await response.json();
+
+      if (data.status !== 200) {
+        throw new Error(data.message);
+      }
+
+      return data.data;
+    } catch (error) {
+      console.error("Error updating review by ID:", error);
+    }
   };
 
   if (!review) {
@@ -43,7 +101,6 @@ const Review = () => {
         </BackButton>
       </BackButtonWrapper>
       <ReviewWrapper>
-        {" "}
         <ReviewHeader>
           <CompanyName>{review.companyName}</CompanyName>
           <Rating>Rating: {review.grade} / 5</Rating>
@@ -53,13 +110,28 @@ const Review = () => {
         </ReviewSubHeader>
         <ReviewContent>{review.text}</ReviewContent>
         <ReviewAuthor>
-          {" "}
           Left by {review.userName}
           <ReviewDate>
-            {" "}
             on {new Date(review.date).toLocaleDateString()}
           </ReviewDate>
         </ReviewAuthor>
+        {showUpdateForm ? (
+          <ReviewUpdateForm
+            review={review}
+            handleUpdateSubmit={handleUpdateSubmit}
+            open={showUpdateForm}
+            handleClose={() => setShowUpdateForm(false)}
+          />
+        ) : (
+          <>
+            {author && (
+              <>
+                <button onClick={handleUpdate}>Update</button>
+                <button onClick={handleDelete}>Delete</button>
+              </>
+            )}
+          </>
+        )}
       </ReviewWrapper>
     </>
   );
@@ -100,13 +172,13 @@ const ReviewHeader = styled.div`
 `;
 
 const CompanyName = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: bold;
   color: #2c3e50;
 `;
 
 const Rating = styled.span`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #e67e22;
 `;
@@ -119,7 +191,7 @@ const ReviewSubHeader = styled.div`
 `;
 
 const ReviewTitle = styled.h3`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #8e44ad;
 `;
@@ -130,7 +202,7 @@ const ReviewDate = styled.span`
 `;
 
 const ReviewContent = styled.p`
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   margin-bottom: 1rem;
   color: #2c3e50;

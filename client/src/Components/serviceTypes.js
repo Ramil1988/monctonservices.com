@@ -25,6 +25,12 @@ export const serviceTypes = {
     imageSrc: "/assets/AutoDealers.jpg",
   },
 
+  walkinClinics: {
+    id: "walkinClinics",
+    name: "Walk in clinics",
+    imageSrc: "/assets/WalkinClinics.jpg",
+  },
+
   // banks: {
   //   id: "banks",
   //   name: "Banks",

@@ -567,7 +567,7 @@ const updateUser = async (req, res) => {
 const updateReview = async (req, res) => {
   try {
     const { id } = req.params;
-    const { date, title, text, user, grade } = req.body;
+    const { date, title, text, grade } = req.body;
 
     await client.connect();
 
@@ -575,7 +575,6 @@ const updateReview = async (req, res) => {
     if (date) updatedFields["reviews.$.date"] = date;
     if (title) updatedFields["reviews.$.title"] = title;
     if (text) updatedFields["reviews.$.text"] = text;
-    if (user) updatedFields["reviews.$.user"] = user;
     if (grade) updatedFields["reviews.$.grade"] = grade;
 
     const { value: updatedCompany } = await companies.findOneAndUpdate(
