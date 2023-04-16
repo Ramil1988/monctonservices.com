@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import ListOfItems from "./ListOfItems";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
-import Footer from "./Footer";
 import MonctonImage from "../Pictures/Moncton.jpg";
 
 const Homepage = (props) => {
@@ -46,7 +45,6 @@ const Homepage = (props) => {
         <PopularServices />
         <BigText>Recent reviews</BigText>
         <Reviews reviews={reviews} />
-        <Footer />
       </MainWrapper>
     </>
   );
@@ -59,6 +57,7 @@ const LandingContainer = styled.div`
 `;
 
 const BigImage = styled.img`
+
   width: 100vw;
   height: 500px;
   object-fit: cover;

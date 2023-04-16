@@ -30,6 +30,7 @@ const Logo = styled.div`
   & img {
     width: 300px;
     margin-bottom: 20px;
+    margin-left: 20px;
   }
 `;
 
@@ -63,7 +64,7 @@ const NavFoot = styled(NavLink)`
   text-decoration: none;
   color: black;
   margin-top: -20px;
-  margin-left: 20px;
+  margin-left: 40px;
 
   & p {
     font-size: 1.1em;

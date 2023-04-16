@@ -22,7 +22,9 @@ const Reviews = ({ reviews }) => {
   };
 
   const handleNext = () => {
-    setStartIndex(startIndex === recentReviews.length - 3 ? 0 : startIndex + 3);
+    if (startIndex < recentReviews.length - 3) {
+      setStartIndex(startIndex + 3);
+    }
   };
 
   const visibleReviews = recentReviews.slice(startIndex, startIndex + 3);
@@ -88,6 +90,11 @@ const Review = styled.div`
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: calc(33.33% - 20px);
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -142,6 +149,7 @@ const ReviewGrade = styled.div`
 
 const ReviewNavigation = styled.button`
   background-color: transparent;
+  margin: 20px;
   border: none;
   font-size: 24px;
   cursor: pointer;

@@ -43,7 +43,7 @@ const Profile = () => {
 
   const handleRemoveFavoriteClick = async (event, companyId) => {
     event.stopPropagation();
-  
+
     try {
       const response = await fetch(`/user/remove-favorite/${currentUser.sub}`, {
         method: "POST",
@@ -107,7 +107,7 @@ const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 2rem;
+  padding: 0.5rem;
   max-width: 1200px;
   margin: 0 auto;
 `;

@@ -1,17 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
+import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button"; //
-import TextField from "@mui/material/TextField"; //
-import Grid from "@mui/material/Grid"; //
 import { UserContext } from "./UserContext";
 import Spinner from "./Spinner";
-import IconButton from "@mui/material/IconButton"; //
-import CloseIcon from "@mui/icons-material/Close";
+import { Link } from "react-router-dom";
+import Maps from "./Maps";
 
 const Company = () => {
   const { companyId } = useParams();
@@ -20,6 +18,31 @@ const Company = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { currentUser } = useContext(UserContext);
   const [notification, setNotification] = useState(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [recentReviews, setRecentReviews] = useState([]);
+
+  const fetchCompanyById = async () => {
+    try {
+      const response = await fetch(`/company/${companyId}`);
+      const data = await response.json();
+      setCompany(data.data);
+    } catch (error) {
+      console.error("Error fetching company:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (company && Array.isArray(company.reviews)) {
+      const sortedReviews = [...company.reviews].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
+      setRecentReviews(sortedReviews.slice(0, 9));
+    }
+  }, [company]);
+
+  useEffect(() => {
+    fetchCompanyById();
+  }, [companyId, showConfirmation]);
 
   const handleAddReviewClick = () => {
     if (currentUser) {
@@ -30,18 +53,27 @@ const Company = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCompanyById(companyId);
-  }, [companyId, showConfirmation]);
-
-  const fetchCompanyById = async (companyId) => {
-    try {
-      const response = await fetch(`/company/${companyId}`);
-      const data = await response.json();
-      setCompany(data.data);
-    } catch (error) {
-      console.error("Error fetching company:", error);
+  const handleNext = () => {
+    if (startIndex < recentReviews.length - 3) {
+      setStartIndex(startIndex + 3);
     }
+  };
+
+  const handlePrevious = () => {
+    if (startIndex > 0) {
+      setStartIndex(startIndex - 3);
+    }
+  };
+
+  const visibleReviews = recentReviews.slice(startIndex, startIndex + 3);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -112,20 +144,30 @@ const Company = () => {
     );
   }
 
+  const averageGrade =
+    company.reviews && company.reviews.length
+      ? (
+          company.reviews.reduce((sum, review) => sum + review.grade, 0) /
+          company.reviews.length
+        ).toFixed(1)
+      : 0;
+
   if (showConfirmation) {
     return (
-      <Wrapper>
-        <Header>
-          <Title>Review Submitted</Title>
-        </Header>
-        <Content>
-          <p>
+      <NotificationWrapper>
+        <NotificationHeader>
+          <NotificationTitle>Review Submitted</NotificationTitle>
+        </NotificationHeader>
+        <NotificationContent>
+          <Message>
             Thank you for submitting your review! Your feedback is valuable to
             us.
-          </p>
-          <Button onClick={() => setShowConfirmation(false)}>Go Back</Button>
-        </Content>
-      </Wrapper>
+          </Message>
+          <StyledButton onClick={() => setShowConfirmation(false)}>
+            Go Back
+          </StyledButton>
+        </NotificationContent>
+      </NotificationWrapper>
     );
   }
 
@@ -133,79 +175,110 @@ const Company = () => {
     <Wrapper>
       <Header>
         <Title>{company.name}</Title>
+        <ButtonContainer>
+          <StyledButton onClick={handleAddReviewClick}>Add Review</StyledButton>
+          <StyledButton onClick={handleAddFavoriteClick}>
+            Add to Favorites
+          </StyledButton>
+        </ButtonContainer>
       </Header>
       <Content>
-        <Image src={company.image} alt={company.name} />
-        <Address>{company.address}</Address>
-        <Address>{company.phoneNumber}</Address>
-        <Reviews>
-          {company.reviews && company.reviews.length > 0 ? (
-            company.reviews.map((review) => (
-              <Review key={review._id}>
-                <Rating>{review.grade}</Rating>
-                <Comment>{review.title}</Comment>
-              </Review>
-            ))
-          ) : (
-            <p>No reviews found.</p>
-          )}
-        </Reviews>
+        <Image src={company.image} />
+        <InfoBox>
+          <InfoTitle>Address</InfoTitle>
+          <Address>{company.address}</Address>
+          <InfoTitle>Phone Number</InfoTitle>
+          <PhoneNumber>{company.phoneNumber}</PhoneNumber>
+          <InfoTitle>Average Rating</InfoTitle>
+          <AverageRating>
+            {" "}
+            <AverageGrade>
+              <AiFillStar />
+              {averageGrade}
+            </AverageGrade>
+          </AverageRating>
+          {/* <Maps /> */}
+        </InfoBox>
       </Content>
-      <ButtonContainer>
-        <Button onClick={handleAddReviewClick}>Add Review</Button>
-        <Button onClick={handleAddFavoriteClick}>Add to Favorites</Button>
-      </ButtonContainer>
+      <BigText>Reviews left by customers</BigText>
+      <ReviewsWrapper>
+        {recentReviews.length > 0 ? (
+          <>
+            <ReviewNavigation
+              disabled={startIndex === 0}
+              onClick={handlePrevious}
+            >
+              <AiOutlineLeft />
+            </ReviewNavigation>
+            <ReviewsContainer>
+              {visibleReviews.map((review) => (
+                <Review key={review._id}>
+                  <StyledLink to={`/review/${review._id}`}>
+                    <ReviewTitle>{review.title}</ReviewTitle>
+                    <ReviewAuthor>By {review.userName}</ReviewAuthor>
+                    <ReviewDate>On {formatDate(review.date)}</ReviewDate>
+                    <ReviewGrade>
+                      <AiFillStar />
+                      {review.grade}
+                    </ReviewGrade>
+                  </StyledLink>
+                </Review>
+              ))}
+            </ReviewsContainer>
+            <ReviewNavigation
+              disabled={startIndex >= recentReviews.length - 3}
+              onClick={handleNext}
+            >
+              <AiOutlineRight />
+            </ReviewNavigation>
+          </>
+        ) : (
+          <NoReviewsMessage>
+            Nobody has left reviews about this company yet
+          </NoReviewsMessage>
+        )}
+      </ReviewsWrapper>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add Review</DialogTitle>
         <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <StyledTextField
-                  label="Date"
-                  name="date"
-                  type="date"
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <StyledTextField
-                  label="Title"
-                  name="title"
-                  type="text"
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <StyledTextField
-                  label="Text"
+          <StyledDialogContent>
+            <FormWrapper>
+              <FieldWrapper>
+                <FieldTitle>Date</FieldTitle>
+                <StyledTextField name="date" type="date" fullWidth required />
+              </FieldWrapper>
+              <FieldWrapper>
+                <FieldTitle>Title</FieldTitle>
+                <StyledTextField name="title" type="text" fullWidth required />
+              </FieldWrapper>
+              <FieldWrapper>
+                <FieldTitle>Text</FieldTitle>
+                <StyledTextArea
                   name="text"
-                  type="text"
                   fullWidth
                   multiline
-                  rows={4}
+                  rows={8}
                   required
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </FieldWrapper>
+              <FieldWrapper>
+                <FieldTitle>Grade</FieldTitle>
                 <StyledTextField
-                  label="Grade"
                   name="grade"
                   type="number"
-                  inputProps={{ min: 1, max: 5 }}
+                  min="1"
+                  max="5"
                   fullWidth
                   required
                 />
-              </Grid>
-            </Grid>
-          </DialogContent>
+              </FieldWrapper>
+            </FormWrapper>
+          </StyledDialogContent>
           <DialogActions>
-            <Button type="button" onClick={() => setOpen(false)}>
+            <CancelButton type="button" onClick={() => setOpen(false)}>
               Cancel
-            </Button>
-            <Button type="submit">Submit</Button>
+            </CancelButton>
+            <SubmitButton type="submit">Submit</SubmitButton>
           </DialogActions>
         </form>
       </Dialog>
@@ -213,7 +286,7 @@ const Company = () => {
         <Notification>
           <NotificationText>{notification}</NotificationText>
           <CloseButton onClick={() => setNotification(null)}>
-            <CloseIcon />
+            <CloseIcon>X</CloseIcon>
           </CloseButton>
         </Notification>
       )}
@@ -228,99 +301,375 @@ const SpinnerContainer = styled.div`
   min-height: 100vh;
 `;
 
-const Wrapper = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
+const NotificationWrapper = styled.div`
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 400px;
 `;
 
-const Header = styled.div`
-  text-align: center;
-  margin-bottom: 20px;
+const NotificationHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: black;
+  border-radius: 0.25rem 0.25rem 0 0;
+  padding: 0.5rem 0;
 `;
 
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
+const NotificationTitle = styled.h1`
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
   margin: 0;
 `;
 
-const Content = styled.div`
+const NotificationContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Image = styled.img`
+  justify-content: center;
   width: 100%;
-  max-width: 500px;
-  height: auto;
-  margin-bottom: 20px;
+  padding: 1rem 0;
 `;
 
-const Address = styled.p`
-  font-size: 20px;
-  margin-bottom: 20px;
+const Message = styled.h2`
+  color: #212529;
+  font-size: 1.125rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 0 0 1.5rem;
 `;
 
-const Reviews = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 20px 50px 120px 50px;
 `;
 
-const Review = styled.div`
+const Header = styled.div`
   display: flex;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #003262;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
 `;
 
-const Rating = styled.div`
-  font-size: 20px;
+const Title = styled.h1`
+  font-size: 32px;
   font-weight: bold;
-  margin-right: 10px;
-`;
-
-const Comment = styled.div`
-  font-size: 20px;
-`;
-
-const StyledTextField = styled(TextField)`
-  && {
-    margin-bottom: 16px;
-  }
+  color: #ffffff;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 16px;
-  justify-content: center;
+  gap: 10px;
+`;
+
+const StyledButton = styled.button`
+  background-color: #ffc107;
+  border: none;
+  border-radius: 4px;
+  color: #003262;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 12px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #ffb600;
+  }
+`;
+
+const Content = styled.div`
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
   margin-top: 20px;
+  gap: 20px;
+`;
+
+const Image = styled.img`
+  max-width: 300px;
+  height: auto;
+  border-radius: 5px;
+`;
+
+const InfoBox = styled.div`
+  background-color: #f8f9fa;
+  width: 100%;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+`;
+
+const InfoTitle = styled.h2`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #003262;
+`;
+
+const Address = styled.p`
+  font-size: 18px;
+  font-weight: 500;
+  margin: 5px 0;
+`;
+
+const PhoneNumber = styled(Address)`
+  font-weight: 500;
+`;
+
+const AverageRating = styled.span`
+  font-size: 1rem;
+  font-weight: 500;
+  color: #28a745;
+`;
+
+const AverageGrade = styled.span`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: #333;
+  margin-right: 5px;
+
+  svg {
+    color: gold;
+    margin-right: 2px;
+  }
+`;
+
+const BigText = styled.h2`
+  margin: 40px;
+  color: black;
+  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 80vw;
+`;
+
+const StyledDialogContent = styled(DialogContent)`
+  max-width: 100%;
+  overflow-x: hidden;
+`;
+
+const FieldWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const FieldTitle = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+const StyledTextField = styled.input`
+  width: 46%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+
+  &:focus {
+    border-color: #007bff;
+  }
+`;
+
+const StyledTextArea = styled.textarea`
+  width: 46%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  resize: vertical;
+
+  &:focus {
+    border-color: #007bff;
+  }
+`;
+
+const NoReviewsMessage = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin: 0;
+`;
+
+const ReviewsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 50px;
+`;
+
+const ReviewsContainer = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const Review = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 30px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: calc(33.33% - 20px);
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ReviewTitle = styled.h2`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const ReviewAuthor = styled.p`
+  font-size: 16px;
+  margin-bottom: 5px;
+`;
+
+const ReviewDate = styled.div`
+  font-size: 14px;
+  text-align: right;
+  color: #777;
+  margin-top: 10px;
+`;
+
+const ReviewGrade = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  margin: 15px;
+
+  svg {
+    color: gold;
+    margin-right: 2px;
+  }
+`;
+
+const ReviewNavigation = styled.button`
+  background-color: transparent;
+  margin: 20px;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  color: ${(props) => (props.disabled ? "#ccc" : "inherit")};
+  pointer-events: ${(props) => (props.disabled ? "none" : "inherit")};
+
+  &:hover {
+    color: ${(props) => (props.disabled ? "#ccc" : "#666")};
+  }
+`;
+
+const CancelButton = styled(StyledButton)`
+  margin-bottom: 20px;
+  background-color: #dc3545;
+  color: #fff;
+
+  &:hover {
+    background-color: #c82333;
+  }
+`;
+
+const SubmitButton = styled(StyledButton)`
+  margin-bottom: 20px;
+  background-color: #28a745;
+  color: #fff;
+  margin-right: 20px;
+
+  &:hover {
+    background-color: #218838;
+  }
 `;
 
 const Notification = styled.div`
-  position: fixed;
-  top: 50%;
-  right: 50%;
-  background-color: #4caf50;
-  color: white;
-  font-size: 20px;
-  padding: 16px;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  opacity: 70%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  margin: auto;
+  padding: 20px;
+  background-color: #28a745;
+  color: #fff;
+  border-radius: 5px;
+  width: 300px;
 `;
 
-const CloseButton = styled(IconButton)`
+const NotificationText = styled.p`
+  font-size: 20px;
+  margin: 0;
+`;
+
+const CloseButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
   color: white;
-  margin-left: 8px;
-  padding: 8px;
-  margin-top: -8px;
+  font-size: 20px;
+  outline: none;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
-const NotificationText = styled.div`
-  margin-right: 20px;
+const CloseIcon = styled.span`
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 `;
 
 export default Company;

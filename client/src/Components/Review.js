@@ -13,12 +13,15 @@ const Review = () => {
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const [author, setAuthor] = useState(false);
-
-  console.log(currentUser);
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
   useEffect(() => {
     fetchReviewById();
-  }, [review]);
+  }, []);
 
   useEffect(() => {
     const isAuthor = () => {
@@ -58,20 +61,45 @@ const Review = () => {
         throw new Error("Failed to delete review");
       }
 
-      alert("Review deleted successfully!");
-      goBack();
+      setNotification({
+        show: true,
+        message: "Review deleted successfully!",
+        type: "success",
+      });
+      setTimeout(() => {
+        setNotification({ ...notification, show: false });
+        goBack();
+      }, 3000);
     } catch (error) {
       console.error("Error deleting review:", error);
-      alert("Failed to delete review.");
+      setNotification({
+        show: true,
+        message: "Failed to delete review.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
     }
   };
+
   const handleUpdateSubmit = async (updatedData) => {
     const result = await updateReviewById(id, updatedData);
     if (result && result.status === 200) {
-      setReview(result.data);
-      alert("Review updated successfully!");
+      setReview(result.updatedReview);
+      setShowUpdateForm(false);
+      setNotification({
+        show: true,
+        message: "Review updated successfully!",
+        type: "success",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
+      fetchReviewById();
     } else {
-      alert("Failed to update review.");
+      setNotification({
+        show: true,
+        message: "Failed to update review.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
     }
   };
 
@@ -87,11 +115,11 @@ const Review = () => {
 
       const data = await response.json();
 
-      if (data.status !== 200) {
+      if (response.status !== 200) {
         throw new Error(data.message);
       }
 
-      return data.data;
+      return { status: response.status, updatedReview: data.data };
     } catch (error) {
       console.error("Error updating review by ID:", error);
     }
@@ -126,6 +154,7 @@ const Review = () => {
         <ReviewAuthor>
           Left by {review.userName}
           <ReviewDate>
+            {" "}
             on {new Date(review.date).toLocaleDateString()}
           </ReviewDate>
         </ReviewAuthor>
@@ -151,9 +180,37 @@ const Review = () => {
           )}
         </>
       )}
+      <Notification show={notification.show} type={notification.type}>
+        {notification.message}
+      </Notification>
+      ;
     </>
   );
 };
+
+const Notification = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 15px;
+  max-width: 200px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ type }) =>
+    type === "success" ? "#27ae60" : "#c0392b"};
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  opacity: ${({ show }) => (show ? "1" : "0")};
+  transition: opacity 0.3s ease-in-out;
+`;
 
 const BackButtonWrapper = styled.div`
   margin: 2rem;
@@ -228,6 +285,7 @@ const ReviewContent = styled.p`
   line-height: 1.5;
   margin-bottom: 1rem;
   color: #2c3e50;
+  word-wrap: break-word;
 `;
 
 const ReviewAuthor = styled.p`

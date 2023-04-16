@@ -595,6 +595,21 @@ const updateReview = async (req, res) => {
       (review) => review._id === id
     );
 
+    // Update the review in the user's document
+    const { value: updatedUser } = await users.findOneAndUpdate(
+      { "reviews._id": id },
+      { $set: updatedFields },
+      { returnOriginal: false }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found.",
+        data: null,
+      });
+    }
+
     return res.status(200).json({
       status: 200,
       message: "Review updated successfully.",
@@ -644,7 +659,6 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     await client.connect();
- 
 
     const result = await users.deleteOne({ _id: id });
 
