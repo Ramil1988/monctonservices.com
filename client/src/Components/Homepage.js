@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import ListOfItems from "./ListOfItems";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
+import Footer from "./Footer";
+import MonctonImage from "../Pictures/Moncton.jpg";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
@@ -25,51 +27,91 @@ const Homepage = (props) => {
 
   return (
     <>
+      <LandingContainer>
+        <BigImage src={MonctonImage} alt="Moncton" />
+        <TextContainer>
+          <SloganText>
+            We can <HighlightedText>help</HighlightedText> you to find what you
+            want in <HighlightedText>Moncton</HighlightedText>
+          </SloganText>
+          <NavLink to="/searchresults">
+            <SearchButton>Search</SearchButton>
+          </NavLink>
+        </TextContainer>
+      </LandingContainer>
       <MainWrapper>
-        <SloganText>What are you looking for?</SloganText>
+        <BigText>Services in Moncton</BigText>
         <ListOfItems data={allItems} />
         <BigText>Popular Services</BigText>
         <PopularServices />
         <BigText>Recent reviews</BigText>
         <Reviews reviews={reviews} />
+        <Footer />
       </MainWrapper>
     </>
   );
 };
-const MainWrapper = styled.div`
-  padding: 20px;
-  background: lightgray;
-  transition: background 0.5s;
+
+const LandingContainer = styled.div`
+  position: relative;
+  margin-bottom: 30px;
+  overflow: hidden;
 `;
 
-const typing = keyframes`
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
+const BigImage = styled.img`
+  width: 100vw;
+  height: 500px;
+  object-fit: cover;
+  opacity: 0.5;
 `;
 
-const blinkCursor = keyframes`
-  from, to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: black;
-  }
+const TextContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
+
+const MainWrapper = styled.div``;
 
 const SloganText = styled.h1`
-  margin: 30px 20px;
-  color: black;
+  font-size: 2.5rem;
+  color: #333;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
-  overflow: hidden;
-  white-space: nowrap;
-  animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
-  animation-fill-mode: forwards;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+`;
+
+const HighlightedText = styled.span`
+  color: white;
+  font-weight: bold;
+`;
+
+const SearchButton = styled.button`
+  margin-top: 20px;
+  padding: 20px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: black;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    background-color: white;
+    color: black;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
+  }
 `;
 
 const BigText = styled.h1`

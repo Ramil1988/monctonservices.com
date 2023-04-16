@@ -8,6 +8,7 @@ const SearchResults = () => {
   const [matches, setMatches] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [searchType, setSearchType] = useState("Name");
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -22,16 +23,30 @@ const SearchResults = () => {
     fetchCompanies();
   }, []);
 
+  const getUniqueServiceTypes = () => {
+    const serviceTypesSet = new Set(
+      companies.map((company) => company.serviceType)
+    );
+    return Array.from(serviceTypesSet);
+  };
+
   useEffect(() => {
     if (value.length >= 1) {
-      const filtered = companies.filter((company) =>
-        company.name.toLowerCase().includes(value.toLowerCase())
-      );
+      let filtered = [];
+      if (searchType === "Name") {
+        filtered = companies.filter((company) =>
+          company.name.toLowerCase().includes(value.toLowerCase())
+        );
+      } else if (searchType === "ServiceType") {
+        filtered = companies.filter((company) =>
+          company.serviceType.toLowerCase().includes(value.toLowerCase())
+        );
+      }
       setMatches(filtered);
     } else {
       setMatches([]);
     }
-  }, [value, companies]);
+  }, [value, companies, searchType]);
 
   const groupCompaniesByType = (companies) => {
     const groups = {};
@@ -71,7 +86,10 @@ const SearchResults = () => {
         renderedItems.push(
           <StyledLi key={company._id}>
             <NavLink to={`/company/${company._id}`}>
-              {highlightMatches(company.name, value)} - {company.serviceType}
+              {searchType === "Name"
+                ? highlightMatches(company.name, value)
+                : company.name}{" "}
+              - {company.serviceType}
             </NavLink>
           </StyledLi>
         );
@@ -102,12 +120,22 @@ const SearchResults = () => {
 
   return (
     <StyledSearchWrapper>
-      <h1>Search for a company</h1>
+      <h1>
+        Search{" "}
+        <StyledSelect
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
+        >
+          <option value="Name">by company name</option>
+          <option value="ServiceType">by service type</option>
+        </StyledSelect>
+      </h1>
       <StyledInputsuggestion
         type="text"
         value={value}
         onChange={(ev) => setValue(ev.target.value)}
       />
+
       <StyledClearButton onClick={() => setValue("")}>Clear</StyledClearButton>
       <StyledUl>{renderList()}</StyledUl>
       {renderPagination()}
@@ -157,14 +185,33 @@ const StyledType = styled.li`
 `;
 
 const StyledInputsuggestion = styled.input`
-  width: 300px;
-  padding-left: 10px;
-  line-height: 2.7em;
-  border-radius: 3px;
-  border: 1px solid gray;
-  margin-right: 15px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  margin: 20px;
+  width: 250px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  transition: all 0.3s ease-in-out;
+
   &:focus {
-    outline-color: black;
+    outline: none;
+    border: 1px solid black;
+  }
+`;
+
+const StyledSelect = styled.select`
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  appearance: none;
+  background-color: #ffffff;
+  &:focus {
+    outline: none;
+    border: 1px solid #0071bc;
   }
 `;
 
@@ -172,9 +219,11 @@ const StyledClearButton = styled.button`
   background-color: white;
   color: black;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 13px 25px;
   border: 1px solid black;
   transition: color 0.2s ease-in-out;
+  font-weight: bold;
+  font-size: 15px;
 
   &:hover {
     transform: scale(1.1);

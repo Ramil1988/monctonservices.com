@@ -46,7 +46,7 @@ const Header = () => {
 const Wrapper = styled.header`
   background-color: #ffffff;
   box-shadow: 1px 2px 4px rgba(1, 2, 0, 0.1);
-  width: 100%;
+  width: 100vw;
 `;
 
 const InnerWrapper = styled.div`
