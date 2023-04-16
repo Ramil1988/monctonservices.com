@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Spinner from "./Spinner";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -49,10 +49,22 @@ const Review = () => {
   };
 
   const handleDelete = async () => {
-    // Perform API call to delete review
-    // Show a confirmation message and navigate back to the previous page
-  };
+    try {
+      const response = await fetch(`/review/${id}`, {
+        method: "DELETE",
+      });
 
+      if (response.status !== 200) {
+        throw new Error("Failed to delete review");
+      }
+
+      alert("Review deleted successfully!");
+      goBack();
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      alert("Failed to delete review.");
+    }
+  };
   const handleUpdateSubmit = async (updatedData) => {
     const result = await updateReviewById(id, updatedData);
     if (result && result.status === 200) {
@@ -102,7 +114,9 @@ const Review = () => {
       </BackButtonWrapper>
       <ReviewWrapper>
         <ReviewHeader>
-          <CompanyName>{review.companyName}</CompanyName>
+          <StyledNavlink to={`/company/${review.companyId}`}>
+            <CompanyName>{review.companyName}</CompanyName>
+          </StyledNavlink>
           <Rating>Rating: {review.grade} / 5</Rating>
         </ReviewHeader>
         <ReviewSubHeader>
@@ -115,24 +129,28 @@ const Review = () => {
             on {new Date(review.date).toLocaleDateString()}
           </ReviewDate>
         </ReviewAuthor>
-        {showUpdateForm ? (
-          <ReviewUpdateForm
-            review={review}
-            handleUpdateSubmit={handleUpdateSubmit}
-            open={showUpdateForm}
-            handleClose={() => setShowUpdateForm(false)}
-          />
-        ) : (
-          <>
-            {author && (
-              <>
-                <button onClick={handleUpdate}>Update</button>
-                <button onClick={handleDelete}>Delete</button>
-              </>
-            )}
-          </>
-        )}
       </ReviewWrapper>
+      {showUpdateForm ? (
+        <ReviewUpdateForm
+          review={review}
+          handleUpdateSubmit={handleUpdateSubmit}
+          open={showUpdateForm}
+          handleClose={() => setShowUpdateForm(false)}
+        />
+      ) : (
+        <>
+          {author && (
+            <ActionButtonsContainer>
+              <StyledUpdateButton onClick={handleUpdate}>
+                Update
+              </StyledUpdateButton>
+              <StyledDeleteButton onClick={handleDelete}>
+                Delete
+              </StyledDeleteButton>
+            </ActionButtonsContainer>
+          )}
+        </>
+      )}
     </>
   );
 };
@@ -169,6 +187,10 @@ const ReviewHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+`;
+
+const StyledNavlink = styled(NavLink)`
+  text-decoration: none;
 `;
 
 const CompanyName = styled.h2`
@@ -219,6 +241,47 @@ const SpinnerContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+`;
+
+const ActionButtonsContainer = styled.div`
+  margin: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const StyledUpdateButton = styled.button`
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #3f51b5;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
+
+const StyledDeleteButton = styled.button`
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: red;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #c0392b;
+  }
 `;
 
 export default Review;

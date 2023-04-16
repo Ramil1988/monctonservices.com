@@ -28,7 +28,7 @@ const PopularServices = () => {
 
         const sortedCompanies = companies
           .sort((a, b) => b.reviews.length - a.reviews.length)
-          .slice(0, 5); // Sort companies in descending order of review count and get the top 5
+          .slice(0, 5);
 
         servicesWithTopCompanies.push({
           ...serviceType,
