@@ -1,6 +1,7 @@
 import React from "react";
 import { serviceTypes } from "./serviceTypes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navigation from "./Navigation";
 import Homepage from "./Homepage";
 import Profile from "./Profile";
 import RatingTable from "./RatingTable";
@@ -14,6 +15,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
+      <Navigation />
       <Routes>
         <Route path="/" element={<Homepage items={serviceTypes} />} />
         <Route

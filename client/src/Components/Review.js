@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Spinner from "./Spinner";
-import { AiOutlineArrowLeft } from "react-icons/ai";
 import ReviewUpdateForm from "./ReviewUpdateForm";
 import { UserContext } from "./UserContext";
 
@@ -135,11 +134,6 @@ const Review = () => {
 
   return (
     <>
-      <BackButtonWrapper>
-        <BackButton onClick={goBack}>
-          <AiOutlineArrowLeft />
-        </BackButton>
-      </BackButtonWrapper>
       <ReviewWrapper>
         <ReviewHeader>
           <StyledNavlink to={`/company/${review.companyId}`}>
@@ -214,18 +208,6 @@ const Notification = styled.div`
 
 const BackButtonWrapper = styled.div`
   margin: 2rem;
-`;
-
-const BackButton = styled.button`
-  font-size: 30px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    color: #666;
-  }
 `;
 
 const ReviewWrapper = styled.div`

@@ -209,6 +209,8 @@ const Company = () => {
       <Content>
         <Image src={company.image} />
         <InfoBox>
+          <InfoTitle>Service type</InfoTitle>
+          <Address>{company.serviceType}</Address>
           <InfoTitle>Address</InfoTitle>
           <Address>{company.address}</Address>
           <Maps address={company.address}></Maps>
@@ -321,7 +323,7 @@ const Company = () => {
         </form>
       </StyledDialog>
       {notification && (
-        <Notification>
+        <Notification message={notification}>
           <NotificationText>{notification}</NotificationText>
           <CloseButton onClick={() => setNotification(null)}>
             <CloseIcon>X</CloseIcon>
@@ -691,15 +693,16 @@ const Notification = styled.div`
   position: fixed;
   margin: auto;
   padding: 20px;
-  background-color: ${({ bgColor }) => bgColor || "#28a745"};
-  color: #fff;
-  border-radius: 5px;
+  background-color: ${({ message }) =>
+    message === "The company is already in your favorites" ? "red" : "#28a745"};
   width: 300px;
+  border-radius: 5px;
 `;
 
 const NotificationText = styled.p`
   font-size: 20px;
   margin: 0;
+  color: white;
 `;
 
 const CloseButton = styled.button`

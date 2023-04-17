@@ -19,8 +19,13 @@ const ReviewUpdateForm = ({
 
   const handleChange = (e) => {
     let value = e.target.value;
-    if (e.target.name === "grade" && parseInt(value) > 5) {
-      value = "5";
+    if (e.target.name === "grade") {
+      value = parseInt(value);
+      if (value > 5) {
+        value = 5;
+      } else if (value < 0) {
+        value = 0;
+      }
     }
     setUpdatedData({
       ...updatedData,

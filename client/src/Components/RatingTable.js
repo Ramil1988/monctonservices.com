@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Spinner from "./Spinner";
+import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 
 const RatingTable = () => {
   const { serviceType } = useParams();
@@ -11,6 +12,30 @@ const RatingTable = () => {
   useEffect(() => {
     fetchCompaniesByServiceType(serviceType);
   }, [serviceType]);
+
+  const renderStars = (rating) => {
+    if (rating === 0) {
+      return "-";
+    }
+
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<BsStarFill key={i} />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<BsStarHalf key={"half"} />);
+    }
+
+    while (stars.length < 5) {
+      stars.push(<BsStar key={stars.length} />);
+    }
+
+    return stars;
+  };
 
   const fetchCompaniesByServiceType = async (serviceType) => {
     try {
@@ -44,7 +69,7 @@ const RatingTable = () => {
           <tr>
             <Th>Place</Th>
             <Th>Company Name</Th>
-            <Th>Overall Rating</Th>
+            <Th>Average Rating</Th>
             <Th>Reviews</Th>
           </tr>
         </thead>
@@ -67,7 +92,9 @@ const RatingTable = () => {
                     {company.name}
                   </StyledLink>
                 </Td>
-                <Td>{averageRating}</Td>
+                <Td>
+                  <StarWrapper>{renderStars(averageRating)}</StarWrapper>
+                </Td>
                 <Td>{company.reviews.length}</Td>
               </tr>
             );
@@ -87,43 +114,64 @@ const SpinnerContainer = styled.div`
 
 const Wrapper = styled.div`
   background-color: #fff;
-  border-radius: 5px;
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 2rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  margin: 0.2rem;
 `;
 
 const TableHeading = styled.h2`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 500;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   color: #003262;
+  text-align: center;
 `;
 
 const Table = styled.table`
   font-size: 1.2rem;
   margin: auto;
-  width: 90%;
-  border-collapse: collapse;
+  width: 70%;
+  border-collapse: separate;
+  border-spacing: 0;
   background-color: #fff;
-  border-radius: 5px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const Th = styled.th`
   padding: 16px;
-  background-color: #f8f9fa;
-  border: 1px solid #d8d8d8;
+  background-color: #003262;
+  color: #fff;
+  border: 1px solid #003262;
   font-weight: 600;
+  &:first-child {
+    border-top-left-radius: 10px;
+  }
+  &:last-child {
+    border-top-right-radius: 10px;
+  }
 `;
 
 const Td = styled.td`
   padding: 16px;
   border: 1px solid #d8d8d8;
+  text-align: center;
+`;
+
+const StarWrapper = styled.span`
+  display: inline-flex;
+  color: gold;
 `;
 
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  transition: background-color 0.2s ease;
 
   &:hover {
     background-color: lightblue;
