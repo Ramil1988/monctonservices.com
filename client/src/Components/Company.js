@@ -3,7 +3,6 @@ import { useParams } from "react-router";
 import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { UserContext } from "./UserContext";
@@ -20,6 +19,8 @@ const Company = () => {
   const [notification, setNotification] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [recentReviews, setRecentReviews] = useState([]);
+  const [dateError, setDateError] = useState(false);
+  const [formValid, setFormValid] = useState(true);
 
   const fetchCompanyById = async () => {
     try {
@@ -78,11 +79,19 @@ const Company = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const reviewDate = e.target.date.value;
+
+    if (!validateDate(reviewDate)) {
+      setDateError(true);
+      setFormValid(false);
+      return;
+    }
+
     const reviewData = {
       userId: currentUser.sub,
       userName: currentUser.nickname,
       company: company.name,
-      date: e.target.date.value,
+      date: reviewDate,
       title: e.target.title.value,
       text: e.target.text.value,
       grade: parseInt(e.target.grade.value, 10),
@@ -152,6 +161,21 @@ const Company = () => {
         ).toFixed(1)
       : 0;
 
+  const validateDate = (date) => {
+    const currentDate = new Date();
+    const inputDate = new Date(date);
+    currentDate.setHours(0, 0, 0, 0);
+    inputDate.setHours(0, 0, 0, 0);
+
+    return inputDate < currentDate;
+  };
+
+  const handleDateChange = (event) => {
+    const isValidDate = validateDate(event.target.value);
+    setDateError(!isValidDate);
+    setFormValid(isValidDate);
+  };
+
   if (showConfirmation) {
     return (
       <NotificationWrapper>
@@ -187,6 +211,7 @@ const Company = () => {
         <InfoBox>
           <InfoTitle>Address</InfoTitle>
           <Address>{company.address}</Address>
+          <Maps address={company.address}></Maps>
           <InfoTitle>Phone Number</InfoTitle>
           <PhoneNumber>{company.phoneNumber}</PhoneNumber>
           <InfoTitle>Average Rating</InfoTitle>
@@ -197,7 +222,6 @@ const Company = () => {
               {averageGrade}
             </AverageGrade>
           </AverageRating>
-          {/* <Maps /> */}
         </InfoBox>
       </Content>
       <BigText>Reviews left by customers</BigText>
@@ -238,14 +262,21 @@ const Company = () => {
           </NoReviewsMessage>
         )}
       </ReviewsWrapper>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <StyledDialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add Review</DialogTitle>
         <form onSubmit={handleSubmit}>
           <StyledDialogContent>
             <FormWrapper>
               <FieldWrapper>
                 <FieldTitle>Date</FieldTitle>
-                <StyledTextField name="date" type="date" fullWidth required />
+                <StyledTextField
+                  name="date"
+                  type="date"
+                  fullWidth
+                  required
+                  error={dateError}
+                  onChange={handleDateChange}
+                />
               </FieldWrapper>
               <FieldWrapper>
                 <FieldTitle>Title</FieldTitle>
@@ -278,10 +309,17 @@ const Company = () => {
             <CancelButton type="button" onClick={() => setOpen(false)}>
               Cancel
             </CancelButton>
-            <SubmitButton type="submit">Submit</SubmitButton>
+            <SubmitButton
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!formValid}
+            >
+              Submit
+            </SubmitButton>
           </DialogActions>
         </form>
-      </Dialog>
+      </StyledDialog>
       {notification && (
         <Notification>
           <NotificationText>{notification}</NotificationText>
@@ -425,7 +463,7 @@ const InfoTitle = styled.h2`
 const Address = styled.p`
   font-size: 18px;
   font-weight: 500;
-  margin: 5px 0;
+  margin: 5px 0px 20px;
 `;
 
 const PhoneNumber = styled(Address)`
@@ -461,6 +499,17 @@ const BigText = styled.h2`
   white-space: nowrap;
 `;
 
+const StyledDialog = styled(Dialog)`
+  margin: auto;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+`;
+
+const DialogTitle = styled.h1`
+  margin: 20px;
+`;
+
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -477,6 +526,7 @@ const FieldWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  max-width: 1150px;
 `;
 
 const FieldTitle = styled.label`
@@ -624,12 +674,13 @@ const CancelButton = styled(StyledButton)`
 
 const SubmitButton = styled(StyledButton)`
   margin-bottom: 20px;
-  background-color: #28a745;
+  background-color: ${({ disabled }) => (disabled ? "gray" : "#28a745")};
   color: #fff;
   margin-right: 20px;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: #218838;
+    background-color: ${({ disabled }) => (disabled ? "gray" : "#218838")};
   }
 `;
 
@@ -640,7 +691,7 @@ const Notification = styled.div`
   position: fixed;
   margin: auto;
   padding: 20px;
-  background-color: #28a745;
+  background-color: ${({ bgColor }) => bgColor || "#28a745"};
   color: #fff;
   border-radius: 5px;
   width: 300px;
