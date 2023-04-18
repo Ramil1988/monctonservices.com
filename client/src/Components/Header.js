@@ -18,21 +18,13 @@ const Header = () => {
         <Logo to={`/`} onClick={window.location.reload}>
           <img src={logo} alt="Logo" />
         </Logo>
-        <div className="nav-links">
-          <NavLink className="nav-link" to="/" exact>
-            <StyledIcon as={FaHome} />
-            Home
-          </NavLink>
-          <NavLink className="nav-link" to="/about">
-            <StyledIcon as={FaBook} />
-            About
-          </NavLink>
-          <NavLink className="nav-link" to="/searchresults">
-            <StyledIcon as={FaSearch} />
-            Search
-          </NavLink>
-        </div>
         <UserWrapper>
+          <NavLinks>
+            <NavLink className="nav-link" to="/searchresults">
+              <StyledIcon as={FaSearch} />
+              Search
+            </NavLink>
+          </NavLinks>
           {currentUser && <UserName>Hello, {currentUser.name}</UserName>}
           <SearchWrapper></SearchWrapper>
           <LoginButton />
@@ -47,7 +39,6 @@ const Wrapper = styled.header`
   background-color: #ffffff;
   box-shadow: 1px 2px 4px rgba(1, 2, 0, 0.1);
   width: 100vw;
-
 `;
 
 const InnerWrapper = styled.div`
@@ -57,14 +48,26 @@ const InnerWrapper = styled.div`
   margin: 0 auto;
   padding: 15px 20px;
   max-width: 1200px;
+`;
 
-  .nav-links {
-    display: flex;
-    align-items: center;
+const Logo = styled(NavLink)`
+  display: block;
+
+  & img {
+    width: 400px;
   }
 
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+
   .nav-link {
-    margin-left: 1.5rem;
+    margin-right: 5rem;
     font-size: 1.2rem;
     font-weight: 600;
     color: black;
@@ -88,38 +91,6 @@ const InnerWrapper = styled.div`
       transform: scaleX(1);
     }
   }
-
-  @media (max-width: 1070px) {
-    .nav-links {
-      margin-top: 0;
-    }
-
-    .nav-link {
-      margin-left: 0;
-      margin-right: 1.5rem;
-    }
-  }
-`;
-
-const Logo = styled(NavLink)`
-  display: block;
-
-  & img {
-    width: 400px;
-    margin: 0 -80px;
-
-    @media (max-width: 871px) {
-      width: 150px;
-      margin: 0;
-    }
-  }
-`;
-
-const SearchWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
 
 const StyledIcon = styled.span`
@@ -131,10 +102,9 @@ const UserWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  @media (max-width: 1070px) {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 1rem;
+  @media (max-width: 1024px) {
+    width: 100%;
+    justify-content: center;
   }
 `;
 
@@ -144,9 +114,16 @@ const UserName = styled.div`
   font-weight: 600;
   color: black;
 
-  @media (max-width: 1070px) {
+  @media (max-width: 767px) {
     display: none;
   }
+`;
+
+const SearchWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default Header;

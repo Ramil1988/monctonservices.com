@@ -73,7 +73,7 @@ const Profile = () => {
         <ProfileReviews reviews={reviews} />
       </SectionWrapper>
       <SectionWrapper>
-        <h2>Favorites</h2>
+        <h2>Your Favorites</h2>
         <FavoriteGrid>
           {favorites &&
             favorites.map((favorite) => (
@@ -108,42 +108,21 @@ const ProfileWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0.5rem;
-  max-width: 1200px;
+  max-width: 80vw;
   margin: 0 auto;
-`;
 
-const typing = keyframes`
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
+  @media (max-width: 767px) {
+    padding: 0.5rem 1rem;
+    max-width: 100vw;
   }
 `;
 
-const blinkCursor = keyframes`
-  from, to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: black;
-  }
-`;
 const Name = styled.h2`
   font-size: 1.8rem;
-  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-weight: 700;
-  line-height: 44px;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  white-space: nowrap;
-  animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
-  animation-fill-mode: forwards;
+  // ... rest of the code
 
-  & span {
-    font-style: italic;
+  @media (max-width: 767px) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -160,6 +139,11 @@ const FavoriteGrid = styled.div`
 
   @media (min-width: 1000px) {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 1rem;
   }
 `;
 

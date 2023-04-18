@@ -394,6 +394,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 20px 50px 120px 50px;
+
+  @media (max-width: 768px) {
+    margin: 20px 20px 120px 20px;
+  }
 `;
 
 const Header = styled.div`
@@ -401,6 +405,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin: 5px;
   background-color: #003262;
   padding: 10px;
   border-radius: 5px 5px 0 0;
@@ -410,11 +415,19 @@ const Title = styled.h1`
   font-size: 32px;
   font-weight: bold;
   color: #ffffff;
+
+  @media (max-width: 767px) {
+    font-size: 24px;
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 767px) {
+    gap: 5px;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -431,6 +444,11 @@ const StyledButton = styled.button`
   &:hover {
     background-color: #ffb600;
   }
+
+  @media (max-width: 767px) {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
 `;
 
 const Content = styled.div`
@@ -439,6 +457,11 @@ const Content = styled.div`
   width: 100%;
   margin-top: 20px;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const Image = styled.img`
@@ -453,6 +476,10 @@ const InfoBox = styled.div`
   border-radius: 5px;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `;
 
 const InfoTitle = styled.h2`
@@ -503,7 +530,7 @@ const BigText = styled.h2`
 
 const StyledDialog = styled(Dialog)`
   margin: auto;
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     flex-direction: row;
   }
 `;
@@ -517,18 +544,26 @@ const FormWrapper = styled.div`
   flex-direction: column;
   gap: 15px;
   width: 80vw;
+  margin: 10px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 20px);
+  }
 `;
 
 const StyledDialogContent = styled(DialogContent)`
   max-width: 100%;
-  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden; // Add this to hide horizontal scrolling
 `;
 
 const FieldWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  max-width: 1150px;
+  margin-right: 20px;
 `;
 
 const FieldTitle = styled.label`
@@ -537,7 +572,7 @@ const FieldTitle = styled.label`
 `;
 
 const StyledTextField = styled.input`
-  width: 46%;
+  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -551,7 +586,7 @@ const StyledTextField = styled.input`
 `;
 
 const StyledTextArea = styled.textarea`
-  width: 46%;
+  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -583,6 +618,12 @@ const ReviewsWrapper = styled.div`
 const ReviewsContainer = styled.div`
   display: flex;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
 `;
 
 const Review = styled.div`
@@ -601,6 +642,12 @@ const Review = styled.div`
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 250px;
+    margin-bottom: 20px;
   }
 `;
 

@@ -71,11 +71,22 @@ const ReviewsWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const ReviewsContainer = styled.div`
   display: flex;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const Review = styled.div`
@@ -85,7 +96,7 @@ const Review = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 30px;
+  padding: 0 20px;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -94,6 +105,11 @@ const Review = styled.div`
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0 10px;
   }
 `;
 
@@ -113,33 +129,33 @@ const StyledLink = styled(Link)`
 `;
 
 const ReviewTitle = styled.h2`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
 const ReviewAuthor = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 5px;
 `;
 
 const ReviewDate = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   text-align: right;
   color: #777;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const ReviewCompany = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 5px;
 `;
 
 const ReviewGrade = styled.div`
   display: flex;
   align-items: center;
-  font-size: 30px;
-  margin: 15px;
+  font-size: 24px;
+  margin: 10px;
 
   svg {
     color: gold;
@@ -159,6 +175,10 @@ const ReviewNavigation = styled.button`
 
   &:hover {
     color: ${(props) => (props.disabled ? "#ccc" : "#666")};
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
   }
 `;
 

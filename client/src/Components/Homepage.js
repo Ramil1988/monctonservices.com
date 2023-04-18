@@ -57,11 +57,14 @@ const LandingContainer = styled.div`
 `;
 
 const BigImage = styled.img`
-
-  width: 100vw;
+  width: 100%;
   height: 500px;
   object-fit: cover;
   opacity: 0.5;
+
+  @media (max-width: 768px) {
+    height: 300px;
+  }
 `;
 
 const TextContainer = styled.div`
@@ -76,7 +79,10 @@ const TextContainer = styled.div`
   text-align: center;
 `;
 
-const MainWrapper = styled.div``;
+const MainWrapper = styled.div`
+  max-width: 100%;
+  overflow-x: hidden;
+`;
 
 const SloganText = styled.h1`
   font-size: 2.5rem;
@@ -85,6 +91,10 @@ const SloganText = styled.h1`
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const HighlightedText = styled.span`
@@ -111,6 +121,11 @@ const SearchButton = styled.button`
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
     transform: translateY(-3px);
   }
+
+  @media (max-width: 768px) {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
 `;
 
 const BigText = styled.h1`
@@ -121,6 +136,11 @@ const BigText = styled.h1`
     "Segoe UI Symbol";
   overflow: hidden;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin: 30px 10px;
+  }
 `;
 
 export default Homepage;

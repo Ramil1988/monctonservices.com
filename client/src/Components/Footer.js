@@ -32,6 +32,13 @@ const Logo = styled.div`
     margin-bottom: 20px;
     margin-left: 20px;
   }
+
+  @media (max-width: 768px) {
+    & img {
+      width: 200px;
+      margin-left: 0;
+    }
+  }
 `;
 
 const StyledFooter = styled.div`
@@ -48,12 +55,22 @@ const FooterContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 const NavLinksContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
+
+  @media (max-width: 1024px) {
+    align-items: center;
+    margin: 20px;
+  }
 `;
 
 const NavLinks = styled.div`
@@ -82,6 +99,11 @@ const NavFoot = styled(NavLink)`
 
   & p:hover:after {
     transform: scaleX(1);
+  }
+
+  @media (max-width: 768px) {
+    margin-top: -20px;
+    font-size: 12px;
   }
 `;
 

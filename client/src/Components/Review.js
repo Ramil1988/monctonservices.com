@@ -177,7 +177,6 @@ const Review = () => {
       <Notification show={notification.show} type={notification.type}>
         {notification.message}
       </Notification>
-      ;
     </>
   );
 };
