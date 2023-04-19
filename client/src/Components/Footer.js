@@ -29,7 +29,6 @@ const Logo = styled.div`
 
   & img {
     width: 300px;
-    margin-bottom: 20px;
     margin-left: 20px;
   }
 
@@ -47,7 +46,7 @@ const StyledFooter = styled.div`
   width: 100%;
   color: white;
   padding: 40px 0;
-  margin-top: 30px;
+  margin-top: 50px;
   border-top: 2px solid lightgray;
 `;
 

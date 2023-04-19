@@ -71,6 +71,7 @@ const ReviewsWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 50px;
+  margin-bottom: 50px;
   margin-left: 10px;
   margin-right: 10px;
 

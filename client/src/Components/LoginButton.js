@@ -5,14 +5,20 @@ import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
+import { useLocation } from "react-router-dom";
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
+  let location = useLocation();
   const { currentUser, isAuthenticated } = useContext(UserContext);
 
   const handleLoginClick = () => {
     if (!isAuthenticated) {
-      loginWithRedirect({ appState: { returnTo: `/` } });
+      loginWithRedirect({
+        appState: {
+          returnTo: `${location.pathname} `,
+        },
+      });
     }
   };
 
