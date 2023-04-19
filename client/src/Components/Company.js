@@ -9,6 +9,7 @@ import { UserContext } from "./UserContext";
 import Spinner from "./Spinner";
 import { Link } from "react-router-dom";
 import Maps from "./Maps";
+import NotificationBox from "./NotificationBox";
 
 const Company = () => {
   const { companyId } = useParams();
@@ -178,20 +179,12 @@ const Company = () => {
 
   if (showConfirmation) {
     return (
-      <NotificationWrapper>
-        <NotificationHeader>
-          <NotificationTitle>Review Submitted</NotificationTitle>
-        </NotificationHeader>
-        <NotificationContent>
-          <Message>
-            Thank you for submitting your review! Your feedback is valuable to
-            us.
-          </Message>
-          <StyledButton onClick={() => setShowConfirmation(false)}>
-            Go Back
-          </StyledButton>
-        </NotificationContent>
-      </NotificationWrapper>
+      <NotificationBox
+        title="Review Submitted"
+        message="Thank you for submitting your review!"
+        buttonText="Continue"
+        onButtonClick={() => setShowConfirmation(false)}
+      />
     );
   }
 
@@ -339,54 +332,6 @@ const SpinnerContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-`;
-
-const NotificationWrapper = styled.div`
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  padding: 1rem;
-  width: 100%;
-  max-width: 400px;
-`;
-
-const NotificationHeader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-color: black;
-  border-radius: 0.25rem 0.25rem 0 0;
-  padding: 0.5rem 0;
-`;
-
-const NotificationTitle = styled.h1`
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-`;
-
-const NotificationContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 1rem 0;
-`;
-
-const Message = styled.h2`
-  color: #212529;
-  font-size: 1.125rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 0 0 1.5rem;
 `;
 
 const Wrapper = styled.div`
@@ -556,7 +501,7 @@ const StyledDialogContent = styled(DialogContent)`
   max-width: 100%;
   display: flex;
   justify-content: center;
-  overflow-x: hidden; // Add this to hide horizontal scrolling
+  overflow-x: hidden;
 `;
 
 const FieldWrapper = styled.div`
@@ -741,7 +686,11 @@ const Notification = styled.div`
   margin: auto;
   padding: 20px;
   background-color: ${({ message }) =>
-    message === "The company is already in your favorites" ? "red" : "#28a745"};
+    message === "The company is already in your favorites" ||
+    message === "Please log in to add a company to favorites" ||
+    message === "Please log in to leave a review"
+      ? "yellow"
+      : "#28a745"};
   width: 300px;
   border-radius: 5px;
 `;
@@ -749,7 +698,7 @@ const Notification = styled.div`
 const NotificationText = styled.p`
   font-size: 20px;
   margin: 0;
-  color: white;
+  color: black;
 `;
 
 const CloseButton = styled.button`
@@ -769,7 +718,7 @@ const CloseButton = styled.button`
 const CloseIcon = styled.span`
   font-weight: bold;
   font-size: 20px;
-  color: white;
+  color: black;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 `;
 

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { FaHome, FaBook, FaSearch } from "react-icons/fa";
+import { FaBook, FaSearch } from "react-icons/fa";
 
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
@@ -20,6 +20,10 @@ const Header = () => {
         </Logo>
         <UserWrapper>
           <NavLinks>
+            <NavLink className="nav-link" to="/about">
+              <StyledIcon as={FaBook} />
+              About
+            </NavLink>
             <NavLink className="nav-link" to="/searchresults">
               <StyledIcon as={FaSearch} />
               Search
@@ -37,7 +41,6 @@ const Header = () => {
 
 const Wrapper = styled.header`
   background-color: #ffffff;
-  box-shadow: 1px 2px 4px rgba(1, 2, 0, 0.1);
   width: 100vw;
 `;
 
@@ -46,7 +49,7 @@ const InnerWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  padding: 15px 20px;
+  padding: 15px;
   max-width: 1200px;
 `;
 
@@ -57,7 +60,7 @@ const Logo = styled(NavLink)`
     width: 400px;
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1150px) {
     display: none;
   }
 `;
@@ -102,7 +105,7 @@ const UserWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1150px) {
     width: 100%;
     justify-content: center;
   }

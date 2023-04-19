@@ -10,6 +10,7 @@ import Header from "./Header";
 import SearchResults from "./SearchResults";
 import Review from "./Review";
 import Footer from "./Footer";
+import About from "./About";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/company/:companyId" element={<Company />} />
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/review/:id" element={<Review />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       <Footer />
     </>

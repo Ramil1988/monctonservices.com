@@ -189,24 +189,21 @@ const Notification = styled.div`
   bottom: 0;
   margin: auto;
   padding: 15px;
-  max-width: 200px;
-  height: 20px;
+  max-width: 400px;
+  height: 40px;
   justify-content: center;
   align-items: center;
+  text-align: center;
   background-color: ${({ type }) =>
     type === "success" ? "#27ae60" : "#c0392b"};
   color: #ffffff;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   opacity: ${({ show }) => (show ? "1" : "0")};
   transition: opacity 0.3s ease-in-out;
-`;
-
-const BackButtonWrapper = styled.div`
-  margin: 2rem;
 `;
 
 const ReviewWrapper = styled.div`

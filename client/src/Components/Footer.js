@@ -10,13 +10,17 @@ const Footer = () => {
           <img src={logo} alt="Logo" />
         </Logo>
         <NavLinksContainer>
+          <NavFoot to="/about">
+            <p>About the project</p>
+          </NavFoot>
           <NavLinks>
-            <NavFoot to="/contactinfo">
+            <StyledAnchor
+              href="https://docs.google.com/forms/d/e/1FAIpQLSffu4RY9a9lgezB9TTJGPhQ-y1iicDpno781sITK4zuRqiohw/viewform?usp=sf_link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <p>Contact Us</p>
-            </NavFoot>
-            <NavFoot to="/about">
-              <p>About the project</p>
-            </NavFoot>
+            </StyledAnchor>
           </NavLinks>
         </NavLinksContainer>
       </FooterContainer>
@@ -79,7 +83,37 @@ const NavLinks = styled.div`
 const NavFoot = styled(NavLink)`
   text-decoration: none;
   color: black;
-  margin-top: -20px;
+  margin-top: -5px;
+  margin-left: 40px;
+
+  & p {
+    font-size: 1.1em;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  & p:after {
+    display: block;
+    content: "";
+    border-bottom: solid 2px black;
+    transform: scaleX(0);
+    transition: transform 250ms ease-in-out;
+  }
+
+  & p:hover:after {
+    transform: scaleX(1);
+  }
+
+  @media (max-width: 768px) {
+    margin-top: -20px;
+    font-size: 12px;
+  }
+`;
+
+const StyledAnchor = styled.a`
+  text-decoration: none;
+  color: black;
+  margin-top: -5px;
   margin-left: 40px;
 
   & p {
