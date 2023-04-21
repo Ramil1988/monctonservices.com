@@ -1,6 +1,8 @@
 import React from "react";
 import { serviceTypes } from "./serviceTypes";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 import Navigation from "./Navigation";
 import Homepage from "./Homepage";
 import Profile from "./Profile";
@@ -11,8 +13,12 @@ import SearchResults from "./SearchResults";
 import Review from "./Review";
 import Footer from "./Footer";
 import About from "./About";
+import Admin from "./Admin";
 
 const App = () => {
+  const { currentUser } = useContext(UserContext);
+  const allowedUserId = "google-oauth2|116851775782187261081";
+
   return (
     <>
       <Header />
@@ -28,6 +34,18 @@ const App = () => {
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/review/:id" element={<Review />} />
         <Route path="/about" element={<About />} />
+        <Route path="/superadminpage" element={<Outlet />}>
+          <Route
+            index
+            element={
+              currentUser && currentUser.sub === allowedUserId ? (
+                <Admin />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+        </Route>
       </Routes>
       <Footer />
     </>

@@ -107,6 +107,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: 1rem;
 `;
 
 const TextArea = styled.textarea`
@@ -117,6 +118,7 @@ const TextArea = styled.textarea`
   resize: vertical;
   min-height: 8rem;
   box-sizing: border-box;
+  font-size: 1rem;
 `;
 
 const ButtonBase = styled.button`

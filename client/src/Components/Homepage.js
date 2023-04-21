@@ -1,10 +1,11 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ListOfItems from "./ListOfItems";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
 import MonctonImage from "../Pictures/Moncton.jpg";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
@@ -25,7 +26,7 @@ const Homepage = (props) => {
   };
 
   return (
-    <>
+    <Wrapper>
       <LandingContainer>
         <BigImage src={MonctonImage} alt="Moncton" />
         <TextContainer>
@@ -46,9 +47,24 @@ const Homepage = (props) => {
         <BigText>Recent reviews</BigText>
         <Reviews reviews={reviews} />
       </MainWrapper>
-    </>
+    </Wrapper>
   );
 };
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const Wrapper = styled.div`
+  animation: ${fadeIn} 1s ease-in;
+`;
 
 const LandingContainer = styled.div`
   position: relative;

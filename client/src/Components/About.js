@@ -38,6 +38,20 @@ const About = () => {
         </Section>
         <Section>
           <SectionIcon>
+            <FontAwesomeIcon icon={faEye} size="1x" />
+          </SectionIcon>
+          <SectionTextWrapper>
+            <SectionTitle>Vision</SectionTitle>
+            <SectionText>
+              Create a user-friendly platform that connects
+              people with top-rated service providers in Moncton. By focusing on
+              real customer reviews, we aim to help users make informed choices
+              while supporting local businesses and strengthening our community.
+            </SectionText>
+          </SectionTextWrapper>
+        </Section>
+        <Section>
+          <SectionIcon>
             <img src={ramil} width="80" height="80" />
           </SectionIcon>
           <SectionTextWrapper>
@@ -57,20 +71,6 @@ const About = () => {
                 Contact Form.
               </StyledAnchor>
               Let us embark on this journey together!
-            </SectionText>
-          </SectionTextWrapper>
-        </Section>
-        <Section>
-          <SectionIcon>
-            <FontAwesomeIcon icon={faEye} size="1x" />
-          </SectionIcon>
-          <SectionTextWrapper>
-            <SectionTitle>Vision</SectionTitle>
-            <SectionText>
-              The goal is to create a user-friendly platform that connects
-              people with top-rated service providers in Moncton. By focusing on
-              real customer reviews, we aim to help users make informed choices
-              while supporting local businesses and strengthening our community.
             </SectionText>
           </SectionTextWrapper>
         </Section>

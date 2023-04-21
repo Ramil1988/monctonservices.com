@@ -57,7 +57,7 @@ const Logo = styled(NavLink)`
   display: block;
 
   & img {
-    width: 400px;
+    width: 300px;
   }
 
   @media (max-width: 1150px) {

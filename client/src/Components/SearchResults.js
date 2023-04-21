@@ -23,13 +23,6 @@ const SearchResults = () => {
     fetchCompanies();
   }, []);
 
-  const getUniqueServiceTypes = () => {
-    const serviceTypesSet = new Set(
-      companies.map((company) => company.serviceType)
-    );
-    return Array.from(serviceTypesSet);
-  };
-
   useEffect(() => {
     if (value.length >= 1) {
       let filtered = [];

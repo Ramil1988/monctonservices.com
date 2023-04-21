@@ -70,10 +70,7 @@ const ReviewsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 50px 150px 50px 150px;
 
   @media (max-width: 768px) {
     flex-direction: column;
