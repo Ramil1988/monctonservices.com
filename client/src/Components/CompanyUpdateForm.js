@@ -5,6 +5,7 @@ const CompanyForm = ({ company, onUpdate, onDelete }) => {
   const [updatedCompany, setUpdatedCompany] = useState(company);
   const [notification, setNotification] = useState("");
 
+
   const handleChange = (e) => {
     setUpdatedCompany({ ...updatedCompany, [e.target.name]: e.target.value });
   };
@@ -35,6 +36,7 @@ const CompanyForm = ({ company, onUpdate, onDelete }) => {
 
   return (
     <>
+      <h2>Update an existing company</h2>
       <Form onSubmit={handleSubmit}>
         <Label>
           Service Type:
@@ -144,7 +146,5 @@ const Button = styled.button`
     }
   }
 `;
-
-export { Label, Input, Button };
 
 export default CompanyForm;

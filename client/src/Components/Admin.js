@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import CompanyForm from "./CompanyForm";
-import { Label, Input, Button } from "./CompanyForm";
+import CompanyForm from "./CompanyUpdateForm";
+import CompanyCreateForm from "./CompanyCreateForm";
 
 const Admin = () => {
   const [companies, setCompanies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [matches, setMatches] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
-
-  const [newCompany, setNewCompany] = useState({
-    serviceType: "",
-    name: "",
-    address: "",
-    phoneNumber: "",
-    image: "",
-  });
 
   const fetchCompanies = async () => {
     try {
@@ -30,37 +22,6 @@ const Admin = () => {
   useEffect(() => {
     fetchCompanies();
   }, []);
-
-  const handleCreateCompany = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("/company", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCompany),
-      });
-
-      const data = await response.json();
-      fetchCompanies();
-
-      setNewCompany({
-        serviceType: "",
-        name: "",
-        address: "",
-        phoneNumber: "",
-        image: "",
-      });
-    } catch (error) {
-      console.error("Error creating company:", error);
-    }
-  };
-
-  const handleNewCompanyChange = (e) => {
-    setNewCompany({ ...newCompany, [e.target.name]: e.target.value });
-  };
 
   const handleSearch = (currentTerm) => {
     if (currentTerm.length >= 1) {
@@ -120,17 +81,21 @@ const Admin = () => {
         value={searchTerm}
         onChange={handleSearchChange}
       />
-      <SearchButton onClick={handleSearch}>Search</SearchButton>
-      <CompanyList>
-        {matches.map((company) => (
-          <CompanyItem
-            key={company._id}
-            onClick={() => handleCompanySelect(company)}
-          >
-            {company.name}
-          </CompanyItem>
-        ))}
-      </CompanyList>
+      <SearchButton onClick={() => setSearchTerm("")}>Clear</SearchButton>
+      {!selectedCompany && (
+        <>
+          <CompanyList>
+            {matches.map((company) => (
+              <CompanyItem
+                key={company._id}
+                onClick={() => handleCompanySelect(company)}
+              >
+                {company.name}
+              </CompanyItem>
+            ))}
+          </CompanyList>
+        </>
+      )}
       {selectedCompany && (
         <CompanyForm
           company={selectedCompany}
@@ -138,55 +103,7 @@ const Admin = () => {
           onDelete={handleCompanyDelete}
         />
       )}
-      <h2>Create a new company</h2>
-      <form onSubmit={handleCreateCompany}>
-        <Label>
-          Service Type:
-          <Input
-            type="text"
-            name="serviceType"
-            value={newCompany.serviceType}
-            onChange={handleNewCompanyChange}
-          />
-        </Label>
-        <Label>
-          Name:
-          <Input
-            type="text"
-            name="name"
-            value={newCompany.name}
-            onChange={handleNewCompanyChange}
-          />
-        </Label>
-        <Label>
-          Address:
-          <Input
-            type="text"
-            name="address"
-            value={newCompany.address}
-            onChange={handleNewCompanyChange}
-          />
-        </Label>
-        <Label>
-          Phone Number:
-          <Input
-            type="text"
-            name="phoneNumber"
-            value={newCompany.phoneNumber}
-            onChange={handleNewCompanyChange}
-          />
-        </Label>
-        <Label>
-          Image URL:
-          <Input
-            type="text"
-            name="image"
-            value={newCompany.image}
-            onChange={handleNewCompanyChange}
-          />
-        </Label>
-        <Button type="submit">Create</Button>
-      </form>
+      <CompanyCreateForm />
     </AdminWrapper>
   );
 };
