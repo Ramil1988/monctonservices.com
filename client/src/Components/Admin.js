@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import CompanyForm from "./CompanyUpdateForm";
 import CompanyCreateForm from "./CompanyCreateForm";
+import ReviewAdmin from "./ReviewAdmin";
 
 const Admin = () => {
   const [companies, setCompanies] = useState([]);
@@ -11,6 +12,7 @@ const Admin = () => {
 
   const fetchCompanies = async () => {
     try {
+      
       const response = await fetch("/allCompanies");
       const data = await response.json();
       setCompanies(data.data);
@@ -104,6 +106,7 @@ const Admin = () => {
         />
       )}
       <CompanyCreateForm />
+      <ReviewAdmin />
     </AdminWrapper>
   );
 };

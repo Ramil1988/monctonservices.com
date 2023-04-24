@@ -78,6 +78,7 @@ const CompanyCreateForm = (company = {}) => {
             name="serviceType"
             value={newCompany.serviceType}
             onChange={handleNewCompanyChange}
+            required
           />
         </Label>
         <Label>
@@ -87,6 +88,7 @@ const CompanyCreateForm = (company = {}) => {
             name="name"
             value={newCompany.name}
             onChange={handleNewCompanyChange}
+            required
           />
         </Label>
         <Label>
@@ -96,6 +98,7 @@ const CompanyCreateForm = (company = {}) => {
             name="address"
             value={newCompany.address}
             onChange={handleNewCompanyChange}
+            required
           />
         </Label>
         <Label>
@@ -105,6 +108,7 @@ const CompanyCreateForm = (company = {}) => {
             name="phoneNumber"
             value={newCompany.phoneNumber}
             onChange={handleNewCompanyChange}
+            required
           />
         </Label>
         <Label>
@@ -114,6 +118,7 @@ const CompanyCreateForm = (company = {}) => {
             name="image"
             value={newCompany.image}
             onChange={handleNewCompanyChange}
+            required
           />
         </Label>
         <Button type="submit">Create</Button>
