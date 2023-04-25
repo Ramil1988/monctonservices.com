@@ -410,10 +410,14 @@ const Content = styled.div`
 `;
 
 const Image = styled.img`
-  max-width: 300px;
+  max-width: 500px;
+  max-height: 300px;
+  width: auto;
   height: auto;
   border-radius: 5px;
 `;
+
+
 
 const InfoBox = styled.div`
   background-color: #f8f9fa;

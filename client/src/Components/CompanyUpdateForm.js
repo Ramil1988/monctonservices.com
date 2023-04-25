@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import UploadImage from "./UploadImage";
 
-const CompanyForm = ({ company, onUpdate, onDelete }) => {
+const CompanyUpdateForm = ({ company, onUpdate, onDelete }) => {
   const [updatedCompany, setUpdatedCompany] = useState(company);
   const [notification, setNotification] = useState("");
-
 
   const handleChange = (e) => {
     setUpdatedCompany({ ...updatedCompany, [e.target.name]: e.target.value });
@@ -66,14 +66,19 @@ const CompanyForm = ({ company, onUpdate, onDelete }) => {
           />
         </Label>
         <Label>
-          Image URL:
+          Phone Number:
           <Input
             type="text"
-            name="image"
-            value={updatedCompany.image}
+            name="phoneNumber"
+            value={updatedCompany.phoneNumber}
             onChange={handleChange}
           />
         </Label>
+        Image URL:
+        <UploadImage
+          newCompany={updatedCompany}
+          setNewCompany={setUpdatedCompany}
+        />
         <ButtonWrapper>
           <Button type="submit">Update</Button>
           <Button type="button" onClick={handleDelete}>
@@ -147,4 +152,4 @@ const Button = styled.button`
   }
 `;
 
-export default CompanyForm;
+export default CompanyUpdateForm;

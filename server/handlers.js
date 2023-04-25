@@ -2,6 +2,7 @@
 
 const { MongoClient } = require("mongodb");
 const { v4: uuidv4 } = require("uuid");
+const { cloudinary } = require("./cloudinary");
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -25,16 +26,40 @@ const createCompany = async (req, res) => {
     await client.connect();
 
     const company = {
-      _id: uuidv4(),
       serviceType: serviceType,
       name: name,
       address: address,
       phoneNumber: phoneNumber,
-      image: image,
       reviews: [],
     };
 
-    await companies.insertOne(company);
+    let newImage;
+
+    await cloudinary.uploader
+      .upload(image, {
+        upload_preset: "moncton_services",
+      })
+      .then((data) => {
+        newImage = data.secure_url;
+        console.log(newImage);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (newImage.length >= 0) {
+      await companies.insertOne({
+        _id: uuidv4(),
+        serviceType: serviceType,
+        name: name,
+        address: address,
+        phoneNumber: phoneNumber,
+        image: newImage,
+        reviews: [],
+      });
+    } else {
+      console.log("no image!");
+    }
 
     return res.status(201).json({
       status: 201,
@@ -478,17 +503,33 @@ const getUserFavorites = async (req, res) => {
 const updateCompany = async (req, res) => {
   try {
     const { id } = req.params;
-    const { serviceType, name, address, image } = req.body;
+    const { serviceType, name, address, phoneNumber, image } = req.body;
 
     await client.connect();
-    const database = client.db("MonctonServicesCom");
-    const companies = database.collection("companies");
 
     const updatedFields = {};
     if (serviceType) updatedFields.serviceType = serviceType;
     if (name) updatedFields.name = name;
     if (address) updatedFields.address = address;
-    if (image) updatedFields.image = image;
+    if (phoneNumber) updatedFields.phoneNumber = phoneNumber;
+
+    let newImage;
+
+    await cloudinary.uploader
+      .upload(image, {
+        upload_preset: "moncton_services",
+      })
+      .then((data) => {
+        newImage = data.secure_url;
+        console.log(newImage);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (newImage.length >= 0) updatedFields.image = newImage;
+
+    console.log(updatedFields.image);
 
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { _id: id },
@@ -595,7 +636,6 @@ const updateReview = async (req, res) => {
       (review) => review._id === id
     );
 
-    // Update the review in the user's document
     const { value: updatedUser } = await users.findOneAndUpdate(
       { "reviews._id": id },
       { $set: updatedFields },

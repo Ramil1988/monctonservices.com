@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import UploadImage from "./UploadImage";
 
-const CompanyCreateForm = (company = {}) => {
+const CompanyCreateForm = () => {
   const [companies, setCompanies] = useState([]);
   const [notification, setNotification] = useState("");
 
@@ -111,16 +112,8 @@ const CompanyCreateForm = (company = {}) => {
             required
           />
         </Label>
-        <Label>
-          Image URL:
-          <Input
-            type="text"
-            name="image"
-            value={newCompany.image}
-            onChange={handleNewCompanyChange}
-            required
-          />
-        </Label>
+        Image URL:
+        <UploadImage newCompany={newCompany} setNewCompany={setNewCompany} />
         <Button type="submit">Create</Button>
       </Form>
       {notification && <Notification>{notification}</Notification>}
