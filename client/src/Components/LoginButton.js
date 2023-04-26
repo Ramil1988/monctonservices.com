@@ -10,7 +10,8 @@ import { useLocation } from "react-router-dom";
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
   let location = useLocation();
-  const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { currentUser, isAuthenticated, setshouldFetchUser } =
+    useContext(UserContext);
 
   const handleLoginClick = () => {
     if (!isAuthenticated) {
@@ -22,17 +23,16 @@ const LoginButton = () => {
     }
   };
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      setshouldFetchUser(true);
+    }
+  }, [isAuthenticated]);
+
   const checkUser = async () => {
     try {
-      const response = await fetch(`/user/${currentUser.sub}`);
-      if (response.ok) {
-        const existingUser = await response.json();
-        if (!existingUser) {
-          saveUser();
-        }
-      } else if (response.status === 404) {
-        saveUser();
-      }
+      const response = await fetch(`/user/${currentUser._id}`);
+      const existingUser = await response.json();
     } catch (error) {
       console.error("Error checking user:", error);
     }
@@ -42,35 +42,13 @@ const LoginButton = () => {
     if (currentUser) {
       checkUser();
     }
-  }, [currentUser]);
-
-  const saveUser = async () => {
-    try {
-      const userData = {
-        userId: currentUser.sub,
-        name: currentUser.given_name,
-        nickname: currentUser.nickname,
-        email: currentUser.email,
-      };
-
-      const response = await fetch("/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: userData }),
-      });
-      await response.json();
-    } catch (error) {
-      console.error("Error saving user:", error);
-    }
-  };
+  }, [currentUser, isAuthenticated]);
 
   return (
     <LoginIconWrapper
       to={
         isAuthenticated && currentUser
-          ? `/Profile/${encodeURIComponent(currentUser.sub)}`
+          ? `/Profile/${encodeURIComponent(currentUser._id)}`
           : null
       }
       onClick={handleLoginClick}

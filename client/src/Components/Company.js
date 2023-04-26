@@ -417,8 +417,6 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
-
-
 const InfoBox = styled.div`
   background-color: #f8f9fa;
   width: 100%;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UploadNotification from "./UploadNotification";
 
-const UploadImage = ({ newCompany, setNewCompany }) => {
+const UploadCompanyImage = ({ newCompany, setNewCompany }) => {
   const [previewSource, setPreviewSource] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -42,4 +42,4 @@ const UploadImage = ({ newCompany, setNewCompany }) => {
   );
 };
 
-export default UploadImage;
+export default UploadCompanyImage;

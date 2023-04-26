@@ -79,7 +79,7 @@ const createCompany = async (req, res) => {
 
 const createUser = async (req, res) => {
   const { user } = req.body;
-  const { userId, name, nickname, email } = user;
+  const { userId, name, nickname, image, email } = user;
   await client.connect();
 
   try {
@@ -92,6 +92,7 @@ const createUser = async (req, res) => {
         _id: userId,
         name: name,
         nickname: nickname,
+        image: image,
         email: email,
         reviews: [],
         favorites: [],
@@ -408,6 +409,7 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    console.log(id, "Test");
     await client.connect();
     const user = await users.findOne({ _id: id });
 
@@ -529,8 +531,6 @@ const updateCompany = async (req, res) => {
 
     if (newImage.length >= 0) updatedFields.image = newImage;
 
-    console.log(updatedFields.image);
-
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { _id: id },
       { $set: updatedFields },
@@ -564,7 +564,7 @@ const updateCompany = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, nickname, favorites, reviews } = req.body;
+    const { name, email, nickname, image, favorites, reviews } = req.body;
 
     await client.connect();
 
@@ -574,6 +574,25 @@ const updateUser = async (req, res) => {
     if (nickname) updatedFields.nickname = nickname;
     if (favorites) updatedFields.favorites = favorites;
     if (reviews) updatedFields.reviews = reviews;
+
+    if (image) {
+      let newImage;
+
+      await cloudinary.uploader
+        .upload(image, {
+          upload_preset: "moncton_services",
+        })
+        .then((data) => {
+          newImage = data.secure_url;
+          console.log(newImage);
+        })
+        .catch((err) => {
+          console.log(err);
+          throw new Error("Error uploading image to Cloudinary");
+        });
+
+      if (newImage.length >= 0) updatedFields.image = newImage;
+    }
 
     const { value: updatedUser } = await users.findOneAndUpdate(
       { _id: id },
@@ -599,7 +618,7 @@ const updateUser = async (req, res) => {
     await client.close();
     return res.status(500).json({
       status: 500,
-      message: "An error occurred while updating the user.",
+      message: `An error occurred while updating the user: ${error.message}`,
       data: null,
     });
   }

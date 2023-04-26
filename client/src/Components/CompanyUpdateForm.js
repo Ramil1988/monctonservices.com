@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import UploadImage from "./UploadImage";
+import UploadCompanyImage from "./UploadCompanyImage";
 
 const CompanyUpdateForm = ({ company, onUpdate, onDelete }) => {
   const [updatedCompany, setUpdatedCompany] = useState(company);
@@ -75,7 +75,7 @@ const CompanyUpdateForm = ({ company, onUpdate, onDelete }) => {
           />
         </Label>
         Image URL:
-        <UploadImage
+        <UploadCompanyImage
           newCompany={updatedCompany}
           setNewCompany={setUpdatedCompany}
         />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import UploadImage from "./UploadImage";
+import UploadCompanyImage from "./UploadCompanyImage";
 
 const CompanyCreateForm = () => {
   const [companies, setCompanies] = useState([]);
@@ -113,7 +113,10 @@ const CompanyCreateForm = () => {
           />
         </Label>
         Image URL:
-        <UploadImage newCompany={newCompany} setNewCompany={setNewCompany} />
+        <UploadCompanyImage
+          newCompany={newCompany}
+          setNewCompany={setNewCompany}
+        />
         <Button type="submit">Create</Button>
       </Form>
       {notification && <Notification>{notification}</Notification>}

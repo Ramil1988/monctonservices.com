@@ -1,17 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import { keyframes } from "styled-components";
+import EditIcon from "@mui/icons-material/Edit";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ProfileReviews from "./ProfileReviews";
+import EditProfileForm from "./EditProfileForm";
 
 const Profile = () => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const [reviews, setReviews] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const [showEditForm, setShowEditForm] = useState(false);
 
   useEffect(() => {
     fetchUserReviews();
@@ -20,7 +23,7 @@ const Profile = () => {
 
   const fetchUserReviews = async () => {
     try {
-      const response = await fetch(`/user/${currentUser.sub}`);
+      const response = await fetch(`/user/${currentUser._id}`);
       const data = await response.json();
       const sortedReviews = data.data.reviews.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
@@ -33,7 +36,7 @@ const Profile = () => {
 
   const fetchUserFavorites = async () => {
     try {
-      const response = await fetch(`/user/${currentUser.sub}`);
+      const response = await fetch(`/user/${currentUser._id}`);
       const data = await response.json();
       setFavorites(data.data.favorites);
     } catch (error) {
@@ -45,7 +48,7 @@ const Profile = () => {
     event.stopPropagation();
 
     try {
-      const response = await fetch(`/user/remove-favorite/${currentUser.sub}`, {
+      const response = await fetch(`/user/remove-favorite/${currentUser._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -65,43 +68,101 @@ const Profile = () => {
 
   return (
     <ProfileWrapper>
-      <Name>
-        <span>Nice to see you again</span> {currentUser.name}!
-      </Name>
-      <SectionWrapper>
-        <h2>Your Reviews</h2>
-        <ProfileReviews reviews={reviews} />
-      </SectionWrapper>
-      <SectionWrapper>
-        <h2>Your Favorites</h2>
-        <FavoriteGrid>
-          {favorites &&
-            favorites.map((favorite) => (
-              <FavoriteContainer key={favorite._id}>
-                <Bookmark>
-                  <HeaderWrapper>
+      <SideWrapper>
+        <Sidebar>
+          <SidebarTop>
+            <ProfileImage src={currentUser.image} />
+            <Nickname>{currentUser.name}</Nickname>
+            <EditProfile onClick={() => setShowEditForm(true)}>
+              <EditIcon fontSize="small" />
+              <span>Edit profile</span>
+            </EditProfile>
+          </SidebarTop>
+          {showEditForm && <EditProfileForm />}
+          <StatsWrapper>
+            <Stat>
+              <StatNumber>{reviews.length}</StatNumber>
+              <StatLabel>Reviews</StatLabel>
+            </Stat>
+            <Stat>
+              <StatNumber>{favorites.length}</StatNumber>
+              <StatLabel>Favorites</StatLabel>
+            </Stat>
+          </StatsWrapper>
+        </Sidebar>
+        <SloganText>
+          <span>Nice to see you again</span> {currentUser.name}!
+        </SloganText>
+      </SideWrapper>
+      <MainContent>
+        <SectionWrapper>
+          <h2>Your Reviews</h2>
+          <ProfileReviews reviews={reviews} />
+        </SectionWrapper>
+        <SectionWrapper>
+          <h2>Your Favorites</h2>
+          <FavoriteGrid>
+            {favorites &&
+              favorites.map((favorite) => (
+                <FavoriteContainer key={favorite._id}>
+                  <Bookmark>
+                    <HeaderWrapper>
+                      <StyledNavLink to={`/company/${favorite._id}`}>
+                        <FavoriteName>{favorite.name}</FavoriteName>
+                      </StyledNavLink>
+                      <RemoveFavoriteButton
+                        onClick={(event) =>
+                          handleRemoveFavoriteClick(event, favorite._id)
+                        }
+                      >
+                        <CloseIcon />
+                      </RemoveFavoriteButton>
+                    </HeaderWrapper>
                     <StyledNavLink to={`/company/${favorite._id}`}>
-                      <FavoriteName>{favorite.name}</FavoriteName>
+                      <FavoriteType>{favorite.serviceType}</FavoriteType>
                     </StyledNavLink>
-                    <RemoveFavoriteButton
-                      onClick={(event) =>
-                        handleRemoveFavoriteClick(event, favorite._id)
-                      }
-                    >
-                      <CloseIcon />
-                    </RemoveFavoriteButton>
-                  </HeaderWrapper>
-                  <StyledNavLink to={`/company/${favorite._id}`}>
-                    <FavoriteType>{favorite.serviceType}</FavoriteType>
-                  </StyledNavLink>
-                </Bookmark>
-              </FavoriteContainer>
-            ))}
-        </FavoriteGrid>
-      </SectionWrapper>
+                  </Bookmark>
+                </FavoriteContainer>
+              ))}
+          </FavoriteGrid>
+        </SectionWrapper>
+      </MainContent>
     </ProfileWrapper>
   );
 };
+
+const typing = keyframes`
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+`;
+const blinkCursor = keyframes`
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #204c84;
+  }
+`;
+const SloganText = styled.h1`
+  color: black;
+  margin: 2rem;
+
+  font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  overflow: hidden;
+  white-space: nowrap;
+  animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
+  animation-fill-mode: forwards;
+
+  & span {
+    font-style: italic;
+  }
+`;
 
 const ProfileWrapper = styled.div`
   display: flex;
@@ -117,17 +178,98 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const Name = styled.h2`
-  font-size: 1.8rem;
-  // ... rest of the code
+const SideWrapper = styled.div`
+  display: flex;
+`;
+const Sidebar = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 2rem;
+`;
+
+const SidebarTop = styled.div`
+  background-color: #003262;
+  padding: 40px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ProfileImage = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const Nickname = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 10px;
+  padding: 10px;
+`;
+
+const EditProfile = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const StatsWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const Stat = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StatNumber = styled.span`
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+`;
+
+const StatLabel = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+  color: #777;
+`;
+
+const MainContent = styled.div`
+  width: 100%;
+`;
+
+const Name = styled.h1`
+  margin: 3rem;
 
   @media (max-width: 767px) {
     font-size: 1.4rem;
   }
+
+  & span {
+    font-style: italic;
+  }
 `;
 
 const SectionWrapper = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
+  margin-top: 2rem;
   width: 100%;
 `;
 

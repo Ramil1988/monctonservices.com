@@ -19,6 +19,8 @@ const App = () => {
   const { currentUser } = useContext(UserContext);
   const allowedUserId = "google-oauth2|116851775782187261081";
 
+  console.log(currentUser);
+
   return (
     <>
       <Header />
@@ -38,7 +40,7 @@ const App = () => {
           <Route
             index
             element={
-              currentUser && currentUser.sub === allowedUserId ? (
+              currentUser && currentUser._id === allowedUserId ? (
                 <Admin />
               ) : (
                 <Navigate to="/" />
