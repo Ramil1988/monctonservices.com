@@ -147,10 +147,10 @@ const blinkCursor = keyframes`
     border-color: #204c84;
   }
 `;
+
 const SloganText = styled.h1`
   color: black;
   margin: 2rem;
-
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
@@ -158,9 +158,14 @@ const SloganText = styled.h1`
   white-space: nowrap;
   animation: ${typing} 3s steps(60, end), ${blinkCursor} 0.5s step-end infinite;
   animation-fill-mode: forwards;
+  display: block;
 
   & span {
     font-style: italic;
+  }
+
+  @media (max-width: 1000px) {
+    display: none;
   }
 `;
 
@@ -169,8 +174,7 @@ const ProfileWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0.5rem;
-  max-width: 80vw;
-  margin: 0 auto;
+  margin: 2rem 4rem;
 
   @media (max-width: 767px) {
     padding: 0.5rem 1rem;
@@ -179,23 +183,31 @@ const ProfileWrapper = styled.div`
 `;
 
 const SideWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 1rem;
+  width: 100%;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
 `;
+
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 350px;
   margin-bottom: 2rem;
+  width: 300px;
 `;
 
 const SidebarTop = styled.div`
-  background-color: #003262;
+  background: linear-gradient(135deg, #003262, #005492);
   padding: 40px;
   border-radius: 8px 8px 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const ProfileImage = styled.img`
@@ -219,8 +231,11 @@ const EditProfile = styled.div`
   font-size: 1rem;
   color: #fff;
   cursor: pointer;
+  transition: 0.2s;
+
   &:hover {
     text-decoration: underline;
+    color: rgba(255, 255, 255, 0.8);
   }
 `;
 
@@ -255,18 +270,6 @@ const MainContent = styled.div`
   width: 100%;
 `;
 
-const Name = styled.h1`
-  margin: 3rem;
-
-  @media (max-width: 767px) {
-    font-size: 1.4rem;
-  }
-
-  & span {
-    font-style: italic;
-  }
-`;
-
 const SectionWrapper = styled.div`
   margin-bottom: 5rem;
   margin-top: 2rem;
@@ -276,7 +279,7 @@ const SectionWrapper = styled.div`
 const FavoriteGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  grid-gap: 1.5rem;
+  grid-gap: 0.5rem;
   padding: 1rem;
 
   @media (min-width: 1000px) {
@@ -290,14 +293,8 @@ const FavoriteGrid = styled.div`
 `;
 
 const FavoriteContainer = styled.div`
-  margin-right: 1.5rem;
-`;
-
-const StyledNavLink = styled(Link)`
-  font-size: 1rem;
-  color: black;
-  text-decoration: none;
-  position: relative;
+  margin: 0.5rem;
+  max-width: 250px;
 `;
 
 const Bookmark = styled.div`
@@ -306,13 +303,20 @@ const Bookmark = styled.div`
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
   padding: 15px;
-  width: 100%;
+  width: 90%;
   transition: transform 0.2s ease-in-out;
 
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
   }
+`;
+
+const StyledNavLink = styled(Link)`
+  font-size: 1rem;
+  color: black;
+  text-decoration: none;
+  position: relative;
 `;
 
 const HeaderWrapper = styled.div`

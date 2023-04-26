@@ -89,7 +89,7 @@ const Company = () => {
     }
 
     const reviewData = {
-      userId: currentUser.sub,
+      userId: currentUser._id,
       userName: currentUser.nickname,
       company: company.name,
       date: reviewDate,
@@ -121,11 +121,11 @@ const Company = () => {
   const handleAddFavoriteClick = async () => {
     if (currentUser) {
       try {
-        const response = await fetch(`/user/favorite/${currentUser.sub}`, {
+        const response = await fetch(`/user/favorite/${currentUser._id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userId: currentUser.sub,
+            userId: currentUser._id,
             companyId: companyId,
             companyName: company.name,
             serviceType: company.serviceType,
@@ -351,7 +351,7 @@ const Header = styled.div`
   align-items: center;
   width: 100%;
   margin: 5px;
-  background-color: #003262;
+  background: linear-gradient(135deg, #003262, #005492);
   padding: 10px;
   border-radius: 5px 5px 0 0;
 `;

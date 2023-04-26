@@ -9,40 +9,16 @@ const UploadProfileImage = ({ currentUser, setCurrentUser }) => {
   const handleUploadProfileImage = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setPreviewSource(reader.result);
-      uploadImage(reader.result);
+      setCurrentUser({ ...currentUser, image: reader.result });
     };
     reader.onerror = () => {
       console.error("AHHHHHHHH!!");
-      setErrMsg("something went wrong!");
+      setErrMsg("Something went wrong!");
     };
-  };
-
-  console.log(currentUser);
-
-  const uploadImage = async (base64EncodedImage) => {
-    try {
-      const response = await fetch(`/user/${currentUser._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...currentUser, image: base64EncodedImage }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setCurrentUser(data.data);
-        setSuccessMsg("Profile image uploaded successfully");
-      } else {
-        console.error("Error uploading profile image");
-        setErrMsg("Error uploading profile image");
-      }
-    } catch (error) {
-      console.error("Error uploading profile image:", error);
-      setErrMsg("Error uploading profile image");
-    }
   };
 
   useEffect(() => {
@@ -59,7 +35,9 @@ const UploadProfileImage = ({ currentUser, setCurrentUser }) => {
           id="fileInput"
           type="file"
           name="image"
-          onChange={handleUploadProfileImage}
+          onChange={(e) => {
+            handleUploadProfileImage(e);
+          }}
         />
       </div>
       {previewSource && (

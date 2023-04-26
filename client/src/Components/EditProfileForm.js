@@ -15,8 +15,6 @@ const EditProfileForm = () => {
     }
   }, [currentUser]);
 
-  console.log(currentUser);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

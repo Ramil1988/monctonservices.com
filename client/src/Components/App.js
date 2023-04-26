@@ -19,8 +19,6 @@ const App = () => {
   const { currentUser } = useContext(UserContext);
   const allowedUserId = "google-oauth2|116851775782187261081";
 
-  console.log(currentUser);
-
   return (
     <>
       <Header />

@@ -24,7 +24,7 @@ const Review = () => {
 
   useEffect(() => {
     const isAuthor = () => {
-      return currentUser && review && currentUser.sub === review.userId;
+      return currentUser && review && currentUser._id === review.userId;
     };
 
     if (review) {
