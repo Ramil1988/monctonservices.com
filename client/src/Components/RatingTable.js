@@ -116,7 +116,7 @@ const Wrapper = styled.div`
   border-radius: 10px;
   padding: 2rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  margin: 0.2rem;
+
   background-color: #f2f2f2;
 `;
 

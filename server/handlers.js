@@ -587,7 +587,7 @@ const updateUser = async (req, res) => {
         console.log(err);
       });
 
-    if (newImage.length >= 0) updatedFields.image = newImage;
+    if (newImage && newImage.length >= 0) updatedFields.image = newImage;
 
     const { value: updatedUser } = await users.findOneAndUpdate(
       { _id: id },

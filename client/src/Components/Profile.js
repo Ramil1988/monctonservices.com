@@ -122,7 +122,15 @@ const Profile = () => {
                     </GridItem>
                   </ClickAwayListener>
                 )}
-                <Nickname>{user.name}</Nickname>
+                <NameFields>
+                  <StyledSpan>Name:</StyledSpan> {user.name}
+                </NameFields>
+                <NameFields>
+                  <StyledSpan>Nickname:</StyledSpan> {user.nickname}
+                </NameFields>
+                <NameFields>
+                  <StyledSpan>e-mail:</StyledSpan> {user.email}
+                </NameFields>
                 <EditProfile onClick={() => setShowEditForm(true)}>
                   <EditIcon fontSize="small" />
                   <span>Edit profile</span>
@@ -257,7 +265,7 @@ const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
-  width: 400px;
+  width: 500px;
 `;
 
 const SidebarTop = styled.div`
@@ -286,12 +294,20 @@ const GridItem = styled.div`
   width: 100%;
 `;
 
-const Nickname = styled.h3`
+const NameFields = styled.h3`
+  display: flex;
+  align-items: center;
   font-size: 1.5rem;
   font-weight: 600;
   color: #fff;
-  margin: 10px;
-  padding: 10px;
+  margin-bottom: 5px;
+`;
+
+const StyledSpan = styled.span`
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.2rem;
+  margin-right: 10px;
 `;
 
 const EditProfile = styled.div`
@@ -301,6 +317,7 @@ const EditProfile = styled.div`
   color: #fff;
   cursor: pointer;
   transition: 0.2s;
+  margin-top: 20px;
 
   &:hover {
     text-decoration: underline;

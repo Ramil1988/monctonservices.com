@@ -74,21 +74,21 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
         <form onSubmit={handleSubmit}>
           <FormGrid>
             <GridItem>
-              <InputLabel>Name:</InputLabel>
-              <Input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </GridItem>
-            <GridItem>
               <InputLabel>Nickname:</InputLabel>
               <Input
                 type="text"
                 id="nickname"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
+              />
+            </GridItem>
+            <GridItem>
+              <InputLabel>Name:</InputLabel>
+              <Input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </GridItem>
           </FormGrid>

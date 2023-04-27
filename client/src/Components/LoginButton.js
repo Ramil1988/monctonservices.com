@@ -32,7 +32,8 @@ const LoginButton = () => {
 
   const checkUser = async () => {
     try {
-      const response = await fetch(`/user/${currentUser._id}`);
+      const userId = currentUser.data ? currentUser.data._id : currentUser._id;
+      const response = await fetch(`/user/${userId}`);
       const existingUser = await response.json();
     } catch (error) {
       console.error("Error checking user:", error);
@@ -48,7 +49,11 @@ const LoginButton = () => {
   return (
     <LoginIconWrapper
       to={
-        currentUser ? `/Profile/${encodeURIComponent(currentUser._id)}` : null
+        currentUser
+          ? currentUser.data
+            ? `/Profile/${encodeURIComponent(currentUser.data._id)}`
+            : `/Profile/${encodeURIComponent(currentUser._id)}`
+          : null
       }
       onClick={handleLoginClick}
     >

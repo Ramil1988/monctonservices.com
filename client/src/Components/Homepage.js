@@ -31,9 +31,8 @@ const Homepage = (props) => {
         <BigImage src={MonctonImage} alt="Moncton" />
         <TextContainer>
           <SloganText>
-            <HighlightedText>
-              We can help you to find what you want in Moncton
-            </HighlightedText>
+            We can <HighlightedText>help</HighlightedText> you to find what you
+            want in <HighlightedText>Moncton</HighlightedText>
           </SloganText>
           <NavLink to="/searchresults">
             <SearchButton>Search</SearchButton>
@@ -104,12 +103,11 @@ const MainWrapper = styled.div`
 
 const SloganText = styled.h1`
   font-size: 2.5rem;
-  color: white;
+  color: #333;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }

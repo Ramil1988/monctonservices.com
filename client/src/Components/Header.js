@@ -12,6 +12,8 @@ import LogoutButton from "./LogoutButton";
 const Header = () => {
   const { currentUser } = useContext(UserContext);
 
+  console.log(currentUser);
+
   return (
     <Wrapper>
       <InnerWrapper>
@@ -29,7 +31,14 @@ const Header = () => {
               Search
             </NavLink>
           </NavLinks>
-          {currentUser && <UserName>Hello, {currentUser.name}</UserName>}
+          {currentUser && (
+            <UserName>
+              Hello{" "}
+              {currentUser.data
+                ? currentUser.data.nickname
+                : currentUser.nickname}
+            </UserName>
+          )}
           <SearchWrapper></SearchWrapper>
           <LoginButton />
           {currentUser && <LogoutButton />}

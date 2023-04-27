@@ -62,6 +62,7 @@ const List = styled.div`
   justify-content: center;
   display: flex;
   flex-wrap: wrap;
+  
 `;
 
 const Divider = styled.div`
