@@ -1,19 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
 import UploadNotification from "./UploadNotification";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
-const UploadProfileImage = ({ currentUser, setCurrentUser }) => {
-  const [previewSource, setPreviewSource] = useState(currentUser.image);
+const UploadProfileImage = ({ user, setUser, handleRefreshData }) => {
+  const [previewSource, setPreviewSource] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [open, setOpen] = useState(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  console.log(user)
 
   const handleUploadProfileImage = (e) => {
     e.preventDefault();
+    handleImageUpload(e);
+  };
+
+  const handleImageUpload = (e) => {
     const file = e.target.files[0];
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setCurrentUser({ ...currentUser, image: reader.result });
+      setUser({ ...user, image: reader.result });
+      handleClose();
     };
     reader.onerror = () => {
       console.error("AHHHHHHHH!!");
@@ -21,30 +38,95 @@ const UploadProfileImage = ({ currentUser, setCurrentUser }) => {
     };
   };
 
-  useEffect(() => {
-    setPreviewSource(currentUser.image);
-  }, [currentUser.image]);
-
   return (
-    <div>
-      <h1 className="title">Upload Profile Image</h1>
-      <UploadNotification msg={errMsg} type="danger" />
-      <UploadNotification msg={successMsg} type="success" />
-      <div className="form">
-        <input
-          id="fileInput"
-          type="file"
-          name="image"
-          onChange={(e) => {
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <DialogTitle>Upload Profile Image</DialogTitle>
+      <DialogContent>
+        <UploadNotification msg={errMsg} type="danger" />
+        <UploadNotification msg={successMsg} type="success" />
+        <Form>
+          <Input
+            id="fileInput"
+            type="file"
+            name="image"
+            onChange={(e) => {
+              handleImageUpload(e);
+            }}
+          />
+          {previewSource && (
+            <>
+              <ImagePreview src={previewSource} alt="chosen" />
+            </>
+          )}
+        </Form>
+      </DialogContent>
+      <DialogActions>
+        <CancelButton type="button" onClick={handleClose}>
+          Cancel
+        </CancelButton>
+        <SubmitButton
+          type="button"
+          onClick={(e) => {
             handleUploadProfileImage(e);
           }}
-        />
-      </div>
-      {previewSource && (
-        <img src={previewSource} alt="chosen" style={{ height: "150px" }} />
-      )}
-    </div>
+        >
+          Upload Image
+        </SubmitButton>
+      </DialogActions>
+    </Dialog>
   );
 };
+
+const Form = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Input = styled.input`
+  margin-bottom: 1rem;
+`;
+
+const ImagePreview = styled.img`
+  height: 350px;
+  width: auto;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+`;
+
+const ButtonBase = styled.button`
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin: 20px 10px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+`;
+
+const CancelButton = styled(ButtonBase)`
+  background-color: red;
+  color: white;
+
+  &:hover {
+    background-color: #d32f2f;
+  }
+`;
+
+const SubmitButton = styled(ButtonBase)`
+  color: #fff;
+  background-color: #3f51b5;
+
+  &:hover {
+    background-color: #283593;
+  }
+
+  &:active {
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0, 0.2),
+      0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+`;
 
 export default UploadProfileImage;

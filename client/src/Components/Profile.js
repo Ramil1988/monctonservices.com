@@ -1,29 +1,63 @@
 import React from "react";
 import styled from "styled-components";
+import logo from "../Pictures/avatar.png";
 import { keyframes } from "styled-components";
 import EditIcon from "@mui/icons-material/Edit";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "./UserContext";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ProfileReviews from "./ProfileReviews";
 import EditProfileForm from "./EditProfileForm";
+import UploadProfileImage from "./UploadProfileImage";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const Profile = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [user, setUser] = useState();
   const [reviews, setReviews] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showUploadImageForm, setShowUploadImageForm] = useState(false);
+
+  const [refreshData, setRefreshData] = useState(true);
+
+  const handleRefreshData = () => {
+    setRefreshData(!refreshData);
+  };
 
   useEffect(() => {
+    if (refreshData) {
+      fetchUser();
+      setRefreshData(false);
+    }
+  }, [refreshData]);
+
+  const { profileId } = useParams();
+
+  const handleClickAway = () => {
+    setShowUploadImageForm(false);
+  };
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/user/${profileId}`);
+      const data = await response.json();
+      setUser(data.data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
     fetchUserReviews();
     fetchUserFavorites();
   }, []);
 
   const fetchUserReviews = async () => {
     try {
-      const response = await fetch(`/user/${currentUser._id}`);
+      const response = await fetch(`/user/${profileId}`);
       const data = await response.json();
       const sortedReviews = data.data.reviews.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
@@ -36,7 +70,7 @@ const Profile = () => {
 
   const fetchUserFavorites = async () => {
     try {
-      const response = await fetch(`/user/${currentUser._id}`);
+      const response = await fetch(`/user/${profileId}`);
       const data = await response.json();
       setFavorites(data.data.favorites);
     } catch (error) {
@@ -48,7 +82,7 @@ const Profile = () => {
     event.stopPropagation();
 
     try {
-      const response = await fetch(`/user/remove-favorite/${currentUser._id}`, {
+      const response = await fetch(`/user/remove-favorite/${user._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -68,65 +102,89 @@ const Profile = () => {
 
   return (
     <ProfileWrapper>
-      <SideWrapper>
-        <Sidebar>
-          <SidebarTop>
-            <ProfileImage src={currentUser.image} />
-            <Nickname>{currentUser.name}</Nickname>
-            <EditProfile onClick={() => setShowEditForm(true)}>
-              <EditIcon fontSize="small" />
-              <span>Edit profile</span>
-            </EditProfile>
-          </SidebarTop>
-          {showEditForm && <EditProfileForm />}
-          <StatsWrapper>
-            <Stat>
-              <StatNumber>{reviews.length}</StatNumber>
-              <StatLabel>Reviews</StatLabel>
-            </Stat>
-            <Stat>
-              <StatNumber>{favorites.length}</StatNumber>
-              <StatLabel>Favorites</StatLabel>
-            </Stat>
-          </StatsWrapper>
-        </Sidebar>
-        <SloganText>
-          <span>Nice to see you again</span> {currentUser.name}!
-        </SloganText>
-      </SideWrapper>
-      <MainContent>
-        <SectionWrapper>
-          <h2>Your Reviews</h2>
-          <ProfileReviews reviews={reviews} />
-        </SectionWrapper>
-        <SectionWrapper>
-          <h2>Your Favorites</h2>
-          <FavoriteGrid>
-            {favorites &&
-              favorites.map((favorite) => (
-                <FavoriteContainer key={favorite._id}>
-                  <Bookmark>
-                    <HeaderWrapper>
-                      <StyledNavLink to={`/company/${favorite._id}`}>
-                        <FavoriteName>{favorite.name}</FavoriteName>
-                      </StyledNavLink>
-                      <RemoveFavoriteButton
-                        onClick={(event) =>
-                          handleRemoveFavoriteClick(event, favorite._id)
-                        }
-                      >
-                        <CloseIcon />
-                      </RemoveFavoriteButton>
-                    </HeaderWrapper>
-                    <StyledNavLink to={`/company/${favorite._id}`}>
-                      <FavoriteType>{favorite.serviceType}</FavoriteType>
-                    </StyledNavLink>
-                  </Bookmark>
-                </FavoriteContainer>
-              ))}
-          </FavoriteGrid>
-        </SectionWrapper>
-      </MainContent>
+      {user && (
+        <>
+          <SideWrapper>
+            <Sidebar>
+              <SidebarTop>
+                <ProfileImage
+                  src={user.image ? user.image : logo}
+                  onClick={() => setShowUploadImageForm(true)}
+                />
+                {showUploadImageForm && (
+                  <ClickAwayListener onClickAway={handleClickAway}>
+                    <GridItem>
+                      <UploadProfileImage
+                        user={user}
+                        setUser={setUser}
+                        handleRefreshData={handleRefreshData}
+                      />
+                    </GridItem>
+                  </ClickAwayListener>
+                )}
+                <Nickname>{user.name}</Nickname>
+                <EditProfile onClick={() => setShowEditForm(true)}>
+                  <EditIcon fontSize="small" />
+                  <span>Edit profile</span>
+                </EditProfile>
+              </SidebarTop>
+              {showEditForm && (
+                <EditProfileForm
+                  open={showEditForm}
+                  handleClose={() => setShowEditForm(false)}
+                  handleRefreshData={handleRefreshData}
+                />
+              )}
+              <StatsWrapper>
+                <Stat>
+                  <StatNumber>{reviews.length}</StatNumber>
+                  <StatLabel>Reviews</StatLabel>
+                </Stat>
+                <Stat>
+                  <StatNumber>{favorites.length}</StatNumber>
+                  <StatLabel>Favorites</StatLabel>
+                </Stat>
+              </StatsWrapper>
+            </Sidebar>
+            <SloganText>
+              <span>Nice to see you again</span> {user.name}
+            </SloganText>
+          </SideWrapper>
+          <MainContent>
+            <SectionWrapper>
+              <h2>Your Reviews</h2>
+              <ProfileReviews reviews={reviews} />
+            </SectionWrapper>
+            <SectionWrapper>
+              <h2>Your Favorites</h2>
+              <FavoriteGrid>
+                {favorites &&
+                  favorites.map((favorite) => (
+                    <FavoriteContainer key={favorite._id}>
+                      <Bookmark>
+                        <HeaderWrapper>
+                          <StyledNavLink to={`/company/${favorite._id}`}>
+                            <FavoriteName>{favorite.name}</FavoriteName>
+                          </StyledNavLink>
+                          <RemoveFavoriteButton
+                            onClick={(event) =>
+                              handleRemoveFavoriteClick(event, favorite._id)
+                            }
+                          >
+                            <CloseIcon />
+                          </RemoveFavoriteButton>
+                        </HeaderWrapper>
+                        <StyledNavLink to={`/company/${favorite._id}`}>
+                          <FavoriteType>{favorite.serviceType}</FavoriteType>
+                        </StyledNavLink>
+                      </Bookmark>
+                    </FavoriteContainer>
+                  ))}
+              </FavoriteGrid>
+            </SectionWrapper>
+          </MainContent>
+        </>
+      )}
     </ProfileWrapper>
   );
 };
@@ -197,7 +255,7 @@ const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
-  width: 300px;
+  width: 400px;
 `;
 
 const SidebarTop = styled.div`
@@ -211,10 +269,19 @@ const SidebarTop = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
+
+  &:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+`;
+
+const GridItem = styled.div`
+  width: 100%;
 `;
 
 const Nickname = styled.h3`

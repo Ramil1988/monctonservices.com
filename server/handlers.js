@@ -523,7 +523,6 @@ const updateCompany = async (req, res) => {
       })
       .then((data) => {
         newImage = data.secure_url;
-        console.log(newImage);
       })
       .catch((err) => {
         console.log(err);
@@ -564,7 +563,7 @@ const updateCompany = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, nickname, image, favorites, reviews } = req.body;
+    const { name, email, nickname, favorites, image, reviews } = req.body;
 
     await client.connect();
 
@@ -575,24 +574,20 @@ const updateUser = async (req, res) => {
     if (favorites) updatedFields.favorites = favorites;
     if (reviews) updatedFields.reviews = reviews;
 
-    if (image) {
-      let newImage;
+    let newImage;
 
-      await cloudinary.uploader
-        .upload(image, {
-          upload_preset: "moncton_services",
-        })
-        .then((data) => {
-          newImage = data.secure_url;
-          console.log(newImage);
-        })
-        .catch((err) => {
-          console.log(err);
-          throw new Error("Error uploading image to Cloudinary");
-        });
+    await cloudinary.uploader
+      .upload(image, {
+        upload_preset: "moncton_services",
+      })
+      .then((data) => {
+        newImage = data.secure_url;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-      if (newImage.length >= 0) updatedFields.image = newImage;
-    }
+    if (newImage.length >= 0) updatedFields.image = newImage;
 
     const { value: updatedUser } = await users.findOneAndUpdate(
       { _id: id },

@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaUser } from "react-icons/fa";
+import logo from "../Pictures/avatar.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
@@ -14,7 +15,7 @@ const LoginButton = () => {
     useContext(UserContext);
 
   const handleLoginClick = () => {
-    if (!isAuthenticated) {
+    if (!currentUser) {
       loginWithRedirect({
         appState: {
           returnTo: `${location.pathname} `,
@@ -47,13 +48,18 @@ const LoginButton = () => {
   return (
     <LoginIconWrapper
       to={
-        isAuthenticated && currentUser
-          ? `/Profile/${encodeURIComponent(currentUser._id)}`
-          : null
+        currentUser ? `/Profile/${encodeURIComponent(currentUser._id)}` : null
       }
       onClick={handleLoginClick}
     >
-      <FaUserIcon />
+      {currentUser ? (
+        <UserImage
+          src={currentUser.image ? currentUser.image : logo}
+          alt="Profile"
+        />
+      ) : (
+        <FaUserIcon />
+      )}
     </LoginIconWrapper>
   );
 };
@@ -71,5 +77,12 @@ const LoginIconWrapper = styled(NavLink)`
 `;
 
 const FaUserIcon = styled(FaUser)``;
+
+const UserImage = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
 
 export default LoginButton;
