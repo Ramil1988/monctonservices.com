@@ -7,12 +7,13 @@ const UserProvider = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
-  const [shouldFetchUser, setshouldFetchUser] = useState(true);
+  const [shouldFetchUser, setShouldFetchUser] = useState(true);
+
+  const getCurrentUser = async (id) => {
+    return await fetch(`/user/${id}`);
+  };
 
   useEffect(() => {
-    const getCurrentUser = async (id) => {
-      return await fetch(`/user/${id}`);
-    };
     if (shouldFetchUser) {
       const storedUser =
         localStorage.getItem("user") !== "undefined"
@@ -56,7 +57,7 @@ const UserProvider = ({ children }) => {
       } else {
         setLoadingUser(false);
       }
-      setshouldFetchUser(false);
+      setShouldFetchUser(false);
     }
   }, [isAuthenticated, user, isLoading, shouldFetchUser]);
 
@@ -67,6 +68,21 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {}, [isLoading]);
 
+  const refetchUser = async () => {
+    if (isAuthenticated && user) {
+      try {
+        const response = await getCurrentUser(user.sub);
+        const customUser = await response.json();
+        if (customUser.data) {
+          localStorage.setItem("user", JSON.stringify(customUser.data));
+          setCurrentUser(customUser.data);
+        }
+      } catch (error) {
+        console.error("Error refetching user:", error);
+      }
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -76,8 +92,8 @@ const UserProvider = ({ children }) => {
         isLoading,
         loadingUser,
         logoutUser,
-        logoutUser,
-        setshouldFetchUser,
+        refetchUser,
+        setShouldFetchUser,
       }}
     >
       {!loadingUser && children}

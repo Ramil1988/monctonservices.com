@@ -113,11 +113,11 @@ const SpinnerContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: #fff;
   border-radius: 10px;
   padding: 2rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   margin: 0.2rem;
+  background-color: #f2f2f2;
 `;
 
 const TableHeading = styled.h2`

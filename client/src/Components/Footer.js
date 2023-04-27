@@ -50,7 +50,7 @@ const StyledFooter = styled.div`
   width: 100%;
   color: white;
   padding: 40px 0;
-  margin-top: 50px;
+
   border-top: 2px solid lightgray;
 `;
 

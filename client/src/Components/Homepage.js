@@ -31,8 +31,9 @@ const Homepage = (props) => {
         <BigImage src={MonctonImage} alt="Moncton" />
         <TextContainer>
           <SloganText>
-            We can <HighlightedText>help</HighlightedText> you to find what you
-            want in <HighlightedText>Moncton</HighlightedText>
+            <HighlightedText>
+              We can help you to find what you want in Moncton
+            </HighlightedText>
           </SloganText>
           <NavLink to="/searchresults">
             <SearchButton>Search</SearchButton>
@@ -64,6 +65,7 @@ const fadeIn = keyframes`
 
 const Wrapper = styled.div`
   animation: ${fadeIn} 1s ease-in;
+  background-color: #f2f2f2;
 `;
 
 const LandingContainer = styled.div`
@@ -102,7 +104,7 @@ const MainWrapper = styled.div`
 
 const SloganText = styled.h1`
   font-size: 2.5rem;
-  color: #333;
+  color: white;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";

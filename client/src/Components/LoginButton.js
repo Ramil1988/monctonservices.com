@@ -11,7 +11,7 @@ import { useLocation } from "react-router-dom";
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
   let location = useLocation();
-  const { currentUser, isAuthenticated, setshouldFetchUser } =
+  const { currentUser, isAuthenticated, setShouldFetchUser } =
     useContext(UserContext);
 
   const handleLoginClick = () => {
@@ -26,7 +26,7 @@ const LoginButton = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      setshouldFetchUser(true);
+      setShouldFetchUser(true);
     }
   }, [isAuthenticated]);
 

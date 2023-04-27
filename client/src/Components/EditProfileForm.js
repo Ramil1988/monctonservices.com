@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import { UserContext } from "./UserContext";
+
+import { useEffect, useState, useContext } from "react";
 
 const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
   const [user, setUser] = useState();
@@ -12,6 +14,7 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
   const [name, setName] = useState("");
 
   const { profileId } = useParams();
+  const { refetchUser } = useContext(UserContext);
 
   const fetchUser = async () => {
     try {
@@ -55,6 +58,7 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
         setUser(data.data);
         handleClose();
         handleRefreshData();
+        refetchUser();
       } else {
         console.error("Error updating profile");
       }

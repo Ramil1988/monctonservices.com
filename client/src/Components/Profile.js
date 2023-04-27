@@ -233,6 +233,7 @@ const ProfileWrapper = styled.div`
   align-items: flex-start;
   padding: 0.5rem;
   margin: 2rem 4rem;
+  background-color: #f2f2f2;
 
   @media (max-width: 767px) {
     padding: 0.5rem 1rem;
@@ -245,6 +246,7 @@ const SideWrapper = styled.div`
   grid-template-columns: 1fr 3fr;
   grid-gap: 1rem;
   width: 100%;
+  margin: 50px;
 
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
@@ -338,9 +340,9 @@ const MainContent = styled.div`
 `;
 
 const SectionWrapper = styled.div`
-  margin-bottom: 5rem;
-  margin-top: 2rem;
-  width: 100%;
+  margin: auto;
+  margin-bottom: 50px;
+  width: 80%;
 `;
 
 const FavoriteGrid = styled.div`

@@ -43,10 +43,10 @@ const About = () => {
           <SectionTextWrapper>
             <SectionTitle>Vision</SectionTitle>
             <SectionText>
-              Create a user-friendly platform that connects
-              people with top-rated service providers in Moncton. By focusing on
-              real customer reviews, we aim to help users make informed choices
-              while supporting local businesses and strengthening our community.
+              Create a user-friendly platform that connects people with
+              top-rated service providers in Moncton. By focusing on real
+              customer reviews, we aim to help users make informed choices while
+              supporting local businesses and strengthening our community.
             </SectionText>
           </SectionTextWrapper>
         </Section>
@@ -92,11 +92,12 @@ const fadeIn = keyframes`
 
 const AboutWrapper = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 50px 20px;
   font-family: "Raleway", sans-serif;
   animation: ${fadeIn} 2s ease-in;
   border-radius: 10px;
+  background-color: #f2f2f2;
 
   @media (max-width: 1040px) {
     padding: 20px 10px;
