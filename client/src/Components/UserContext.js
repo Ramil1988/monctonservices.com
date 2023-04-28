@@ -19,8 +19,8 @@ const UserProvider = ({ children }) => {
         localStorage.getItem("user") !== "undefined"
           ? JSON.parse(localStorage.getItem("user"))
           : null;
-
-      if (isAuthenticated && user) {
+      if (!isLoading && isAuthenticated && user) {
+        setShouldFetchUser(false);
         getCurrentUser(user.sub)
           .then((res) => res.json())
           .then((customUser) => {
@@ -49,7 +49,7 @@ const UserProvider = ({ children }) => {
                 .catch((error) => console.error("Error saving user:", error));
             }
           });
-
+        setShouldFetchUser(false);
         setLoadingUser(false);
       } else if (storedUser) {
         setCurrentUser(storedUser);
@@ -57,7 +57,6 @@ const UserProvider = ({ children }) => {
       } else {
         setLoadingUser(false);
       }
-      setShouldFetchUser(false);
     }
   }, [isAuthenticated, user, isLoading, shouldFetchUser]);
 
@@ -69,10 +68,12 @@ const UserProvider = ({ children }) => {
   useEffect(() => {}, [isLoading]);
 
   const refetchUser = async () => {
+    console.log(isAuthenticated);
     if (isAuthenticated && user) {
       try {
         const response = await getCurrentUser(user.sub);
         const customUser = await response.json();
+
         if (customUser.data) {
           localStorage.setItem("user", JSON.stringify(customUser.data));
           setCurrentUser(customUser.data);

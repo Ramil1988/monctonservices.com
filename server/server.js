@@ -33,12 +33,12 @@ const {
 express()
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
+  .use(express.json({ limit: "50mb" }))
+  .use(express.urlencoded({ limit: "50mb", extended: true }))
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
   .use(express.static("public"))
-  .use(express.json({ limit: "50mb" }))
-  .use(express.urlencoded({ limit: "50mb", extended: true }))
   .use(cors())
 
   // POST REST endpoints

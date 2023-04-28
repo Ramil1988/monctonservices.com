@@ -114,11 +114,7 @@ const Profile = () => {
                 {showUploadImageForm && (
                   <ClickAwayListener onClickAway={handleClickAway}>
                     <GridItem>
-                      <UploadProfileImage
-                        user={user}
-                        setUser={setUser}
-                        handleRefreshData={handleRefreshData}
-                      />
+                      <UploadProfileImage user={user} setUser={setUser} />
                     </GridItem>
                   </ClickAwayListener>
                 )}

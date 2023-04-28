@@ -14,7 +14,7 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
   const [name, setName] = useState("");
 
   const { profileId } = useParams();
-  const { refetchUser } = useContext(UserContext);
+  const { setShouldFetchUser } = useContext(UserContext);
 
   const fetchUser = async () => {
     try {
@@ -55,10 +55,9 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data.data);
         handleClose();
         handleRefreshData();
-        refetchUser();
+        setShouldFetchUser(true);
       } else {
         console.error("Error updating profile");
       }

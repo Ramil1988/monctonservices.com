@@ -692,7 +692,7 @@ const Notification = styled.div`
     message === "Please log in to add a company to favorites" ||
     message === "Please log in to leave a review"
       ? "yellow"
-      : "#28a745"};
+      : "lightgreen"};
   width: 300px;
   border-radius: 5px;
 `;

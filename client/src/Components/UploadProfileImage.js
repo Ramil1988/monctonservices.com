@@ -1,36 +1,45 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import UploadNotification from "./UploadNotification";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import { UserContext } from "./UserContext";
+import { useEffect, useState, useContext } from "react";
 
-const UploadProfileImage = ({ user, setUser, handleRefreshData }) => {
+const UploadProfileImage = ({ user, setUser }) => {
   const [previewSource, setPreviewSource] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [open, setOpen] = useState(true);
+  const [targetImage, setTargetImage] = useState(null);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  console.log(user)
-
   const handleUploadProfileImage = (e) => {
     e.preventDefault();
-    handleImageUpload(e);
+    const response = fetch(`/user/${user._id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: targetImage }),
+    });
+    if (response.ok) {
+      const data = response.json();
+    } else {
+      console.error("Error updating profile");
+    }
+    handleClose();
   };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
+      setTargetImage(reader.result);
       setUser({ ...user, image: reader.result });
-      handleClose();
     };
     reader.onerror = () => {
       console.error("AHHHHHHHH!!");

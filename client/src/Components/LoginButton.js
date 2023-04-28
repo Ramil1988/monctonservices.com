@@ -4,7 +4,7 @@ import logo from "../Pictures/avatar.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useLocation } from "react-router-dom";
 

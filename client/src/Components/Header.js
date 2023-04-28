@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../Pictures/logo-black.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
@@ -11,8 +11,6 @@ import LogoutButton from "./LogoutButton";
 
 const Header = () => {
   const { currentUser } = useContext(UserContext);
-
-  console.log(currentUser);
 
   return (
     <Wrapper>
