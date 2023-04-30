@@ -35,6 +35,7 @@ const ItemDiv = styled.div`
     0 6.7px 5.3px rgba(0, 0, 0, 0.028), 0 12.5px 10px rgba(0, 0, 0, 0.035),
     0 1.3px 17.9px rgba(0, 0, 0, 0.182), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
     0 100px 80px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   a:link {
     text-decoration: none;
@@ -43,6 +44,8 @@ const ItemDiv = styled.div`
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 18px rgba(0, 0, 0, 0.12),
+      0 3px 5px rgba(0, 0, 0, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.25);
   }
 
   @media screen and (max-width: 768px) {
@@ -62,7 +65,6 @@ const List = styled.div`
   justify-content: center;
   display: flex;
   flex-wrap: wrap;
-  
 `;
 
 const Divider = styled.div`
@@ -70,6 +72,8 @@ const Divider = styled.div`
   height: 2px;
   width: 80%;
   margin: auto;
+  margin-top: 10px;
+  margin-bottom: 15px;
 `;
 
 const Item = styled.img`

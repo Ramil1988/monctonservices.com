@@ -415,6 +415,10 @@ const Image = styled.img`
   width: auto;
   height: auto;
   border-radius: 5px;
+
+  &:hover {
+    transform: scale(1.15);
+  }
 `;
 
 const InfoBox = styled.div`

@@ -10,9 +10,13 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
   const [reviews, setReviews] = useState([]);
+  const [companies, setAllCompanies] = useState([]);
+  const [displayedItems, setDisplayedItems] = useState(10);
+  const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
     fetchAllReviews();
+    fetchAllcompanies();
   }, []);
 
   const fetchAllReviews = async () => {
@@ -25,6 +29,25 @@ const Homepage = (props) => {
     }
   };
 
+  const fetchAllcompanies = async () => {
+    try {
+      const response = await fetch("/allCompanies");
+      const data = await response.json();
+      setAllCompanies(data.data);
+    } catch (error) {
+      console.error("Error fetching all reviews:", error);
+    }
+  };
+
+  const handleShowMoreLess = () => {
+    if (showMore) {
+      setDisplayedItems(displayedItems + 10);
+    } else {
+      setDisplayedItems(10);
+    }
+    setShowMore(!showMore);
+  };
+
   return (
     <Wrapper>
       <LandingContainer>
@@ -34,6 +57,10 @@ const Homepage = (props) => {
             We can <HighlightedText>help</HighlightedText> you to find what you
             want in <HighlightedText>Moncton</HighlightedText>
           </SloganText>
+          <StatisticText>
+            Our website already has <span>{companies.length}</span> companies
+            listed.
+          </StatisticText>
           <NavLink to="/searchresults">
             <SearchButton>Search</SearchButton>
           </NavLink>
@@ -41,7 +68,18 @@ const Homepage = (props) => {
       </LandingContainer>
       <MainWrapper>
         <BigText>Services in Moncton</BigText>
-        <ListOfItems data={allItems} />
+        <ListOfItems data={allItems.slice(0, displayedItems)} />
+        <ButtonWrapper>
+          {showMore && displayedItems < allItems.length ? (
+            <ShowMoreLessButton onClick={handleShowMoreLess}>
+              Show more
+            </ShowMoreLessButton>
+          ) : (
+            <ShowMoreLessButton onClick={handleShowMoreLess}>
+              Show less
+            </ShowMoreLessButton>
+          )}
+        </ButtonWrapper>
         <BigText>Popular Services</BigText>
         <PopularServices />
         <BigText>Recent reviews</BigText>
@@ -118,6 +156,21 @@ const HighlightedText = styled.span`
   font-weight: bold;
 `;
 
+const StatisticText = styled.h2`
+  font-style: italic;
+  font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+
+  & span {
+    color: white;
+    padding: 5px;
+    font-size: 30px;
+    border-radius: 10px;
+    border: 5px solid white;
+  }
+`;
+
 const SearchButton = styled.button`
   margin-top: 20px;
   padding: 20px 30px;
@@ -156,6 +209,39 @@ const BigText = styled.h1`
   @media (max-width: 768px) {
     font-size: 1.5rem;
     margin: 30px 10px;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+`;
+
+const ShowMoreLessButton = styled.button`
+  margin: auto;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background-color: black;
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    background-color: #555;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 15px;
+    font-size: 0.9rem;
   }
 `;
 
