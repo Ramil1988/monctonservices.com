@@ -4,13 +4,18 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { FaBook, FaSearch } from "react-icons/fa";
+import { FaBook, FaSearch, FaBars } from "react-icons/fa";
 
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 
 const Header = () => {
   const { currentUser } = useContext(UserContext);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <Wrapper>
@@ -18,17 +23,24 @@ const Header = () => {
         <Logo to={`/`} onClick={window.location.reload}>
           <img src={logo} alt="Logo" />
         </Logo>
+        <MenuIcon onClick={toggleMenu}>
+          <FaBars />
+        </MenuIcon>
+        <NavLinks menuOpen={menuOpen}>
+          <NavLink className="nav-link" to="/about" onClick={toggleMenu}>
+            <StyledIcon as={FaBook} />
+            About
+          </NavLink>
+          <NavLink
+            className="nav-link"
+            to="/searchresults"
+            onClick={toggleMenu}
+          >
+            <StyledIcon as={FaSearch} />
+            Search
+          </NavLink>
+        </NavLinks>
         <UserWrapper>
-          <NavLinks>
-            <NavLink className="nav-link" to="/about">
-              <StyledIcon as={FaBook} />
-              About
-            </NavLink>
-            <NavLink className="nav-link" to="/searchresults">
-              <StyledIcon as={FaSearch} />
-              Search
-            </NavLink>
-          </NavLinks>
           {currentUser && (
             <UserName>
               Hello{" "}
@@ -72,9 +84,34 @@ const Logo = styled(NavLink)`
   }
 `;
 
+const MenuIcon = styled.div`
+  display: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  @media (max-width: 1150px) {
+    display: block;
+  }
+`;
+
 const NavLinks = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 1150px) {
+    display: ${({ menuOpen }) => (menuOpen ? "flex" : "none")};
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    background-color: #ffffff;
+    width: 20vw;
+    padding: 10px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+  }
 
   .nav-link {
     margin-right: 5rem;
@@ -84,12 +121,11 @@ const NavLinks = styled.div`
     text-decoration: none;
     display: flex;
     align-items: center;
-    transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.2);
     }
-
     &:after {
       display: block;
       content: "";
@@ -99,6 +135,11 @@ const NavLinks = styled.div`
     }
     &:hover:after {
       transform: scaleX(1);
+    }
+
+    @media (max-width: 1150px) {
+      margin-right: 0;
+      margin-bottom: 2rem;
     }
   }
 `;

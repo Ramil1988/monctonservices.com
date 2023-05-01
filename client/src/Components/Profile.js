@@ -236,12 +236,12 @@ const ProfileWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0.5rem;
-  margin: 2rem 4rem;
+  margin: 2rem 2rem;
   background-color: #f2f2f2;
 
   @media (max-width: 767px) {
-    padding: 0.5rem 1rem;
-    max-width: 100vw;
+    width: 330px;
+   
   }
 `;
 
@@ -269,7 +269,7 @@ const Sidebar = styled.div`
   width: 500px;
 
   @media (max-width: 767px) {
-    width: 320px;
+    width: 330px;
   }
 `;
 
@@ -369,12 +369,11 @@ const StatLabel = styled.span`
 
 const MainContent = styled.div`
   width: 100%;
-
   margin: auto;
 `;
 
 const SectionWrapper = styled.div`
-  margin: auto;
+ 
   margin-bottom: 50px;
   width: 90%;
 `;

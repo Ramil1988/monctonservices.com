@@ -142,6 +142,10 @@ const AboutTitle = styled.h1`
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
+
+  @media (max-width: 1040px) {
+    font-size: 30px;
+  }
 `;
 
 const AboutSubtitle = styled.h2`

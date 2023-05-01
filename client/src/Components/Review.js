@@ -280,6 +280,28 @@ const Review = () => {
           </ReviewDate>
         </ReviewAuthor>
       </ReviewWrapper>
+      <BigText>Comments</BigText>
+      {review.comments &&
+        review.comments.map((comment, index) => (
+          <Comment key={index}>
+            <CommentHeader>
+              <Nickname>{comment.user}</Nickname>
+              <div>
+                <Time>{new Date(comment.date).toLocaleDateString()}</Time>
+                {currentUser.nickname === comment.user && (
+                  <StyledDeleteCommentButton
+                    onClick={() => {
+                      handleDeleteComment(comment.date);
+                    }}
+                  >
+                    X
+                  </StyledDeleteCommentButton>
+                )}
+              </div>
+            </CommentHeader>
+            <div>{comment.text}</div>
+          </Comment>
+        ))}
       {commentFormVisible ? (
         <CommentForm>
           <CommentInput
@@ -302,24 +324,6 @@ const Review = () => {
           </StyledAddCommentButton>
         </AddCommentButtonContainer>
       )}
-      {review.comments &&
-        review.comments.map((comment, index) => (
-          <Comment key={index}>
-            {comment.text} - {comment.user} on{" "}
-            {new Date(comment.date).toLocaleDateString()}
-            {currentUser.nickname === comment.user && (
-              <StyledDeleteCommentButton
-                onClick={() => {
-                  handleDeleteComment(comment.date);
-                  console.log(comment.user);
-                }}
-              >
-                X
-              </StyledDeleteCommentButton>
-            )}
-          </Comment>
-        ))}
-
       <Notification show={notification.show} type={notification.type}>
         {notification.message}
       </Notification>
@@ -466,6 +470,31 @@ const StyledDeleteButton = styled.button`
   }
 `;
 
+const BigText = styled.h1`
+  margin: 40px 20px;
+  color: black;
+  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  overflow: hidden;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin: 30px 10px;
+  }
+`;
+
+const Comment = styled.div`
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 const CommentForm = styled.div`
   display: flex;
   flex-direction: row;
@@ -476,6 +505,7 @@ const CommentForm = styled.div`
 const CommentInput = styled.input`
   flex-grow: 1;
   margin-right: 1rem;
+  margin-left: 3.5rem;
   padding: 8px;
   font-size: 1rem;
   border: 1px solid #ccc;
@@ -536,12 +566,20 @@ const StyledSubmitButton = styled.button`
     background-color: #2ecc71;
   }
 `;
+const CommentHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
 
-const Comment = styled.div`
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 5px;
+const Nickname = styled.span`
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const Time = styled.span`
+  font-size: 0.9rem;
+  color: #777;
 `;
 
 const StyledDeleteCommentButton = styled.button`

@@ -72,7 +72,7 @@ const ReviewsWrapper = styled.div`
   justify-content: space-between;
   margin: 50px 150px 50px 150px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1150px) {
     flex-direction: column;
   }
 `;
@@ -81,7 +81,7 @@ const ReviewsContainer = styled.div`
   display: flex;
   gap: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1150px) {
     flex-direction: column;
     gap: 10px;
   }
@@ -105,8 +105,8 @@ const Review = styled.div`
     cursor: pointer;
   }
 
-  @media (max-width: 768px) {
-    width: 100%;
+  @media (max-width: 1150px) {
+    width: 50vw;
     padding: 0 10px;
   }
 `;

@@ -116,8 +116,12 @@ const Wrapper = styled.div`
   border-radius: 10px;
   padding: 2rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-
   background-color: #f2f2f2;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    background-color: white;
+  }
 `;
 
 const TableHeading = styled.h2`
@@ -126,6 +130,11 @@ const TableHeading = styled.h2`
   margin-bottom: 1.5rem;
   color: #003262;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Table = styled.table`
@@ -137,6 +146,11 @@ const Table = styled.table`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 0.9rem;
+  }
 `;
 
 const Th = styled.th`

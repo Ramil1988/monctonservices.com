@@ -131,6 +131,11 @@ const TextContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    top: 40%;
+  }
 `;
 
 const MainWrapper = styled.div`
@@ -160,6 +165,7 @@ const StatisticText = styled.h2`
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
+  margin-bottom: 1rem;
 
   & span {
     color: white;
@@ -167,6 +173,10 @@ const StatisticText = styled.h2`
     font-size: 30px;
     border-radius: 10px;
     border: 5px solid white;
+  }
+
+  @media (max-width: 780px) {
+    display: none;
   }
 `;
 

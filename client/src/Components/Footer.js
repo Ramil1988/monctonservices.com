@@ -38,8 +38,7 @@ const Logo = styled.div`
 
   @media (max-width: 768px) {
     & img {
-      width: 200px;
-      margin-left: 0;
+      display: none;
     }
   }
 `;
@@ -50,7 +49,6 @@ const StyledFooter = styled.div`
   width: 100%;
   color: white;
   padding: 40px 0;
-
   border-top: 2px solid lightgray;
 `;
 
@@ -62,6 +60,7 @@ const FooterContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: row;
     align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -83,6 +82,7 @@ const NavLinks = styled.div`
 const NavFoot = styled(NavLink)`
   text-decoration: none;
   color: black;
+  margin-left: 40px;
   margin-top: -5px;
   margin-left: 40px;
 
@@ -106,7 +106,6 @@ const NavFoot = styled(NavLink)`
 
   @media (max-width: 768px) {
     margin-top: -20px;
-    font-size: 12px;
   }
 `;
 
@@ -136,7 +135,6 @@ const StyledAnchor = styled.a`
 
   @media (max-width: 768px) {
     margin-top: -20px;
-    font-size: 12px;
   }
 `;
 
