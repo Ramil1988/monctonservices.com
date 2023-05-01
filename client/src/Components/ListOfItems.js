@@ -45,7 +45,7 @@ const ItemDiv = styled.div`
     transform: scale(1.05);
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 18px rgba(0, 0, 0, 0.12),
-      0 3px 5px rgba(0, 0, 0, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.25);
+      0 3px 5px rgba(0, 0, 0, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.12);
   }
 
   @media screen and (max-width: 768px) {

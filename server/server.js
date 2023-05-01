@@ -28,6 +28,7 @@ const {
   deleteAllReviewsForCompany,
   deleteReview,
   removeFavorite,
+  deleteComment,
 } = require("./handlers");
 
 express()
@@ -70,5 +71,6 @@ express()
   .delete("/user/:id", deleteUser)
   .delete("/allReviews/company/:id", deleteAllReviewsForCompany)
   .delete("/review/:id", deleteReview)
+  .delete("/review/:reviewId/comments/:commentDate", deleteComment)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

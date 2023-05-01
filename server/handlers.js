@@ -115,7 +115,8 @@ const createUser = async (req, res) => {
 const createReview = async (req, res) => {
   try {
     const { companyId } = req.params;
-    const { userId, userName, company, date, title, text, grade } = req.body;
+    const { userId, userName, company, date, title, text, grade, comments } =
+      req.body;
 
     await client.connect();
 
@@ -128,6 +129,7 @@ const createReview = async (req, res) => {
       title: title,
       text: text,
       grade: grade,
+      comments: comments,
     };
 
     const companyResult = await companies.updateOne(
@@ -622,7 +624,7 @@ const updateUser = async (req, res) => {
 const updateReview = async (req, res) => {
   try {
     const { id } = req.params;
-    const { date, title, text, grade } = req.body;
+    const { date, title, text, grade, comment } = req.body;
 
     await client.connect();
 
@@ -632,6 +634,16 @@ const updateReview = async (req, res) => {
     if (text) updatedFields["reviews.$.text"] = text;
     if (grade) updatedFields["reviews.$.grade"] = grade;
 
+    if (comment) {
+      const updateComment = {
+        $push: {
+          "reviews.$.comments": comment,
+        },
+      };
+
+      await companies.updateOne({ "reviews._id": id }, updateComment);
+    }
+
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { "reviews._id": id },
       { $set: updatedFields },
@@ -640,42 +652,22 @@ const updateReview = async (req, res) => {
 
     if (!updatedCompany) {
       return res.status(404).json({
-        status: 404,
-        message: "Review not found.",
-        data: null,
+        message: "Review not found",
       });
     }
 
     const updatedReview = updatedCompany.reviews.find(
-      (review) => review._id === id
+      (review) => review._id.toString() === id
     );
 
-    const { value: updatedUser } = await users.findOneAndUpdate(
-      { "reviews._id": id },
-      { $set: updatedFields },
-      { returnOriginal: false }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({
-        status: 404,
-        message: "User not found.",
-        data: null,
-      });
-    }
-
-    return res.status(200).json({
-      status: 200,
+    res.status(200).json({
       message: "Review updated successfully.",
       data: updatedReview,
     });
   } catch (error) {
     console.error("Error updating review:", error);
-    await client.close();
-    return res.status(500).json({
-      status: 500,
-      message: "An error occurred while updating the review.",
-      data: null,
+    res.status(500).json({
+      message: "Failed to update review.",
     });
   }
 };
@@ -874,6 +866,41 @@ const removeFavorite = async (req, res) => {
   }
 };
 
+const deleteComment = async (req, res) => {
+  try {
+    const { reviewId, commentDate } = req.params;
+    await client.connect();
+
+    const { value: updatedCompany } = await companies.findOneAndUpdate(
+      { "reviews._id": reviewId },
+      { $pull: { "reviews.$.comments": { date: commentDate } } },
+      { returnOriginal: false }
+    );
+
+    await client.close();
+
+    if (!updatedCompany) {
+      return res.status(404).json({
+        status: 404,
+        message: "Comment not found.",
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Comment deleted successfully.",
+      updatedCompany,
+    });
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while deleting the comment.",
+    });
+  }
+};
+
 module.exports = {
   createCompany,
   createUser,
@@ -896,4 +923,5 @@ module.exports = {
   deleteAllReviewsForCompany,
   deleteReview,
   removeFavorite,
+  deleteComment,
 };

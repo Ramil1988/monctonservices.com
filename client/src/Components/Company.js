@@ -96,6 +96,7 @@ const Company = () => {
       title: e.target.title.value,
       text: e.target.text.value,
       grade: parseInt(e.target.grade.value, 10),
+      comments: [],
     };
 
     try {

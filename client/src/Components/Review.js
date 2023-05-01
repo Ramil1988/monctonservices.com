@@ -12,6 +12,10 @@ const Review = () => {
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const [author, setAuthor] = useState(false);
+  const [commentFormVisible, setCommentFormVisible] = useState(false);
+  const [comment, setComment] = useState("");
+  const [commentsVersion, setCommentsVersion] = useState(0);
+
   const [notification, setNotification] = useState({
     show: false,
     message: "",
@@ -20,7 +24,7 @@ const Review = () => {
 
   useEffect(() => {
     fetchReviewById();
-  }, []);
+  }, [commentsVersion]);
 
   useEffect(() => {
     const isAuthor = () => {
@@ -124,6 +128,108 @@ const Review = () => {
     }
   };
 
+  const handleAddCommentClick = () => {
+    setCommentFormVisible(!commentFormVisible);
+  };
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleCancelCommentClick = () => {
+    setComment("");
+    setCommentFormVisible(false);
+  };
+
+  const handleSubmitCommentClick = async () => {
+    const newComment = {
+      date: new Date().toISOString(),
+      user: currentUser.nickname,
+      text: comment,
+    };
+
+    try {
+      const response = await fetch(`/review/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment: newComment }),
+      });
+
+      const data = await response.json();
+
+      if (response.status !== 200) {
+        throw new Error(data.message);
+      }
+
+      setReview({
+        ...review,
+        comments: data.data.comments,
+      });
+
+      setComment("");
+      setCommentFormVisible(false);
+      setCommentsVersion(commentsVersion + 1);
+
+      setNotification({
+        show: true,
+        message: "Comment added successfully!",
+        type: "success",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
+    } catch (error) {
+      console.error("Error adding comment:", error);
+
+      setNotification({
+        show: true,
+        message: "Failed to add comment.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
+    }
+  };
+
+  const handleDeleteComment = async (commentDate) => {
+    try {
+      const response = await fetch(`/review/${id}/comments/${commentDate}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.status !== 200) {
+        throw new Error(data.message);
+      }
+
+      setReview({
+        ...review,
+        comments: data.updatedCompany.reviews.find((r) => r._id === id)
+          .comments,
+      });
+      setCommentsVersion(commentsVersion + 1);
+
+      setNotification({
+        show: true,
+        message: "Comment deleted successfully!",
+        type: "success",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+
+      setNotification({
+        show: true,
+        message: "Failed to delete comment.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ ...notification, show: false }), 3000);
+    }
+  };
+
   if (!review) {
     return (
       <SpinnerContainer>
@@ -134,25 +240,6 @@ const Review = () => {
 
   return (
     <>
-      <ReviewWrapper>
-        <ReviewHeader>
-          <StyledNavlink to={`/company/${review.companyId}`}>
-            <CompanyName>{review.companyName}</CompanyName>
-          </StyledNavlink>
-          <Rating>Rating: {review.grade} / 5</Rating>
-        </ReviewHeader>
-        <ReviewSubHeader>
-          <ReviewTitle>{review.title}</ReviewTitle>
-        </ReviewSubHeader>
-        <ReviewContent>{review.text}</ReviewContent>
-        <ReviewAuthor>
-          Left by {review.userName}
-          <ReviewDate>
-            {" "}
-            on {new Date(review.date).toLocaleDateString()}
-          </ReviewDate>
-        </ReviewAuthor>
-      </ReviewWrapper>
       {showUpdateForm ? (
         <ReviewUpdateForm
           review={review}
@@ -174,6 +261,65 @@ const Review = () => {
           )}
         </>
       )}
+      <ReviewWrapper>
+        <ReviewHeader>
+          <StyledNavlink to={`/company/${review.companyId}`}>
+            <CompanyName>{review.companyName}</CompanyName>
+          </StyledNavlink>
+          <Rating>Rating: {review.grade} / 5</Rating>
+        </ReviewHeader>
+        <ReviewSubHeader>
+          <ReviewTitle>{review.title}</ReviewTitle>
+        </ReviewSubHeader>
+        <ReviewContent>{review.text}</ReviewContent>
+        <ReviewAuthor>
+          Left by {review.userName}
+          <ReviewDate>
+            {" "}
+            on {new Date(review.date).toLocaleDateString()}
+          </ReviewDate>
+        </ReviewAuthor>
+      </ReviewWrapper>
+      {commentFormVisible ? (
+        <CommentForm>
+          <CommentInput
+            type="text"
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder="Write your comment here..."
+          />
+          <StyledCancelButton onClick={handleCancelCommentClick}>
+            Cancel
+          </StyledCancelButton>
+          <StyledSubmitButton onClick={handleSubmitCommentClick}>
+            Comment
+          </StyledSubmitButton>
+        </CommentForm>
+      ) : (
+        <AddCommentButtonContainer>
+          <StyledAddCommentButton onClick={handleAddCommentClick}>
+            Add comment
+          </StyledAddCommentButton>
+        </AddCommentButtonContainer>
+      )}
+      {review.comments &&
+        review.comments.map((comment, index) => (
+          <Comment key={index}>
+            {comment.text} - {comment.user} on{" "}
+            {new Date(comment.date).toLocaleDateString()}
+            {currentUser.nickname === comment.user && (
+              <StyledDeleteCommentButton
+                onClick={() => {
+                  handleDeleteComment(comment.date);
+                  console.log(comment.user);
+                }}
+              >
+                X
+              </StyledDeleteCommentButton>
+            )}
+          </Comment>
+        ))}
+
       <Notification show={notification.show} type={notification.type}>
         {notification.message}
       </Notification>
@@ -280,7 +426,7 @@ const SpinnerContainer = styled.div`
 `;
 
 const ActionButtonsContainer = styled.div`
-  margin: 2rem;
+  margin: 1rem;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -317,6 +463,101 @@ const StyledDeleteButton = styled.button`
 
   &:hover {
     background-color: #c0392b;
+  }
+`;
+
+const CommentForm = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 1rem 0;
+`;
+
+const CommentInput = styled.input`
+  flex-grow: 1;
+  margin-right: 1rem;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const AddCommentButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem;
+`;
+const StyledAddCommentButton = styled.button`
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #8e44ad;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #9b59b6;
+  }
+`;
+
+const StyledCancelButton = styled.button`
+  margin-left: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #c0392b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #e74c3c;
+  }
+`;
+
+const StyledSubmitButton = styled.button`
+  margin-left: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #27ae60;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #2ecc71;
+  }
+`;
+
+const Comment = styled.div`
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+`;
+
+const StyledDeleteCommentButton = styled.button`
+  margin-left: 10px;
+  padding: 2px 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #c0392b;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #e74c3c;
   }
 `;
 

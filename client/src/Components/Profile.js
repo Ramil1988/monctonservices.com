@@ -226,7 +226,7 @@ const SloganText = styled.h1`
     font-style: italic;
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1300px) {
     display: none;
   }
 `;
@@ -252,8 +252,13 @@ const SideWrapper = styled.div`
   width: 100%;
   margin: 50px;
 
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr 2fr;
+  }
+
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
+    margin: auto;
   }
 `;
 
@@ -262,6 +267,10 @@ const Sidebar = styled.div`
   flex-direction: column;
   margin-bottom: 2rem;
   width: 500px;
+
+  @media (max-width: 767px) {
+    width: 320px;
+  }
 `;
 
 const SidebarTop = styled.div`
@@ -297,6 +306,11 @@ const NameFields = styled.h3`
   font-weight: 600;
   color: #fff;
   margin-bottom: 5px;
+
+  @media (max-width: 767px) {
+    font-weight: 200;
+    font-size: 1rem;
+  }
 `;
 
 const StyledSpan = styled.span`
@@ -304,6 +318,11 @@ const StyledSpan = styled.span`
   font-weight: 300;
   font-size: 1.2rem;
   margin-right: 10px;
+
+  @media (max-width: 767px) {
+    font-weight: 200;
+    font-size: 1rem;
+  }
 `;
 
 const EditProfile = styled.div`
@@ -350,12 +369,14 @@ const StatLabel = styled.span`
 
 const MainContent = styled.div`
   width: 100%;
+
+  margin: auto;
 `;
 
 const SectionWrapper = styled.div`
   margin: auto;
   margin-bottom: 50px;
-  width: 80%;
+  width: 90%;
 `;
 
 const FavoriteGrid = styled.div`

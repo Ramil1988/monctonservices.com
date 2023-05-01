@@ -5,13 +5,12 @@ import ListOfItems from "./ListOfItems";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
 import MonctonImage from "../Pictures/Moncton.jpg";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
   const [reviews, setReviews] = useState([]);
   const [companies, setAllCompanies] = useState([]);
-  const [displayedItems, setDisplayedItems] = useState(10);
+  const [displayedItems, setDisplayedItems] = useState(8);
   const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
@@ -41,9 +40,9 @@ const Homepage = (props) => {
 
   const handleShowMoreLess = () => {
     if (showMore) {
-      setDisplayedItems(displayedItems + 10);
+      setDisplayedItems(displayedItems + 8);
     } else {
-      setDisplayedItems(10);
+      setDisplayedItems(8);
     }
     setShowMore(!showMore);
   };

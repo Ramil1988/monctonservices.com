@@ -67,7 +67,7 @@ const ReviewUpdateForm = ({
               <Input
                 name="grade"
                 type="number"
-                min="0"
+                min="1"
                 max="5"
                 value={updatedData.grade}
                 onChange={handleChange}
