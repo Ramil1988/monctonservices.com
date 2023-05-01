@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
-import Spinner from "./Spinner";
+import Spinner from "../Helper/Spinner";
 import ReviewUpdateForm from "./ReviewUpdateForm";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 
 const Review = () => {
   const [review, setReview] = useState(null);

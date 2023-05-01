@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UploadNotification from "./UploadNotification";
+import UploadNotification from "../Helper/UploadNotification";
 
 const UploadCompanyImage = ({ newCompany, setNewCompany }) => {
   const [previewSource, setPreviewSource] = useState("");

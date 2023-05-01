@@ -1,4 +1,4 @@
-import logo from "../Pictures/logo-black.png";
+import logo from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/logo-black.png";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 

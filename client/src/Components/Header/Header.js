@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import logo from "../Pictures/logo-black.png";
+import logo from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/logo-black.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 import { FaBook, FaSearch, FaBars } from "react-icons/fa";
 
 import LoginButton from "./LoginButton";

@@ -5,11 +5,11 @@ import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { UserContext } from "./UserContext";
-import Spinner from "./Spinner";
+import { UserContext } from "../UserContext";
+import Spinner from "../Helper/Spinner";
 import { Link } from "react-router-dom";
 import Maps from "./Maps";
-import NotificationBox from "./NotificationBox";
+import NotificationBox from "../Helper/NotificationBox";
 
 const Company = () => {
   const { companyId } = useParams();

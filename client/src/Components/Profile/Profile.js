@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../Pictures/avatar.png";
+import logo from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/avatar.png";
 import { keyframes } from "styled-components";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
@@ -241,7 +241,6 @@ const ProfileWrapper = styled.div`
 
   @media (max-width: 767px) {
     width: 330px;
-   
   }
 `;
 
@@ -373,14 +372,12 @@ const MainContent = styled.div`
 `;
 
 const SectionWrapper = styled.div`
- 
-  margin-bottom: 50px;
-  width: 90%;
+  margin: auto;
+  width: 80%;
 `;
 
 const FavoriteGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-gap: 0.5rem;
   padding: 1rem;
 

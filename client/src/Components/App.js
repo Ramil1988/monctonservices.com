@@ -3,17 +3,17 @@ import { serviceTypes } from "./serviceTypes";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import Navigation from "./Navigation";
-import Homepage from "./Homepage";
-import Profile from "./Profile";
-import RatingTable from "./RatingTable";
-import Company from "./Company";
-import Header from "./Header";
-import SearchResults from "./SearchResults";
-import Review from "./Review";
-import Footer from "./Footer";
-import About from "./About";
-import Admin from "./Admin";
+import Navigation from "./Helper/Navigation";
+import Homepage from "./Homepage/Homepage";
+import Profile from "./Profile/Profile";
+import RatingTable from "./RatingTable/RatingTable";
+import Company from "./Company/Company";
+import Header from "./Header/Header";
+import SearchResults from "./Search/SearchResults";
+import Review from "./Review/Review";
+import Footer from "./Homepage/Footer";
+import About from "./Header/About";
+import Admin from "./Admin/Admin";
 
 const App = () => {
   const { currentUser } = useContext(UserContext);

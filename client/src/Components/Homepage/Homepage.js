@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import ListOfItems from "./ListOfItems";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
-import MonctonImage from "../Pictures/Moncton.jpg";
+import MonctonImage from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/Moncton.jpg";
 
 const Homepage = (props) => {
   const allItems = Object.values(props.items);

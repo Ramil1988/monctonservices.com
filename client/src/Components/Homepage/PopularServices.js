@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { serviceTypes } from "./serviceTypes";
+import { serviceTypes } from "../serviceTypes";
 import { AiFillStar } from "react-icons/ai";
 
 const PopularServices = () => {

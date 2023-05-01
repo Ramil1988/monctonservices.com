@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
-import logo from "../Pictures/avatar.png";
-import ramil from "../Pictures/Ramil.png";
+import logo from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/avatar.png";
+import ramil from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/Ramil.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 

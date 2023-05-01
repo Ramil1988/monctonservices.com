@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import Spinner from "./Spinner";
+import Spinner from "../Helper/Spinner";
 import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 
 const RatingTable = () => {

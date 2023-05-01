@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 import styled from "styled-components";
 import { FaSignOutAlt } from "react-icons/fa";
 
