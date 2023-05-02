@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/avatar.png";
+import logo from "../../Pictures/avatar.png";
 import { keyframes } from "styled-components";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";

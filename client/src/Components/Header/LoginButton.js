@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaUser } from "react-icons/fa";
-import logo from "/Users/ramilsharapov/Desktop/monctonservices.com/client/src/Pictures/avatar.png";
+import logo from "../../Pictures/avatar.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";

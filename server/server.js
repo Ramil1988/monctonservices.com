@@ -3,7 +3,6 @@
 const express = require("express");
 const morgan = require("morgan");
 var cors = require("cors");
-const path = require("path");
 
 const PORT = 3000;
 
@@ -33,8 +32,6 @@ const {
 } = require("./handlers");
 
 express()
-  .use(express.static(path.join(__dirname, "build")))
-
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(express.json({ limit: "50mb" }))

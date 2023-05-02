@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import Spinner from "../Helper/Spinner";
 import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const RatingTable = () => {
   const { serviceType } = useParams();
   const [companies, setCompanies] = useState([]);
@@ -39,7 +41,7 @@ const RatingTable = () => {
 
   const fetchCompaniesByServiceType = async (serviceType) => {
     try {
-      const response = await fetch(`/companies/${serviceType}`);
+      const response = await fetch(`${ROOT_API}/companies/${serviceType}`);
       const data = await response.json();
       const companies = data.data;
       const sortedCompanies = companies.sort((a, b) => {
