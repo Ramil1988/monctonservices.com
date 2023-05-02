@@ -3,8 +3,9 @@
 const express = require("express");
 const morgan = require("morgan");
 var cors = require("cors");
+const path = require("path");
 
-const PORT = 4000;
+const PORT = 3000;
 
 const {
   createCompany,
@@ -32,6 +33,13 @@ const {
 } = require("./handlers");
 
 express()
+  .use(express.static(path.join(__dirname, "build")))
+  .get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+  })
+  .get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+  })
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(express.json({ limit: "50mb" }))

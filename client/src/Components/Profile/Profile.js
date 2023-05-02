@@ -249,7 +249,7 @@ const SideWrapper = styled.div`
   grid-template-columns: 1fr 3fr;
   grid-gap: 1rem;
   width: 100%;
-  margin: 50px;
+  margin: 20px 0px 0px 20px;
 
   @media (max-width: 1000px) {
     grid-template-columns: 1fr 2fr;
@@ -374,6 +374,10 @@ const MainContent = styled.div`
 const SectionWrapper = styled.div`
   margin: auto;
   width: 80%;
+
+  & h2 {
+    margin-top: 50px;
+  }
 `;
 
 const FavoriteGrid = styled.div`
