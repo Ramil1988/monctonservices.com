@@ -34,12 +34,7 @@ const {
 
 express()
   .use(express.static(path.join(__dirname, "build")))
-  .get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
-  })
-  .get("/*", function (req, res) {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
-  })
+
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(express.json({ limit: "50mb" }))
