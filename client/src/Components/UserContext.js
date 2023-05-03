@@ -3,6 +3,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export const UserContext = createContext(null);
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const UserProvider = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [currentUser, setCurrentUser] = useState(null);
@@ -10,7 +12,7 @@ const UserProvider = ({ children }) => {
   const [shouldFetchUser, setShouldFetchUser] = useState(true);
 
   const getCurrentUser = async (id) => {
-    return await fetch(`/user/${id}`);
+    return await fetch(`${ROOT_API}/user/${id}`);
   };
 
   useEffect(() => {
@@ -34,7 +36,7 @@ const UserProvider = ({ children }) => {
                 nickname: user.nickname,
                 email: user.email,
               };
-              fetch("/user/login", {
+              fetch(`${ROOT_API}/user/login`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

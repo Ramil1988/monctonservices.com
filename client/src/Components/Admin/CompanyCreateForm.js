@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import UploadCompanyImage from "./UploadCompanyImage";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const CompanyCreateForm = () => {
   const [setCompanies] = useState([]);
   const [notification, setNotification] = useState("");
@@ -16,7 +18,7 @@ const CompanyCreateForm = () => {
 
   const fetchCompanies = async () => {
     try {
-      const response = await fetch("/allCompanies");
+      const response = await fetch(`${ROOT_API}/allCompanies`);
       const data = await response.json();
       setCompanies(data.data);
     } catch (error) {
@@ -29,7 +31,7 @@ const CompanyCreateForm = () => {
     setNotification("Company created successfully!");
 
     try {
-      const response = await fetch("/company", {
+      const response = await fetch(`${ROOT_API}/company`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

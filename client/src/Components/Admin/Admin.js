@@ -4,6 +4,8 @@ import CompanyUpdateForm from "./CompanyUpdateForm";
 import CompanyCreateForm from "./CompanyCreateForm";
 import ReviewAdmin from "./ReviewAdmin";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const Admin = () => {
   const [companies, setCompanies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +14,7 @@ const Admin = () => {
 
   const fetchCompanies = async () => {
     try {
-      const response = await fetch("/allCompanies");
+      const response = await fetch(`${ROOT_API}/allCompanies`);
       const data = await response.json();
       setCompanies(data.data);
     } catch (error) {
@@ -47,13 +49,16 @@ const Admin = () => {
 
   const handleCompanyUpdate = async (updatedCompany) => {
     try {
-      const response = await fetch(`/company/${updatedCompany._id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedCompany),
-      });
+      const response = await fetch(
+        `${ROOT_API}/company/${updatedCompany._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedCompany),
+        }
+      );
       await response.json();
       fetchCompanies();
     } catch (error) {
@@ -63,7 +68,7 @@ const Admin = () => {
 
   const handleCompanyDelete = async (companyId) => {
     try {
-      await fetch(`/company/${companyId}`, {
+      await fetch(`${ROOT_API}/company/${companyId}`, {
         method: "DELETE",
       });
       fetchCompanies();

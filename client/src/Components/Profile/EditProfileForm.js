@@ -8,6 +8,8 @@ import { UserContext } from "../UserContext";
 
 import { useEffect, useState, useContext } from "react";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
   const [user, setUser] = useState();
   const [nickname, setNickname] = useState("");
@@ -18,7 +20,7 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(`/user/${profileId}`);
+      const response = await fetch(`${ROOT_API}/user/${profileId}`);
       const data = await response.json();
       setUser(data.data);
     } catch (error) {
@@ -47,7 +49,7 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
     };
 
     try {
-      const response = await fetch(`/user/${user._id}`, {
+      const response = await fetch(`${ROOT_API}/user/${user._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),

@@ -3,6 +3,8 @@ import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const Reviews = ({ reviews }) => {
   const [recentReviews, setRecentReviews] = useState([]);
 

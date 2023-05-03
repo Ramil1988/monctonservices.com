@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { serviceTypes } from "../serviceTypes";
 import { AiFillStar } from "react-icons/ai";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const PopularServices = () => {
   const [servicesData, setServicesData] = useState([]);
 
@@ -22,7 +24,7 @@ const PopularServices = () => {
 
     for (const serviceType of selectedServiceTypes) {
       try {
-        const response = await fetch(`/companies/${serviceType.id}`);
+        const response = await fetch(`${ROOT_API}/companies/${serviceType.id}`);
         const data = await response.json();
         const companies = data.data;
 
@@ -51,7 +53,7 @@ const PopularServices = () => {
         <ServiceBox key={service.id}>
           <ServiceTitle>{service.name}</ServiceTitle>
           <TopCompanies>
-            {service.topCompanies.map((company, index) => {
+            {service.topCompanies.map((company) => {
               const averageGrade = company.reviews.length
                 ? (
                     company.reviews.reduce(

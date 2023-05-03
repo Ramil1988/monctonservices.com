@@ -13,6 +13,8 @@ import EditProfileForm from "./EditProfileForm";
 import UploadProfileImage from "./UploadProfileImage";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const Profile = () => {
   const [user, setUser] = useState();
   const [reviews, setReviews] = useState([]);
@@ -41,7 +43,7 @@ const Profile = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(`/user/${profileId}`);
+      const response = await fetch(`${ROOT_API}/user/${profileId}`);
       const data = await response.json();
       setUser(data.data);
     } catch (error) {
@@ -57,7 +59,7 @@ const Profile = () => {
 
   const fetchUserReviews = async () => {
     try {
-      const response = await fetch(`/user/${profileId}`);
+      const response = await fetch(`${ROOT_API}/user/${profileId}`);
       const data = await response.json();
       const sortedReviews = data.data.reviews.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
@@ -70,7 +72,7 @@ const Profile = () => {
 
   const fetchUserFavorites = async () => {
     try {
-      const response = await fetch(`/user/${profileId}`);
+      const response = await fetch(`${ROOT_API}/user/${profileId}`);
       const data = await response.json();
       setFavorites(data.data.favorites);
     } catch (error) {
@@ -82,13 +84,16 @@ const Profile = () => {
     event.stopPropagation();
 
     try {
-      const response = await fetch(`/user/remove-favorite/${user._id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          companyId: companyId,
-        }),
-      });
+      const response = await fetch(
+        `${ROOT_API}/user/remove-favorite/${user._id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            companyId: companyId,
+          }),
+        }
+      );
 
       if (response.ok) {
         fetchUserFavorites();

@@ -4,12 +4,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { UserContext } from "../UserContext";
-import { useEffect, useState, useContext } from "react";
+
+import { useState } from "react";
+
+const ROOT_API = "https://monctonservices-com.onrender.com";
 
 const UploadProfileImage = ({ user, setUser }) => {
-  const [previewSource, setPreviewSource] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [previewSource] = useState("");
+  const [successMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [open, setOpen] = useState(true);
   const [targetImage, setTargetImage] = useState(null);
@@ -20,7 +22,7 @@ const UploadProfileImage = ({ user, setUser }) => {
 
   const handleUploadProfileImage = (e) => {
     e.preventDefault();
-    const response = fetch(`/user/${user._id}`, {
+    const response = fetch(`${ROOT_API}/user/${user._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ image: targetImage }),

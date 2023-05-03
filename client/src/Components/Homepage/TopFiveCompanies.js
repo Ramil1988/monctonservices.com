@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const TopFiveCompanies = ({ serviceType }) => {
   const [companies, setCompanies] = useState([]);
 
@@ -11,12 +13,12 @@ const TopFiveCompanies = ({ serviceType }) => {
 
   const fetchCompaniesByServiceType = async (serviceType) => {
     try {
-      const response = await fetch(`/companies/${serviceType}`);
+      const response = await fetch(`${ROOT_API}/companies/${serviceType}`);
       const data = await response.json();
       const companies = data.data;
       const sortedCompanies = companies
         .sort((a, b) => b.reviews.length - a.reviews.length)
-        .slice(0, 5); 
+        .slice(0, 5);
       setCompanies(sortedCompanies);
     } catch (error) {
       console.error("Error fetching companies:", error);

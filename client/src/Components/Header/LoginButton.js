@@ -8,6 +8,8 @@ import { useContext } from "react";
 import { UserContext } from "../UserContext";
 import { useLocation } from "react-router-dom";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
   let location = useLocation();
@@ -33,8 +35,8 @@ const LoginButton = () => {
   const checkUser = async () => {
     try {
       const userId = currentUser.data ? currentUser.data._id : currentUser._id;
-      const response = await fetch(`/user/${userId}`);
-      const existingUser = await response.json();
+      const response = await fetch(`${ROOT_API}/user/${userId}`);
+      await response.json();
     } catch (error) {
       console.error("Error checking user:", error);
     }

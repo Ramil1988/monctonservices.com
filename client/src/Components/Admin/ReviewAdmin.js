@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const ReviewAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [review, setReview] = useState(null);
@@ -12,7 +14,7 @@ const ReviewAdmin = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/review/${searchTerm}`);
+      const response = await fetch(`${ROOT_API}/review/${searchTerm}`);
       const data = await response.json();
       setReview(data.data);
     } catch (error) {
@@ -22,7 +24,7 @@ const ReviewAdmin = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/review/${review._id}`, {
+      const response = await fetch(`${ROOT_API}/review/${review._id}`, {
         method: "DELETE",
       });
       if (response.ok) {

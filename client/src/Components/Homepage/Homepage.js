@@ -6,6 +6,8 @@ import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
 import MonctonImage from "../../Pictures/Moncton.jpg";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const Homepage = (props) => {
   const allItems = Object.values(props.items);
   const [reviews, setReviews] = useState([]);
@@ -20,7 +22,7 @@ const Homepage = (props) => {
 
   const fetchAllReviews = async () => {
     try {
-      const response = await fetch("/allReviews");
+      const response = await fetch(`${ROOT_API}/allReviews`);
       const data = await response.json();
       setReviews(data.data);
     } catch (error) {
@@ -30,7 +32,7 @@ const Homepage = (props) => {
 
   const fetchAllcompanies = async () => {
     try {
-      const response = await fetch("/allCompanies");
+      const response = await fetch(`${ROOT_API}/allCompanies`);
       const data = await response.json();
       setAllCompanies(data.data);
     } catch (error) {

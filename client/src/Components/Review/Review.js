@@ -5,6 +5,8 @@ import Spinner from "../Helper/Spinner";
 import ReviewUpdateForm from "./ReviewUpdateForm";
 import { UserContext } from "../UserContext";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const Review = () => {
   const [review, setReview] = useState(null);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -38,7 +40,7 @@ const Review = () => {
 
   const fetchReviewById = async () => {
     try {
-      const response = await fetch(`/review/${id}`);
+      const response = await fetch(`${ROOT_API}/review/${id}`);
       const data = await response.json();
       setReview(data.data);
     } catch (error) {
@@ -56,7 +58,7 @@ const Review = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/review/${id}`, {
+      const response = await fetch(`${ROOT_API}/review/${id}`, {
         method: "DELETE",
       });
 
@@ -108,7 +110,7 @@ const Review = () => {
 
   const updateReviewById = async (id, updateData) => {
     try {
-      const response = await fetch(`/review/${id}`, {
+      const response = await fetch(`${ROOT_API}/review/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -149,7 +151,7 @@ const Review = () => {
     };
 
     try {
-      const response = await fetch(`/review/${id}`, {
+      const response = await fetch(`${ROOT_API}/review/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -192,12 +194,15 @@ const Review = () => {
 
   const handleDeleteComment = async (commentDate) => {
     try {
-      const response = await fetch(`/review/${id}/comments/${commentDate}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${ROOT_API}/review/${id}/comments/${commentDate}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const data = await response.json();
 

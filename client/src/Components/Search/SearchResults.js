@@ -10,10 +10,12 @@ const SearchResults = () => {
   const itemsPerPage = 10;
   const [searchType, setSearchType] = useState("Name");
 
+  const ROOT_API = "https://monctonservices-com.onrender.com";
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await fetch("/allCompanies");
+        const response = await fetch(`${ROOT_API}/allCompanies`);
         const data = await response.json();
         setCompanies(data.data);
       } catch (error) {

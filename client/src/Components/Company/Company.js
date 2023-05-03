@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import Maps from "./Maps";
 import NotificationBox from "../Helper/NotificationBox";
 
+const ROOT_API = "https://monctonservices-com.onrender.com";
+
 const Company = () => {
   const { companyId } = useParams();
   const [company, setCompany] = useState(null);
@@ -25,7 +27,7 @@ const Company = () => {
 
   const fetchCompanyById = async () => {
     try {
-      const response = await fetch(`/company/${companyId}`);
+      const response = await fetch(`${ROOT_API}/company/${companyId}`);
       const data = await response.json();
       setCompany(data.data);
     } catch (error) {
@@ -100,7 +102,7 @@ const Company = () => {
     };
 
     try {
-      const response = await fetch(`/company/review/${companyId}`, {
+      const response = await fetch(`${ROOT_API}/company/review/${companyId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reviewData),
@@ -122,16 +124,19 @@ const Company = () => {
   const handleAddFavoriteClick = async () => {
     if (currentUser) {
       try {
-        const response = await fetch(`/user/favorite/${currentUser._id}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: currentUser._id,
-            companyId: companyId,
-            companyName: company.name,
-            serviceType: company.serviceType,
-          }),
-        });
+        const response = await fetch(
+          `${ROOT_API}/user/favorite/${currentUser._id}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: currentUser._id,
+              companyId: companyId,
+              companyName: company.name,
+              serviceType: company.serviceType,
+            }),
+          }
+        );
 
         if (response.ok) {
           setNotification("Company added to favorites");
