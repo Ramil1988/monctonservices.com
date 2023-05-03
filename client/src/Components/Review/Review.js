@@ -293,7 +293,7 @@ const Review = () => {
               <Nickname>{comment.user}</Nickname>
               <div>
                 <Time>{new Date(comment.date).toLocaleDateString()}</Time>
-                {currentUser.nickname === comment.user && (
+                {currentUser && currentUser.nickname === comment.user && (
                   <StyledDeleteCommentButton
                     onClick={() => {
                       handleDeleteComment(comment.date);
