@@ -54,7 +54,7 @@ const Admin = () => {
         },
         body: JSON.stringify(updatedCompany),
       });
-      const data = await response.json();
+      await response.json();
       fetchCompanies();
     } catch (error) {
       console.error("Error updating company:", error);
@@ -63,7 +63,7 @@ const Admin = () => {
 
   const handleCompanyDelete = async (companyId) => {
     try {
-      const response = await fetch(`/company/${companyId}`, {
+      await fetch(`/company/${companyId}`, {
         method: "DELETE",
       });
       fetchCompanies();
@@ -168,20 +168,6 @@ const CompanyItem = styled.li`
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 10px;
-`;
-
-const StyledSelect = styled.select`
-  padding: 10px;
-  font-size: 20px;
-  font-weight: 600;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  appearance: none;
-  background-color: #ffffff;
-  &:focus {
-    outline: none;
-    border: 1px solid #0071bc;
-  }
 `;
 
 export default Admin;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import UploadCompanyImage from "./UploadCompanyImage";
 
 const CompanyCreateForm = () => {
-  const [companies, setCompanies] = useState([]);
+  const [setCompanies] = useState([]);
   const [notification, setNotification] = useState("");
 
   const [newCompany, setNewCompany] = useState({
@@ -37,7 +37,7 @@ const CompanyCreateForm = () => {
         body: JSON.stringify(newCompany),
       });
 
-      const data = await response.json();
+      await response.json();
       fetchCompanies();
 
       setNewCompany({

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import UploadNotification from "../Helper/UploadNotification";
 
 const UploadCompanyImage = ({ newCompany, setNewCompany }) => {
-  const [previewSource, setPreviewSource] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [previewSource] = useState("");
+  const [successMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
   const handleUploadImage = (e) => {
