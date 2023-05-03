@@ -323,11 +323,13 @@ const Review = () => {
           </StyledSubmitButton>
         </CommentForm>
       ) : (
-        <AddCommentButtonContainer>
-          <StyledAddCommentButton onClick={handleAddCommentClick}>
-            Add comment
-          </StyledAddCommentButton>
-        </AddCommentButtonContainer>
+        currentUser && (
+          <AddCommentButtonContainer>
+            <StyledAddCommentButton onClick={handleAddCommentClick}>
+              Add comment
+            </StyledAddCommentButton>
+          </AddCommentButtonContainer>
+        )
       )}
       <Notification show={notification.show} type={notification.type}>
         {notification.message}
