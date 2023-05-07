@@ -360,6 +360,11 @@ const Header = styled.div`
   background: linear-gradient(135deg, #003262, #005492);
   padding: 10px;
   border-radius: 5px 5px 0 0;
+
+  @media (max-width: 767px) {
+    font-size: 24px;
+    width: 100%;
+  }
 `;
 
 const Title = styled.h1`
@@ -409,7 +414,7 @@ const Content = styled.div`
   margin-top: 20px;
   gap: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     gap: 10px;
   }
@@ -424,6 +429,11 @@ const Image = styled.img`
 
   &:hover {
     transform: scale(1.15);
+  }
+
+  @media (max-width: 767px) {
+    width: 100%;
+    height: auto;
   }
 `;
 

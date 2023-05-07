@@ -1,8 +1,10 @@
+import styled from "styled-components";
+
 const Maps = (address) => {
   const mapSrc = `https://maps.google.com/maps?&q="+${address.address}"&output=embed`;
 
   return (
-    <div>
+    <Wrapper>
       <iframe
         width="300"
         height="300"
@@ -12,8 +14,14 @@ const Maps = (address) => {
         marginWidth="0"
         src={mapSrc}
       ></iframe>
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  @media (max-width: 370px) {
+    display: none;
+  }
+`;
 
 export default Maps;

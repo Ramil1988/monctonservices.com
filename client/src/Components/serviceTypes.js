@@ -21,7 +21,7 @@ export const serviceTypes = {
   },
   autodealerships: {
     id: "autodealerships",
-    name: "Auto dealerships",
+    name: "Auto dealers",
     imageSrc: "/assets/AutoDealers.jpg",
   },
 
@@ -56,10 +56,14 @@ export const serviceTypes = {
     name: "Insurance",
     imageSrc: "/assets/Insurance.jpg",
   },
-    // homerepair: {
+  autoservice: {
+    id: "autoservice",
+    name: "Auto services",
+    imageSrc: "/assets/Autoservice.jpg",
+  },
+  // homerepair: {
   //   id: "homerepair",
   //   name: "Home repair",
   //   imageSrc: "/assets/HomeRepair.jpg",
   // },
-  
 };

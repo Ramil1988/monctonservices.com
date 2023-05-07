@@ -45,6 +45,9 @@ const RatingTable = () => {
       const data = await response.json();
       const companies = data.data;
       const sortedCompanies = companies.sort((a, b) => {
+        if (a.reviews.length === 0 && b.reviews.length === 0) {
+          return a.name.localeCompare(b.name);
+        }
         return b.reviews.length - a.reviews.length;
       });
       setCompanies(sortedCompanies);
@@ -121,7 +124,7 @@ const Wrapper = styled.div`
   background-color: #f2f2f2;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0.2rem;
     background-color: white;
   }
 `;
@@ -150,7 +153,6 @@ const Table = styled.table`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    width: 100%;
     font-size: 0.9rem;
   }
 `;
@@ -170,9 +172,13 @@ const Th = styled.th`
 `;
 
 const Td = styled.td`
-  padding: 16px;
+  padding: 15px;
   border: 1px solid #d8d8d8;
   text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const StarWrapper = styled.span`

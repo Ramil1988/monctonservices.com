@@ -2,10 +2,12 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const ListOfItems = ({ data }) => {
+  const sortedData = [...data].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <>
       <List>
-        {data.map((item) => {
+        {sortedData.map((item) => {
           return (
             <ItemDiv key={item.id}>
               <Link to={`companies/${item.id}`}>
