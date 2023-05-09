@@ -66,6 +66,11 @@ export const serviceTypes = {
     name: "Property management companies",
     imageSrc: "/assets/Propertymanagement.jpg",
   },
+  realestate: {
+    id: "realestate",
+    name: "Real Estate agencies",
+    imageSrc: "/assets/RealEstateAgencies.jpg",
+  },
   // homerepair: {
   //   id: "homerepair",
   //   name: "Home repair",

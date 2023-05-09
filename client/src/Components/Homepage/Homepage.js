@@ -12,7 +12,7 @@ const Homepage = (props) => {
   const allItems = Object.values(props.items);
   const [reviews, setReviews] = useState([]);
   const [companies, setAllCompanies] = useState([]);
-  const [displayedItems, setDisplayedItems] = useState(8);
+  const [displayedItems, setDisplayedItems] = useState(20);
   const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const Homepage = (props) => {
       <MainWrapper>
         <BigText>Services in Moncton</BigText>
         <ListOfItems data={allItems.slice(0, displayedItems)} />
-        <ButtonWrapper>
+        {/* <ButtonWrapper>
           {showMore && displayedItems < allItems.length ? (
             <ShowMoreLessButton onClick={handleShowMoreLess}>
               Show more
@@ -80,7 +80,7 @@ const Homepage = (props) => {
               Show less
             </ShowMoreLessButton>
           )}
-        </ButtonWrapper>
+        </ButtonWrapper> */}
         <BigText>Popular Services</BigText>
         <PopularServices />
         <BigText>Recent reviews</BigText>
