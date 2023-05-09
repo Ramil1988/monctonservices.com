@@ -74,18 +74,16 @@ const Divider = styled.div`
   height: 2px;
   width: 80%;
   margin: auto;
-  margin-top: 10px;
   margin-bottom: 15px;
+  margin-top: 10px;
 `;
 
 const Item = styled.img`
-  height: 90px;
+  height: 80px;
   border-radius: 20px;
-  margin-bottom: 15px;
 
   @media screen and (max-width: 768px) {
-    height: 60px;
-    margin-bottom: 10px;
+    height: 80px;
   }
 `;
 

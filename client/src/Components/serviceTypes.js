@@ -61,6 +61,11 @@ export const serviceTypes = {
     name: "Auto services",
     imageSrc: "/assets/Autoservice.jpg",
   },
+  propertymanagement: {
+    id: "propertymanagement",
+    name: "Property management companies",
+    imageSrc: "/assets/Propertymanagement.jpg",
+  },
   // homerepair: {
   //   id: "homerepair",
   //   name: "Home repair",
