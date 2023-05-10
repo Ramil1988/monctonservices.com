@@ -440,6 +440,12 @@ const Content = styled.div`
 const StyledWrapper = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Image = styled.img`
@@ -484,8 +490,16 @@ const Address = styled.p`
   margin: 5px 0px 20px;
 `;
 
-const PhoneNumber = styled(Address)`
-  font-weight: 500;
+const PhoneNumber = styled.p`
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+
+  @media (max-width: 767px) {
+    max-width: 100%;
+  }
 `;
 
 const AverageRating = styled.span`
