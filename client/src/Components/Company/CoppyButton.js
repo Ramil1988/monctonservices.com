@@ -29,7 +29,6 @@ const CopyButton = ({ textToCopy }) => {
         <IoCopyOutline />
       </CopyIconButton>
       <CopiedText>{copiedText}</CopiedText>{" "}
-      {/* Add the "Copied" text element */}
     </div>
   );
 };
