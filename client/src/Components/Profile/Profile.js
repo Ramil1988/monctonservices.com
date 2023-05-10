@@ -130,7 +130,7 @@ const Profile = () => {
                   <StyledSpan>Nickname:</StyledSpan> {user.nickname}
                 </NameFields>
                 <NameFields>
-                  <StyledSpan>e-mail:</StyledSpan> {user.email}
+                  <StyledSpan>email:</StyledSpan> {user.email}
                 </NameFields>
                 <EditProfile onClick={() => setShowEditForm(true)}>
                   <EditIcon fontSize="small" />
@@ -273,7 +273,7 @@ const Sidebar = styled.div`
   width: 500px;
 
   @media (max-width: 767px) {
-    width: 330px;
+    width: 315px;
   }
 `;
 
@@ -310,8 +310,10 @@ const NameFields = styled.h3`
   font-weight: 600;
   color: #fff;
   margin-bottom: 5px;
+  padding: 5px 20px;
 
   @media (max-width: 767px) {
+    padding: 10px 20px;
     font-weight: 200;
     font-size: 1rem;
   }
@@ -324,8 +326,7 @@ const StyledSpan = styled.span`
   margin-right: 10px;
 
   @media (max-width: 767px) {
-    font-weight: 200;
-    font-size: 1rem;
+    display: none;
   }
 `;
 

@@ -3,8 +3,6 @@ import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
-
 const Reviews = ({ reviews }) => {
   const [recentReviews, setRecentReviews] = useState([]);
 
@@ -85,7 +83,7 @@ const ReviewsContainer = styled.div`
 
   @media (max-width: 1150px) {
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
   }
 `;
 
@@ -101,6 +99,7 @@ const Review = styled.div`
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: calc(33.33% - 20px);
+  padding: 20px;
 
   &:hover {
     transform: scale(1.05);
@@ -108,8 +107,8 @@ const Review = styled.div`
   }
 
   @media (max-width: 1150px) {
-    width: 50vw;
-    padding: 0 10px;
+    width: 60vw;
+    padding: 20px;
   }
 `;
 

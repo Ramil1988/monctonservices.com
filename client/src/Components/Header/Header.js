@@ -105,8 +105,9 @@ const NavLinks = styled.div`
     top: 80px;
     left: 20px;
     background-color: #ffffff;
-    width: 20vw;
-    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 20px;
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     align-items: center;
@@ -121,25 +122,19 @@ const NavLinks = styled.div`
     text-decoration: none;
     display: flex;
     align-items: center;
-    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
-      transform: scale(1.2);
-    }
-    &:after {
-      display: block;
-      content: "";
-      border-bottom: solid 3px white;
-      transform: scaleX(0);
-      transition: transform 500ms ease-in-out;
-    }
-    &:hover:after {
-      transform: scaleX(1);
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
     }
 
     @media (max-width: 1150px) {
       margin-right: 0;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
   }
 `;

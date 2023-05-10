@@ -600,10 +600,10 @@ const Review = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 30px;
+  padding: 30px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
   width: calc(33.33% - 20px);
 
   &:hover {

@@ -108,6 +108,10 @@ const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
 const WrapperDialog = styled(Dialog)`
   width: 500px;
   margin: auto;
+
+  @media (max-width: 767px) {
+    width: 400px;
+  }
 `;
 
 const FormGrid = styled.div`

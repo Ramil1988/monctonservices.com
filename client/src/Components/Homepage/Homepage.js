@@ -177,7 +177,7 @@ const StatisticText = styled.h2`
     border: 5px solid white;
   }
 
-  @media (max-width: 780px) {
+  @media (max-width: 860px) {
     display: none;
   }
 `;
