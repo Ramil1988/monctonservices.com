@@ -71,6 +71,16 @@ export const serviceTypes = {
     name: "Real Estate agencies",
     imageSrc: "/assets/RealEstateAgencies.jpg",
   },
+  travel: {
+    id: "travel",
+    name: "Travel agencies",
+    imageSrc: "/assets/Travel.jpg",
+  },
+  cleaning: {
+    id: "cleaning",
+    name: "Cleaning service",
+    imageSrc: "/assets/Cleaning.jpg",
+  },
   // homerepair: {
   //   id: "homerepair",
   //   name: "Home repair",
