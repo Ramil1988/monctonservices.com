@@ -10,6 +10,7 @@ import Spinner from "../Helper/Spinner";
 import { Link } from "react-router-dom";
 import Maps from "./Maps";
 import NotificationBox from "../Helper/NotificationBox";
+import CopyButton from "./CoppyButton";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
@@ -211,12 +212,26 @@ const Company = () => {
           <InfoTitle>Service type</InfoTitle>
           <Address>{company.serviceType}</Address>
           <InfoTitle>Address</InfoTitle>
-          <Address>{company.address}</Address>
+          <StyledWrapper>
+            <Address>{company.address}</Address>
+            <CopyButton textToCopy={company.address} />
+          </StyledWrapper>
           <Maps address={company.address}></Maps>
           <InfoTitle>Phone Number</InfoTitle>
-          <PhoneNumber>{company.phoneNumber}</PhoneNumber>
-          <InfoTitle>Website</InfoTitle>
-          <PhoneNumber>{company.website}</PhoneNumber>
+          <StyledWrapper>
+            {" "}
+            <PhoneNumber>{company.phoneNumber}</PhoneNumber>
+            <CopyButton textToCopy={company.phoneNumber} />
+          </StyledWrapper>
+          {company.website && (
+            <>
+              <InfoTitle>Website</InfoTitle>
+              <StyledWrapper>
+                <PhoneNumber>{company.website}</PhoneNumber>
+                <CopyButton textToCopy={company.website} />
+              </StyledWrapper>
+            </>
+          )}
           <InfoTitle>Average Rating</InfoTitle>
           <AverageRating>
             {" "}
@@ -420,6 +435,11 @@ const Content = styled.div`
     flex-direction: column;
     gap: 10px;
   }
+`;
+
+const StyledWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Image = styled.img`

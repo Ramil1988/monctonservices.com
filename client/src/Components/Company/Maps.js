@@ -19,6 +19,7 @@ const Maps = (address) => {
 };
 
 const Wrapper = styled.div`
+  margin-bottom: 20px;
   @media (max-width: 370px) {
     display: none;
   }
