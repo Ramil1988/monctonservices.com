@@ -10,6 +10,26 @@ const ROOT_API = "https://monctonservices-com.onrender.com";
 const RatingTable = () => {
   const { serviceType } = useParams();
   const [companies, setCompanies] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("All");
+  const [filteredCompanies, setFilteredCompanies] = useState(companies);
+
+  const handleCityFilterChange = (event) => {
+    const city = event.target.value;
+    setSelectedCity(city);
+
+    if (city === "All") {
+      setFilteredCompanies(companies);
+    } else {
+      const filtered = companies.filter((company) =>
+        company.address.toLowerCase().includes(city.toLowerCase())
+      );
+      setFilteredCompanies(filtered);
+    }
+  };
+
+  useEffect(() => {
+    setFilteredCompanies(companies);
+  }, [companies]);
 
   useEffect(() => {
     fetchCompaniesByServiceType(serviceType);
@@ -66,6 +86,17 @@ const RatingTable = () => {
 
   return (
     <Wrapper>
+      <CenteredWrapper>
+        <FilterWrapper>
+          <FilterLabel>Filter by city:</FilterLabel>
+          <FilterSelect value={selectedCity} onChange={handleCityFilterChange}>
+            <option value="All">All</option>
+            <option value="Moncton">Moncton</option>
+            <option value="Dieppe">Dieppe</option>
+            <option value="Riverview">Riverview</option>
+          </FilterSelect>
+        </FilterWrapper>
+      </CenteredWrapper>
       <TableHeading>
         {serviceType.replace(/\b\w/g, (l) => l.toUpperCase())} Rating
       </TableHeading>
@@ -79,7 +110,7 @@ const RatingTable = () => {
           </tr>
         </thead>
         <tbody>
-          {companies.map((company, index) => {
+          {filteredCompanies.map((company, index) => {
             const averageRating =
               company.reviews.length > 0
                 ? (
@@ -109,6 +140,49 @@ const RatingTable = () => {
     </Wrapper>
   );
 };
+
+const CenteredWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FilterWrapper = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  background-color: #003262;
+  padding: 10px;
+  border-radius: 5px;
+`;
+
+const FilterLabel = styled.label`
+  margin-right: 0.5rem;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+`;
+
+const FilterSelect = styled.select`
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #003262;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+
+  &:focus {
+    border-color: #003262;
+  }
+`;
 
 const SpinnerContainer = styled.div`
   display: flex;
