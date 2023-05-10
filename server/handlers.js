@@ -21,7 +21,8 @@ client.connect();
 
 const createCompany = async (req, res) => {
   try {
-    const { serviceType, name, address, phoneNumber, image } = req.body;
+    const { serviceType, name, address, phoneNumber, website, image } =
+      req.body;
 
     await client.connect();
 
@@ -30,6 +31,7 @@ const createCompany = async (req, res) => {
       name: name,
       address: address,
       phoneNumber: phoneNumber,
+      website: website,
       reviews: [],
     };
 
@@ -507,7 +509,8 @@ const getUserFavorites = async (req, res) => {
 const updateCompany = async (req, res) => {
   try {
     const { id } = req.params;
-    const { serviceType, name, address, phoneNumber, image } = req.body;
+    const { serviceType, name, address, phoneNumber, website, image } =
+      req.body;
 
     await client.connect();
 
@@ -516,6 +519,7 @@ const updateCompany = async (req, res) => {
     if (name) updatedFields.name = name;
     if (address) updatedFields.address = address;
     if (phoneNumber) updatedFields.phoneNumber = phoneNumber;
+    if (website) updatedFields.website = website;
 
     let newImage;
 

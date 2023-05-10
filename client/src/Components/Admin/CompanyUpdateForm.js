@@ -74,6 +74,16 @@ const CompanyUpdateForm = ({ company, onUpdate, onDelete }) => {
             onChange={handleChange}
           />
         </Label>
+        <Label>
+          Website:
+          <Input
+            type="text"
+            name="website"
+            value={updatedCompany.website}
+            onChange={handleChange}
+            required
+          />
+        </Label>
         Image URL:
         <UploadCompanyImage
           newCompany={updatedCompany}

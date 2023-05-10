@@ -215,6 +215,8 @@ const Company = () => {
           <Maps address={company.address}></Maps>
           <InfoTitle>Phone Number</InfoTitle>
           <PhoneNumber>{company.phoneNumber}</PhoneNumber>
+          <InfoTitle>Website</InfoTitle>
+          <PhoneNumber>{company.website}</PhoneNumber>
           <InfoTitle>Average Rating</InfoTitle>
           <AverageRating>
             {" "}
@@ -373,7 +375,7 @@ const Title = styled.h1`
   color: #ffffff;
 
   @media (max-width: 767px) {
-    font-size: 24px;
+    font-size: 20px;
   }
 `;
 
@@ -434,6 +436,10 @@ const Image = styled.img`
   @media (max-width: 767px) {
     width: 100%;
     height: auto;
+
+    &:hover {
+      transform: none;
+    }
   }
 `;
 
@@ -443,10 +449,6 @@ const InfoBox = styled.div`
   border-radius: 5px;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-
-  @media (max-width: 768px) {
-    width: 95%;
-  }
 `;
 
 const InfoTitle = styled.h2`
@@ -603,7 +605,7 @@ const Review = styled.div`
   padding: 30px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   width: calc(33.33% - 20px);
 
   &:hover {

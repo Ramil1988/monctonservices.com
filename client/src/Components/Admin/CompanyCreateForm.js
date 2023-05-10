@@ -114,6 +114,16 @@ const CompanyCreateForm = () => {
             required
           />
         </Label>
+        <Label>
+          Website:
+          <Input
+            type="text"
+            name="website"
+            value={newCompany.website}
+            onChange={handleNewCompanyChange}
+            required
+          />
+        </Label>
         Image URL:
         <UploadCompanyImage
           newCompany={newCompany}
