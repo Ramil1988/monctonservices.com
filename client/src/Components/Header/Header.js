@@ -27,8 +27,10 @@ const Header = () => {
           <FaBars />
         </MenuIcon>
         <NavLinks menuOpen={menuOpen}>
+          <NavLink className="nav-link" to="/" onClick={toggleMenu}>
+            Home
+          </NavLink>
           <NavLink className="nav-link" to="/about" onClick={toggleMenu}>
-            <StyledIcon as={FaBook} />
             About
           </NavLink>
           <NavLink
@@ -36,7 +38,6 @@ const Header = () => {
             to="/searchresults"
             onClick={toggleMenu}
           >
-            <StyledIcon as={FaSearch} />
             Search
           </NavLink>
         </NavLinks>
@@ -76,7 +77,7 @@ const Logo = styled(NavLink)`
   display: block;
 
   & img {
-    width: 300px;
+    width: 280px;
   }
 
   @media (max-width: 1150px) {
@@ -115,7 +116,7 @@ const NavLinks = styled.div`
   }
 
   .nav-link {
-    margin-right: 5rem;
+    margin-right: 2rem;
     font-size: 1.2rem;
     font-weight: 600;
     color: black;

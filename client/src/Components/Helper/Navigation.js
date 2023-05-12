@@ -34,6 +34,7 @@ const NavWrapper = styled.div`
 
 const BackButton = styled.button`
   font-size: 40px;
+  margin-bottom: 20px;
   background-color: transparent;
   border: none;
   cursor: pointer;
