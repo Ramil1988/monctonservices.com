@@ -81,6 +81,11 @@ export const serviceTypes = {
     name: "Cleaning service",
     imageSrc: "/assets/Cleaning.jpg",
   },
+  event: {
+    id: "event",
+    name: "Event agencies",
+    imageSrc: "/assets/Eventagencies.jpg",
+  },
   // homerepair: {
   //   id: "homerepair",
   //   name: "Home repair",

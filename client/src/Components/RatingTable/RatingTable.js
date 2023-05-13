@@ -232,6 +232,7 @@ const Table = styled.table`
 `;
 
 const Th = styled.th`
+  text-align: center;
   padding: 16px;
   background-color: #003262;
   color: #fff;

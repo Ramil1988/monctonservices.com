@@ -57,6 +57,7 @@ const createCompany = async (req, res) => {
         address: address,
         phoneNumber: phoneNumber,
         image: newImage,
+        website: website,
         reviews: [],
       });
     } else {

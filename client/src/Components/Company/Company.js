@@ -431,18 +431,9 @@ const Content = styled.div`
   margin-top: 20px;
   gap: 20px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1130px) {
     flex-direction: column;
     gap: 10px;
-  }
-`;
-
-const StyledWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  @media (max-width: 767px) {
   }
 `;
 
@@ -482,12 +473,22 @@ const InfoTitle = styled.h2`
   color: #003262;
 `;
 
+const StyledWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 767px) {
+  }
+`;
+
 const Address = styled.p`
   font-size: 18px;
   font-weight: 500;
   margin: 5px 0px 20px;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 50%;
 
   @media (max-width: 767px) {
     max-width: 80%;

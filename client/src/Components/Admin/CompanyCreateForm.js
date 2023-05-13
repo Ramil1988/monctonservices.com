@@ -13,6 +13,7 @@ const CompanyCreateForm = () => {
     name: "",
     address: "",
     phoneNumber: "",
+    website: "",
     image: "",
   });
 
@@ -47,6 +48,7 @@ const CompanyCreateForm = () => {
         name: "",
         address: "",
         phoneNumber: "",
+        website: "",
         image: "",
       });
     } catch (error) {
