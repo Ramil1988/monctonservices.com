@@ -4,6 +4,15 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Spinner from "../Helper/Spinner";
 import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import CopyButton from "../Company/CoppyButton";
+import Maps from "../Company/Maps";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
@@ -12,6 +21,17 @@ const RatingTable = () => {
   const [companies, setCompanies] = useState([]);
   const [selectedCity, setSelectedCity] = useState("All");
   const [filteredCompanies, setFilteredCompanies] = useState(companies);
+  const [open, setOpen] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
+
+  const handleDialogOpen = (company) => {
+    setSelectedCompany(company);
+    setOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
 
   const handleCityFilterChange = (event) => {
     const city = event.target.value;
@@ -127,6 +147,9 @@ const RatingTable = () => {
                   <StyledLink to={`/company/${company._id}`}>
                     {company.name}
                   </StyledLink>
+                  <QuestionButton onClick={() => handleDialogOpen(company)}>
+                    <AiOutlineQuestionCircle size="1.2em" />
+                  </QuestionButton>
                 </Td>
                 <Td>
                   <StarWrapper>{renderStars(averageRating)}</StarWrapper>
@@ -137,9 +160,74 @@ const RatingTable = () => {
           })}
         </tbody>
       </Table>
+
+      <CenteredDialog
+        open={open}
+        onClose={handleDialogClose}
+        fullWidth={true}
+        onMouseEnter={() => handleDialogOpen(selectedCompany)}
+        onMouseLeave={() => handleDialogClose()}
+      >
+        {selectedCompany ? (
+          <>
+            <DialogTitle id="dialog-title" style={{ paddingRight: "100px" }}>
+              {selectedCompany.name}
+              <IconButton
+                edge="end"
+                color="inherit"
+                onClick={handleDialogClose}
+                aria-label="close"
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "10px",
+                  marginRight: "20px",
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentStyled>
+                Address: {selectedCompany.address}
+                <CopyButton textToCopy={selectedCompany.address} />
+              </DialogContentStyled>
+              {selectedCompany.phoneNumber && (
+                <>
+                  <DialogContentStyled>
+                    Phone number: {selectedCompany.phoneNumber}
+                    <CopyButton textToCopy={selectedCompany.phoneNumber} />
+                  </DialogContentStyled>
+                </>
+              )}
+              {selectedCompany.website && (
+                <>
+                  <DialogContentStyled>
+                    Website: {selectedCompany.website}
+                    <CopyButton textToCopy={selectedCompany.website} />
+                  </DialogContentStyled>
+                </>
+              )}
+              <DialogContentText>
+                <Maps address={selectedCompany.address}></Maps>
+              </DialogContentText>
+            </DialogContent>
+          </>
+        ) : null}
+      </CenteredDialog>
     </Wrapper>
   );
 };
+
+const CenteredDialog = styled(Dialog)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DialogContentStyled = styled(DialogContentText)`
+  display: flex;
+`;
 
 const CenteredWrapper = styled.div`
   display: flex;
@@ -272,6 +360,18 @@ const StyledLink = styled(Link)`
 
   &:hover {
     background-color: lightblue;
+  }
+`;
+
+const QuestionButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #003262;
+  margin-left: 20px;
+  cursor: pointer;
+
+  &:hover {
+    color: #f2b01e;
   }
 `;
 

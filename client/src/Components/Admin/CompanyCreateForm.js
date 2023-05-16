@@ -123,7 +123,6 @@ const CompanyCreateForm = () => {
             name="website"
             value={newCompany.website}
             onChange={handleNewCompanyChange}
-            required
           />
         </Label>
         Image URL:
