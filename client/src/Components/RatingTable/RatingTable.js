@@ -200,14 +200,6 @@ const RatingTable = () => {
                   </DialogContentStyled>
                 </>
               )}
-              {selectedCompany.website && (
-                <>
-                  <DialogContentStyled>
-                    Website: {selectedCompany.website}
-                    <CopyButton textToCopy={selectedCompany.website} />
-                  </DialogContentStyled>
-                </>
-              )}
               <DialogContentText>
                 <Maps address={selectedCompany.address}></Maps>
               </DialogContentText>
