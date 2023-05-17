@@ -1,9 +1,4 @@
 export const serviceTypes = {
-  restaurants: {
-    id: "restaurants",
-    name: "Restaurants",
-    imageSrc: "/assets/Restaurant.jpg",
-  },
   hotels: {
     id: "hotels",
     name: "Hotels",
@@ -13,11 +8,6 @@ export const serviceTypes = {
     id: "beautysalons",
     name: "Beauty salons",
     imageSrc: "/assets/BeautySalon.jpg",
-  },
-  fitness: {
-    id: "fitness",
-    name: "Fitness",
-    imageSrc: "/assets/Fitness.jpg",
   },
   autodealerships: {
     id: "autodealerships",

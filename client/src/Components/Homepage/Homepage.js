@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import ListOfItems from "./ListOfItems";
+import ListOfServices from "./ListOfServices";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
 import MonctonImage from "../../Pictures/Moncton.jpg";
@@ -9,7 +9,8 @@ import MonctonImage from "../../Pictures/Moncton.jpg";
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
 const Homepage = (props) => {
-  const allItems = Object.values(props.items);
+  const serviceTypes = Object.values(props.serviceTypes);
+  const thingsToDo = Object.values(props.thingsToDo);
   const [reviews, setReviews] = useState([]);
   const [companies, setAllCompanies] = useState([]);
   const [displayedItems, setDisplayedItems] = useState(20);
@@ -59,7 +60,7 @@ const Homepage = (props) => {
             want in <HighlightedText>Moncton</HighlightedText>
           </SloganText>
           <StatisticText>
-            Our website already has <span>{companies.length}</span> companies
+            Our website already has <span>{companies.length}</span> places to visit
             listed.
           </StatisticText>
           <NavLink to="/searchresults">
@@ -69,7 +70,7 @@ const Homepage = (props) => {
       </LandingContainer>
       <MainWrapper>
         <BigText>Services in Moncton</BigText>
-        <ListOfItems data={allItems.slice(0, displayedItems)} />
+        <ListOfServices data={serviceTypes.slice(0, displayedItems)} />
         {/* <ButtonWrapper>
           {showMore && displayedItems < allItems.length ? (
             <ShowMoreLessButton onClick={handleShowMoreLess}>
@@ -81,6 +82,8 @@ const Homepage = (props) => {
             </ShowMoreLessButton>
           )}
         </ButtonWrapper> */}
+        <BigText>Things to Do in Moncton</BigText>
+        <ListOfServices data={thingsToDo.slice(0, displayedItems)} />
         <BigText>Popular Services</BigText>
         <PopularServices />
         <BigText>Recent reviews</BigText>

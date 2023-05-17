@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const ListOfItems = ({ data }) => {
+const ListOfServices = ({ data }) => {
   const sortedData = [...data].sort((a, b) => a.name.localeCompare(b.name));
 
   return (
@@ -10,7 +10,7 @@ const ListOfItems = ({ data }) => {
         {sortedData.map((item) => {
           return (
             <ItemDiv key={item.id}>
-              <Link to={`companies/${item.id}`}>
+              <Link to={`/${item.id}`}>
                 <Item src={item.imageSrc} alt={item.name} />
                 <Divider />
                 <ItemName>{item.name}</ItemName>
@@ -87,4 +87,4 @@ const Item = styled.img`
   }
 `;
 
-export default ListOfItems;
+export default ListOfServices;

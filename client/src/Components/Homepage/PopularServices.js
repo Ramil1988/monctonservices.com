@@ -17,7 +17,7 @@ const PopularServices = () => {
     const servicesWithTopCompanies = [];
 
     const selectedServiceTypes = [
-      serviceTypes.restaurants,
+      serviceTypes.hotels,
       serviceTypes.beautysalons,
       serviceTypes.dentalclinics,
     ];

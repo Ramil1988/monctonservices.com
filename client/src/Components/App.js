@@ -1,5 +1,6 @@
 import React from "react";
 import { serviceTypes } from "./serviceTypes";
+import { thingsToDo } from "./ThingsToDo";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
@@ -24,12 +25,17 @@ const App = () => {
       <Header />
       <Navigation />
       <Routes>
-        <Route path="/" element={<Homepage items={serviceTypes} />} />
+        <Route
+          path="/"
+          element={
+            <Homepage serviceTypes={serviceTypes} thingsToDo={thingsToDo} />
+          }
+        />
         <Route
           path="/Profile/:profileId"
           element={<Profile items={serviceTypes} />}
         />
-        <Route path="/companies/:serviceType" element={<RatingTable />} />
+        <Route path="/:serviceType" element={<RatingTable />} />
         <Route path="/company/:companyId" element={<Company />} />
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/review/:id" element={<Review />} />

@@ -189,13 +189,13 @@ const RatingTable = () => {
             </DialogTitle>
             <DialogContent>
               <DialogContentStyled>
-                Address: {selectedCompany.address}
+                <span>Address</span>: {selectedCompany.address}
                 <CopyButton textToCopy={selectedCompany.address} />
               </DialogContentStyled>
               {selectedCompany.phoneNumber && (
                 <>
                   <DialogContentStyled>
-                    Phone number: {selectedCompany.phoneNumber}
+                    <span>Phone number</span>: {selectedCompany.phoneNumber}
                     <CopyButton textToCopy={selectedCompany.phoneNumber} />
                   </DialogContentStyled>
                 </>
@@ -219,6 +219,10 @@ const CenteredDialog = styled(Dialog)`
 
 const DialogContentStyled = styled(DialogContentText)`
   display: flex;
+
+  & span {
+    font-weight: bold;
+  }
 `;
 
 const CenteredWrapper = styled.div`
