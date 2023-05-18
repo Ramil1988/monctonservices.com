@@ -29,4 +29,9 @@ export const thingsToDo = {
     name: "Museums",
     imageSrc: "/assets/Museums.jpg",
   },
+  childrenentertainment: {
+    id: "childrenentertainment",
+    name: "Entertainment for children",
+    imageSrc: "/assets/Children.jpg",
+  },
 };
