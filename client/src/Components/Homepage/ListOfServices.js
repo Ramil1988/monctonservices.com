@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 
 const ListOfServices = ({ data }) => {
@@ -10,11 +10,11 @@ const ListOfServices = ({ data }) => {
         {sortedData.map((item) => {
           return (
             <ItemDiv key={item.id}>
-              <Link to={`/${item.id}`}>
+              <StyledLink to={`/${item.id}`}>
                 <Item src={item.imageSrc} alt={item.name} />
                 <Divider />
                 <ItemName>{item.name}</ItemName>
-              </Link>
+              </StyledLink>
             </ItemDiv>
           );
         })}
@@ -22,6 +22,30 @@ const ListOfServices = ({ data }) => {
     </>
   );
 };
+
+const scaleAnimation = keyframes`
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+`;
+
+const StyledLink = styled(Link)`
+  display: block;
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: rotate(360deg);
+  }
+`;
 
 const ItemDiv = styled.div`
   width: 200px;
@@ -43,16 +67,21 @@ const ItemDiv = styled.div`
     text-decoration: none;
   }
 
-  &:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 18px rgba(0, 0, 0, 0.12),
-      0 3px 5px rgba(0, 0, 0, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.12);
-  }
-
   @media screen and (max-width: 768px) {
     margin: 10px;
     padding: 20px;
+  }
+
+  ${({ index }) => css`
+    animation: ${scaleAnimation} 10s ease-in-out infinite;
+    animation-delay: ${index * 1}s;
+  `}
+
+  &:hover {
+    ${({ index }) => css`
+      animation: ${scaleAnimation} 0.5s ease-in-out infinite;
+      animation-delay: ${index * 1}s;
+    `}
   }
 `;
 
