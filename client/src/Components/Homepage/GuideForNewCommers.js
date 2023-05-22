@@ -490,6 +490,7 @@ const SectionText = styled.p`
 `;
 
 const StyledAnchor = styled.a`
+  font-weight: bold;
   color: black;
   text-decoration: none;
   padding: 4px 8px;
@@ -498,7 +499,6 @@ const StyledAnchor = styled.a`
 
   &:hover {
     background-color: lightblue;
-    font-weight: bold;
   }
 `;
 
