@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import ListOfServices from "./ListOfServices";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
@@ -13,8 +13,8 @@ const Homepage = (props) => {
   const thingsToDo = Object.values(props.thingsToDo);
   const [reviews, setReviews] = useState([]);
   const [companies, setAllCompanies] = useState([]);
-  const [displayedItems, setDisplayedItems] = useState(20);
-  const [showMore, setShowMore] = useState(true);
+  const [currentTab, setCurrentTab] = useState(0);
+  const location = useLocation();
 
   useEffect(() => {
     fetchAllReviews();
@@ -41,15 +41,6 @@ const Homepage = (props) => {
     }
   };
 
-  const handleShowMoreLess = () => {
-    if (showMore) {
-      setDisplayedItems(displayedItems + 8);
-    } else {
-      setDisplayedItems(8);
-    }
-    setShowMore(!showMore);
-  };
-
   return (
     <Wrapper>
       <LandingContainer>
@@ -60,8 +51,8 @@ const Homepage = (props) => {
             want in <HighlightedText>Moncton</HighlightedText>
           </SloganText>
           <StatisticText>
-            Our website already has <span>{companies.length}</span> places to visit
-            listed.
+            Our website already has <span>{companies.length}</span> places to
+            visit listed.
           </StatisticText>
           <NavLink to="/searchresults">
             <SearchButton>Search</SearchButton>
@@ -69,21 +60,30 @@ const Homepage = (props) => {
         </TextContainer>
       </LandingContainer>
       <MainWrapper>
-        <BigText>Services in Moncton</BigText>
-        <ListOfServices data={serviceTypes.slice(0, displayedItems)} />
-        {/* <ButtonWrapper>
-          {showMore && displayedItems < allItems.length ? (
-            <ShowMoreLessButton onClick={handleShowMoreLess}>
-              Show more
-            </ShowMoreLessButton>
-          ) : (
-            <ShowMoreLessButton onClick={handleShowMoreLess}>
-              Show less
-            </ShowMoreLessButton>
-          )}
-        </ButtonWrapper> */}
-        <BigText>Things to Do in Moncton</BigText>
-        <ListOfServices data={thingsToDo.slice(0, displayedItems)} />
+        <TabMenu>
+          <TabButton onClick={() => setCurrentTab(0)} active={currentTab === 0}>
+            Services in Moncton
+          </TabButton>
+          <TabButton onClick={() => setCurrentTab(1)} active={currentTab === 1}>
+            Things to Do in Moncton
+          </TabButton>
+          <NavLink to="/guide">
+            <TabButton active={location.pathname === "/guide"}>
+              Guide for newcomers
+            </TabButton>
+          </NavLink>
+        </TabMenu>
+        {currentTab === 0 ? (
+          <>
+            <BigText>Services in Moncton</BigText>
+            <ListOfServices data={serviceTypes} />
+          </>
+        ) : currentTab === 1 ? (
+          <>
+            <BigText>Things to Do in Moncton</BigText>
+            <ListOfServices data={thingsToDo} />
+          </>
+        ) : null}
         <BigText>Popular Services</BigText>
         <PopularServices />
         <BigText>Recent reviews</BigText>
@@ -101,6 +101,32 @@ const fadeIn = keyframes`
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+`;
+
+const TabMenu = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+
+  border-radius: 8px;
+  margin-bottom: 20px;
+`;
+
+const TabButton = styled.button`
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  background: ${(props) => (props.active ? "black" : "#ffffff")};
+  color: ${(props) => (props.active ? "#ffffff" : "#333333")};
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  box-shadow: ${(props) => (props.active ? "0px 4px 10px black" : "none")};
+
+  &:hover {
+    background: ${(props) => (props.active ? "black" : "#eeeeee")};
   }
 `;
 

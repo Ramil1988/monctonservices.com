@@ -2993,6 +2993,14 @@ ajv@^8.0.0, ajv@^8.6.0, ajv@^8.8.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
+animation@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/animation/-/animation-0.1.3.tgz#132bdfde017464b0daa7dfa138eec0608770e45e"
+  integrity sha512-lDxVxJV6YA0JRvBJovS14KcnZmPmI451gD2a5e4a75rAtAQbNRs6TPpjgonXGOYR9dO7qY4V6ipcW6tu2frHSg==
+  dependencies:
+    ms ">= 0.1.0"
+    request-animation-frame ">= 0.1.0"
+
 ansi-escapes@^4.2.1, ansi-escapes@^4.3.1:
   version "4.3.2"
   resolved "https://registry.npmjs.org/ansi-escapes/-/ansi-escapes-4.3.2.tgz"
@@ -7007,7 +7015,7 @@ ms@2.1.2:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-ms@2.1.3, ms@^2.1.1:
+ms@2.1.3, "ms@>= 0.1.0", ms@^2.1.1:
   version "2.1.3"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
@@ -8132,6 +8140,11 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-animations@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-animations/-/react-animations-1.0.0.tgz#d96222920dfeabec8984d9b2ef2c5a5aadb40f06"
+  integrity sha512-ePPpVgdKnNEXm+LP1ww5s3n0JzebBw9QdRfxRqogzeg1PDIn6kf0pmvgeTeVZQXXpGmHImkIeTiaQR1O6xjntA==
+
 react-app-polyfill@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/react-app-polyfill/-/react-app-polyfill-3.0.0.tgz"
@@ -8432,6 +8445,11 @@ renderkid@^3.0.0:
     htmlparser2 "^6.1.0"
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
+
+"request-animation-frame@>= 0.1.0":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/request-animation-frame/-/request-animation-frame-0.1.1.tgz#a70e1edf15fc6a7217bbf1f0a2dda9d7aa83d266"
+  integrity sha512-FaRKSMU6wZAeXU6eG25JkRbzFOEBiqZEiVJj6bmepuuz0tr9o6aGld9CZh1iwMRAW47F3GNeHbLrcYmm7/XRYg==
 
 require-directory@^2.1.1:
   version "2.1.1"

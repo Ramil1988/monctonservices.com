@@ -15,6 +15,7 @@ import Review from "./Review/Review";
 import Footer from "./Homepage/Footer";
 import About from "./Header/About";
 import Admin from "./Admin/Admin";
+import Guide from "./Homepage/GuideForNewCommers";
 
 const App = () => {
   const { currentUser } = useContext(UserContext);
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/review/:id" element={<Review />} />
         <Route path="/about" element={<About />} />
+        <Route path="/guide" element={<Guide />} />
         <Route path="/superadminpage" element={<Outlet />}>
           <Route
             index
