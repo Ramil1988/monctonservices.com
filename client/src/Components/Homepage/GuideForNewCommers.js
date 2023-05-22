@@ -290,7 +290,7 @@ const Guide = () => {
               <FontAwesomeIcon icon={faCheck} size="1x" />
             </ImageIcon>
             <SectionTextWrapper>
-              <SectionTitle>Step 10: Find a famil doctor</SectionTitle>
+              <SectionTitle>Step 10: Find a family doctor</SectionTitle>
               <SectionText>
                 Getting a family doctor in Moncton may take some time. Through
                 Service NB you can register to be assigned a family doctor. If
@@ -367,7 +367,6 @@ const AboutWrapper = styled.div`
   margin: 20px auto;
   padding: 50px 20px;
   font-family: "Raleway", sans-serif;
-  animation: ${fadeIn} 2s ease-in;
   border-radius: 10px;
   background: linear-gradient(to right, #f2f2f2, #c4c4c4);
 
