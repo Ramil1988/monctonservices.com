@@ -128,6 +128,19 @@ const TabButton = styled.button`
   &:hover {
     background: ${(props) => (props.active ? "black" : "#eeeeee")};
   }
+
+  // Responsive styles
+  @media (max-width: 768px) {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    margin: 0 2px;
+    padding: 3px 6px;
+    font-size: 0.8rem;
+  }
 `;
 
 const Wrapper = styled.div`

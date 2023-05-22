@@ -1,7 +1,5 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { bounceInLeft } from "react-animations";
 
 const bounceAnimation = keyframes`${bounceInLeft}`;
@@ -31,9 +29,6 @@ const Guide = () => {
       <AboutContent>
         <BounceInLeftAnimationIcon delay="0s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 1: Before arriving reach out to Monctoncares
@@ -57,9 +52,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="1s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 2: Start searching for an appartment
@@ -83,9 +75,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="2s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 3: Once found an appartment, reach out to NB Power and
@@ -116,9 +105,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="3s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 4: Get your Social Insurance Number (SIN)
@@ -142,9 +128,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="4s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 5: Update Your Current Address for recieving your PR Cards
@@ -168,9 +151,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="5s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 6: Apply for a Medicare Health Insurance card
@@ -194,9 +174,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="6s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>Step 7: Open Bank account</SectionTitle>
               <SectionText>
@@ -220,9 +197,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="7s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>Step 8: Get driver license</SectionTitle>
               <SectionText>
@@ -253,9 +227,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="8s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 9: Apply for Canada child benefit and GST/HST credit
@@ -286,9 +257,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="9s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>Step 10: Find a family doctor</SectionTitle>
               <SectionText>
@@ -312,9 +280,6 @@ const Guide = () => {
         </BounceInLeftAnimationIcon>
         <BounceInLeftAnimationIcon delay="10s">
           <Section>
-            <ImageIcon>
-              <FontAwesomeIcon icon={faCheck} size="1x" />
-            </ImageIcon>
             <SectionTextWrapper>
               <SectionTitle>
                 Step 11: Register your children in school
@@ -373,6 +338,10 @@ const AboutWrapper = styled.div`
   @media (max-width: 1040px) {
     padding: 20px 10px;
   }
+
+  @media (max-width: 768px) {
+    padding: 10px 5px;
+  }
 `;
 
 const Header = styled.div`
@@ -383,6 +352,10 @@ const Header = styled.div`
   @media (max-width: 1040px) {
     flex-direction: column;
   }
+
+  @media (max-width: 480px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -392,6 +365,10 @@ const TitleWrapper = styled.div`
   @media (max-width: 1040px) {
     width: 90%;
     margin-left: 0;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
   }
 `;
 
@@ -404,12 +381,32 @@ const AboutTitle = styled.h1`
   @media (max-width: 1040px) {
     font-size: 30px;
   }
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 const AboutSubtitle = styled.h2`
   font-size: 24px;
   font-weight: normal;
   color: #333;
+
+  @media (max-width: 1040px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
 const AboutContent = styled.div`
@@ -419,6 +416,7 @@ const AboutContent = styled.div`
 `;
 
 const Section = styled.div`
+  margin: 0px 20px;
   background-color: #fff;
   border-radius: 8px;
   padding: 20px;
@@ -428,29 +426,16 @@ const Section = styled.div`
   min-height: 150px;
   animation: ${fadeIn} 2s ease-in;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 10px;
+  }
+
   &:hover {
     transform: scale(1.01);
     transition: all 0.2s ease-in-out;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   }
-`;
-
-const SectionIcon = styled.span`
-  font-size: 48px;
-  margin-left: 10px;
-  width: 150px;
-
-  img {
-    border-radius: 50%;
-  }
-`;
-
-const ImageIcon = styled(SectionIcon)`
-  img {
-    border-radius: 0%;
-  }
-  flex-basis: 70px;
-  flex-shrink: 0;
 `;
 
 const SectionTextWrapper = styled.div`
@@ -461,18 +446,47 @@ const SectionTextWrapper = styled.div`
   flex-basis: 0;
   min-width: 0;
   margin-left: 20px;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 const SectionTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
+
+  @media (max-width: 1040px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
 const SectionText = styled.p`
   font-size: 20px;
   line-height: 2;
   color: #333;
+
+  @media (max-width: 1040px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 const StyledAnchor = styled.a`
