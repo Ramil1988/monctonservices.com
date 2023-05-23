@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../UserContext";
-import { FaBook, FaSearch, FaBars } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
@@ -139,12 +139,6 @@ const NavLinks = styled.div`
     }
   }
 `;
-
-const StyledIcon = styled.span`
-  font-size: 1.2rem;
-  margin-right: 0.5rem;
-`;
-
 const UserWrapper = styled.div`
   display: flex;
   align-items: center;
