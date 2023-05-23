@@ -16,6 +16,7 @@ const client = new MongoClient(MONGO_URI, options);
 const database = client.db("MonctonServicesCom");
 const companies = database.collection("companies");
 const users = database.collection("users");
+const events = database.collection("events");
 
 client.connect();
 
@@ -140,10 +141,7 @@ const createReview = async (req, res) => {
       { $push: { reviews: review } }
     );
 
-    const userResult = await users.updateOne(
-      { _id: userId },
-      { $push: { reviews: review } }
-    );
+    await users.updateOne({ _id: userId }, { $push: { reviews: review } });
 
     if (companyResult.modifiedCount === 0) {
       return res.status(404).json({
@@ -225,6 +223,45 @@ const createFavorite = async (req, res) => {
       message: "An error occurred while adding the favorite.",
       data: null,
     });
+  }
+};
+
+const createEvent = async (req, res) => {
+  try {
+    const { title, date, location, description, link } = req.body;
+
+    await client.connect();
+
+    const event = {
+      title: title,
+      date: date,
+      location: location,
+      description: description,
+      link: link,
+    };
+
+    await events.insertOne({
+      _id: uuidv4(),
+      title: title,
+      date: date,
+      location: location,
+      description: description,
+      link: link,
+    });
+
+    return res.status(201).json({
+      status: 201,
+      message: `Event ${title} successfully created.`,
+      createdEvent: event,
+    });
+  } catch (error) {
+    console.error("Error adding company:", error);
+    await client.close();
+    return {
+      status: 500,
+      message: "An error occurred while creating the company.",
+      data: null,
+    };
   }
 };
 
@@ -503,6 +540,28 @@ const getUserFavorites = async (req, res) => {
       status: 500,
       message: "Error fetching user favorites.",
       data: { error: error.message },
+    });
+  }
+};
+
+const getAllEvents = async (req, res) => {
+  try {
+    await client.connect();
+
+    const allEvents = await events.find().toArray();
+
+    return res.status(200).json({
+      status: 200,
+      message: "All events retrieved successfully.",
+      data: allEvents,
+    });
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    await client.close();
+    return res.status(500).json({
+      status: 500,
+      message: "An error occurred while fetching events.",
+      data: null,
     });
   }
 };
@@ -852,7 +911,7 @@ const removeFavorite = async (req, res) => {
       });
     }
 
-    const userResult = await users.updateOne(
+    await users.updateOne(
       { _id: userId },
       { $pull: { favorites: { _id: companyId } } }
     );
@@ -911,6 +970,7 @@ module.exports = {
   createUser,
   createReview,
   createFavorite,
+  createEvent,
   getAllCompanies,
   getCompaniesByServiceType,
   getCompanyById,
@@ -920,6 +980,7 @@ module.exports = {
   getUserById,
   getUserReviews,
   getUserFavorites,
+  getAllEvents,
   updateCompany,
   updateUser,
   updateReview,

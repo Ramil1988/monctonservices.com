@@ -11,6 +11,7 @@ const {
   createUser,
   createReview,
   createFavorite,
+  createEvent,
   getAllCompanies,
   getCompaniesByServiceType,
   getCompanyById,
@@ -20,6 +21,7 @@ const {
   getUserById,
   getUserReviews,
   getUserFavorites,
+  getAllEvents,
   updateCompany,
   updateUser,
   updateReview,
@@ -48,6 +50,7 @@ express()
   .post("/user/login", createUser)
   .post("/user/favorite/:userId", createFavorite)
   .post("/user/remove-favorite/:userId", removeFavorite)
+  .post("/event", createEvent)
 
   // GET REST endpoints
   .get("/allCompanies", getAllCompanies)
@@ -59,6 +62,7 @@ express()
   .get("/user/:id", getUserById)
   .get("/user/reviews/:id", getUserReviews)
   .get("/user/favorites/:userId", getUserFavorites)
+  .get("/allEvents", getAllEvents)
 
   // PATCH REST endpoints
   .patch("/company/:id", updateCompany)

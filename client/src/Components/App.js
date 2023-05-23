@@ -18,6 +18,7 @@ import Footer from "./Homepage/Footer";
 import About from "./Header/About";
 import Admin from "./Admin/Admin";
 import Guide from "./Homepage/GuideForNewCommers";
+import CityEvents from "./Homepage/Events";
 
 const App = () => {
   const { currentUser } = useContext(UserContext);
@@ -74,6 +75,7 @@ const App = () => {
         <Route path="/review/:id" element={<Review />} />
         <Route path="/about" element={<About />} />
         <Route path="/guide" element={<Guide />} />
+        <Route path="/events" element={<CityEvents />} />
         <Route path="/superadminpage" element={<Outlet />}>
           <Route
             index

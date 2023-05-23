@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import CompanyUpdateForm from "./CompanyUpdateForm";
 import CompanyCreateForm from "./CompanyCreateForm";
 import ReviewAdmin from "./ReviewAdmin";
+import EventsAddForm from "./EventsAddForm";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
@@ -111,6 +112,7 @@ const Admin = () => {
       )}
       <CompanyCreateForm />
       <ReviewAdmin />
+      <EventsAddForm />
     </AdminWrapper>
   );
 };
