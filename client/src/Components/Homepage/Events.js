@@ -28,7 +28,7 @@ const CityEvents = () => {
 
   useEffect(() => {
     fetchAllevents();
-  }, [cityEvents]);
+  }, []);
 
   const eventsForCalendar = cityEvents.map((event) => {
     const formattedDate = moment(event.date).toISOString();
