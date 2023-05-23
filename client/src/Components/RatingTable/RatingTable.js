@@ -320,7 +320,7 @@ const Th = styled.th`
   padding: 16px;
   background-color: #003262;
   color: #fff;
-  border: 1px solid #003262;
+  border: 1px solid white;
   font-weight: 600;
   &:first-child {
     border-top-left-radius: 10px;

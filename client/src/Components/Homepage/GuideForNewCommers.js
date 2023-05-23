@@ -221,6 +221,17 @@ const Guide = () => {
                 >
                   link.
                 </StyledAnchor>
+                You can also study at an Autoshool and gain three years of
+                driving experience after completion. That will effect on your
+                car insurance fee. The total list of insurance companies you can
+                find in this
+                <StyledAnchor
+                  href="https://monctonservices.com/insurance"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link.
+                </StyledAnchor>
               </SectionText>
             </SectionTextWrapper>
           </Section>
@@ -307,6 +318,64 @@ const Guide = () => {
                 >
                   link.
                 </StyledAnchor>
+              </SectionText>
+            </SectionTextWrapper>
+          </Section>
+        </BounceInLeftAnimationIcon>
+        <BounceInLeftAnimationIcon delay="11s">
+          <Section>
+            <SectionTextWrapper>
+              <SectionTitle>
+                Step 12: Additional support you might apply for
+              </SectionTitle>
+              <SectionText>
+                <span>Visit Magma/Cafi</span>: Both of these organizations can
+                assist you with a variety of essential needs, such as job
+                searching, filing taxes, language courses, etc. Magma{" "}
+                <StyledAnchor
+                  href="https://magma-amgm.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link.
+                </StyledAnchor>{" "}
+                Cafi{" "}
+                <StyledAnchor
+                  href="https://cafi-nb.org/wp2021/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link.
+                </StyledAnchor>
+                <br></br>
+                <span>Daycare Assistance Program</span>: The Daycare Assistance
+                Program offers financial support to families to help them pay
+                the daycare cost of Early Learning and Childcare Centres for{" "}
+                <StyledAnchor
+                  href="https://www2.gnb.ca/content/gnb/en/services/services_renderer.14136.Daycare_Assistance_Program.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link.
+                </StyledAnchor>
+                <br></br>
+                <span>Canada - New Brunswick Housing Benefit</span>: You might
+                be eligible for Canada-New Brunswick Housing Benefit if you make
+                under 50 000 CAD per year. It can cover up to 500 CAD of your
+                rental payments. More information you can find here in this{" "}
+                <StyledAnchor
+                  href="https://socialsupportsnb.ca/en/simple_page/canada-new-brunswick-housing-benefit-application-form"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link.
+                </StyledAnchor>
+                <br></br>
+                <span>Food bank</span>: In the early days of your arrival in
+                Canada, it might be necessary for your family to receive food
+                from some volunteer organizations, like Peter McKee Community
+                Food Centre. For more information call them +1 506 383-42-81 or
+                visit at 475 St. George St, Moncton, NB E1C 1Y4.
               </SectionText>
             </SectionTextWrapper>
           </Section>
@@ -474,6 +543,10 @@ const SectionText = styled.p`
   font-size: 20px;
   line-height: 2;
   color: #333;
+
+  & span {
+    font-weight: bold;
+  }
 
   @media (max-width: 1040px) {
     font-size: 18px;
