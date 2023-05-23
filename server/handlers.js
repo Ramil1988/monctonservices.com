@@ -228,31 +228,27 @@ const createFavorite = async (req, res) => {
 
 const createEvent = async (req, res) => {
   try {
-    const { title, date, location, description, link } = req.body;
+    const { title, startDate, endDate, location, description, link } = req.body;
 
     await client.connect();
 
-    const event = {
+    const newEvent = {
+      _id: uuidv4(),
       title: title,
-      date: date,
+      startDate: startDate,
+      endDate: endDate,
       location: location,
       description: description,
       link: link,
     };
 
-    await events.insertOne({
-      _id: uuidv4(),
-      title: title,
-      date: date,
-      location: location,
-      description: description,
-      link: link,
-    });
+    const result = await events.insertOne(newEvent);
 
     return res.status(201).json({
       status: 201,
+      result: result,
       message: `Event ${title} successfully created.`,
-      createdEvent: event,
+      createdEvent: newEvent,
     });
   } catch (error) {
     console.error("Error adding company:", error);

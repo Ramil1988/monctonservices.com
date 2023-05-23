@@ -4,7 +4,6 @@ import styled from "styled-components";
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
 const EventsAddForm = () => {
-  const [events] = useState([]);
   const [setEvents] = useState([]);
   const [notification, setNotification] = useState("");
 
@@ -19,7 +18,8 @@ const EventsAddForm = () => {
 
   const [newEvent, setNewEvent] = useState({
     title: "",
-    date: formatDate,
+    startDate: formatDate,
+    endDate: formatDate,
     location: "",
     description: "",
     link: "",
@@ -53,9 +53,11 @@ const EventsAddForm = () => {
 
       setNewEvent({
         title: "",
-        date: formatDate,
+        startDate: formatDate,
+        endDate: formatDate,
         location: "",
         description: "",
+        link: "",
       });
     } catch (error) {
       console.error("Error creating company:", error);
@@ -93,7 +95,17 @@ const EventsAddForm = () => {
           />
         </Label>
         <Label>
-          Date:
+          Start date:
+          <Input
+            type="date"
+            name="date"
+            value={newEvent.date}
+            onChange={handleEventChange}
+            required
+          />
+        </Label>
+        <Label>
+          End date:
           <Input
             type="date"
             name="date"
@@ -129,6 +141,7 @@ const EventsAddForm = () => {
             name="link"
             value={newEvent.link}
             onChange={handleEventChange}
+            required
           />
         </Label>
         <Button type="submit">Create</Button>
