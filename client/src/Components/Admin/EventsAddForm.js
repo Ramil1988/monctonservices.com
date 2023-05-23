@@ -53,8 +53,8 @@ const EventsAddForm = () => {
 
       setNewEvent({
         title: "",
-        startDate: formatDate,
-        endDate: formatDate,
+        startDate: "",
+        endDate: "",
         location: "",
         description: "",
         link: "",
@@ -98,8 +98,8 @@ const EventsAddForm = () => {
           Start date:
           <Input
             type="date"
-            name="date"
-            value={newEvent.date}
+            name="startDate"
+            value={newEvent.startDate}
             onChange={handleEventChange}
             required
           />
@@ -108,8 +108,8 @@ const EventsAddForm = () => {
           End date:
           <Input
             type="date"
-            name="date"
-            value={newEvent.date}
+            name="endDate"
+            value={newEvent.endDate}
             onChange={handleEventChange}
             required
           />
