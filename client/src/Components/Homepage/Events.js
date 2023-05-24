@@ -116,6 +116,9 @@ const CityEvents = () => {
 const CalendarWrapper = styled.div`
   height: 600px;
   margin: 50px;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 768px) {
     margin: 10px;

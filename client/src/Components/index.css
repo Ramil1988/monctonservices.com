@@ -1,0 +1,7 @@
+@media (max-width: 428px) {
+  .rbc-overlay {
+    width: 90%;
+    left: 5% !important;
+    transform: none !important;
+  }
+}

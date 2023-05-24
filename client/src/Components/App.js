@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./index.css";
 import styled from "styled-components";
 import { FaArrowUp } from "react-icons/fa";
 import { serviceTypes } from "./serviceTypes";
