@@ -357,6 +357,14 @@ const Guide = () => {
                   rel="noopener noreferrer"
                 >
                   link.
+                </StyledAnchor>{" "}
+                We gathered for you daycares in Moncton, look it up here in this
+                <StyledAnchor
+                  href="https://monctonservices.com/daycares"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link.
                 </StyledAnchor>
                 <br></br>
                 <span>Canada - New Brunswick Housing Benefit</span>: You might
