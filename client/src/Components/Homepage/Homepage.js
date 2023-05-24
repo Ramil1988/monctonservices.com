@@ -67,6 +67,12 @@ const Homepage = (props) => {
           <TabButton onClick={() => setCurrentTab(1)} active={currentTab === 1}>
             Things to Do in Moncton
           </TabButton>
+
+          <NavLink to="/events">
+            <TabButton active={location.pathname === "/events"}>
+              City events
+            </TabButton>
+          </NavLink>
           <NavLink to="/guide">
             <TabButton active={location.pathname === "/guide"}>
               Guide for newcomers
@@ -106,11 +112,14 @@ const fadeIn = keyframes`
 
 const TabMenu = styled.div`
   display: flex;
+ 
   justify-content: center;
+  overflow-x: auto;
   padding: 10px;
-
   border-radius: 8px;
   margin-bottom: 20px;
+  white-space: nowrap;
+  scroll-snap-type: x mandatory;
 `;
 
 const TabButton = styled.button`
@@ -129,7 +138,6 @@ const TabButton = styled.button`
     background: ${(props) => (props.active ? "black" : "#eeeeee")};
   }
 
-  // Responsive styles
   @media (max-width: 768px) {
     margin: 0 5px;
     padding: 5px 10px;
