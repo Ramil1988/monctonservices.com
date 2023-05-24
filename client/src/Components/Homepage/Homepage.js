@@ -112,7 +112,6 @@ const fadeIn = keyframes`
 
 const TabMenu = styled.div`
   display: flex;
- 
   justify-content: center;
   overflow-x: auto;
   padding: 10px;
@@ -120,6 +119,12 @@ const TabMenu = styled.div`
   margin-bottom: 20px;
   white-space: nowrap;
   scroll-snap-type: x mandatory;
+
+  @media (max-width: 768px) {
+    display: block;
+    overflow-x: visible;
+    white-space: normal;
+  }
 `;
 
 const TabButton = styled.button`
@@ -139,13 +144,13 @@ const TabButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    margin: 0 5px;
+    margin: 5px 0;
     padding: 5px 10px;
     font-size: 1rem;
   }
 
   @media (max-width: 480px) {
-    margin: 0 2px;
+    margin: 2px 0;
     padding: 3px 6px;
     font-size: 0.8rem;
   }
