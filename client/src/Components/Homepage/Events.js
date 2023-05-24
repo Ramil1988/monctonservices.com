@@ -114,11 +114,11 @@ const CityEvents = () => {
 };
 
 const CalendarWrapper = styled.div`
-  height: 500px;
+  height: 600px;
   margin: 50px;
 
   @media (max-width: 768px) {
-    margin: 20px;
+    margin: 10px;
   }
 `;
 
@@ -263,25 +263,20 @@ const StyledPagination = styled.div`
 `;
 
 const StyledPageButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${({ active }) => (active ? "black" : "white")};
   color: ${({ active }) => (active ? "white" : "black")};
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  line-height: 30px;
-  text-align: center;
   margin: 0 5px;
   border: 1px solid white;
   transition: color 0.2s ease-in-out;
 
   &:hover {
     transform: scale(1.1);
-  }
-
-  @media (max-width: 768px) {
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
   }
 `;
 
