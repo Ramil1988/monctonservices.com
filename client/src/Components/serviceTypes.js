@@ -32,7 +32,7 @@ export const serviceTypes = {
   },
   plumbing: {
     id: "plumbing",
-    name: "Plumbing",
+    name: "Plumbing companies",
     imageSrc: "/assets/plumbing.jpg",
   },
 
@@ -43,7 +43,7 @@ export const serviceTypes = {
   },
   insurance: {
     id: "insurance",
-    name: "Insurance",
+    name: "Insurance companies",
     imageSrc: "/assets/Insurance.jpg",
   },
   autoservice: {
@@ -53,7 +53,7 @@ export const serviceTypes = {
   },
   propertymanagement: {
     id: "propertymanagement",
-    name: "Property management companies",
+    name: "Rental appartments",
     imageSrc: "/assets/Propertymanagement.jpg",
   },
   realestate: {
@@ -78,8 +78,18 @@ export const serviceTypes = {
   },
   daycares: {
     id: "daycares",
-    name: "Daycares, Aftershools",
+    name: "Daycares, Afterschools, Summer camps",
     imageSrc: "/assets/Daycares.jpg",
+  },
+  drivingschool: {
+    id: "drivingschool",
+    name: "Driving schools",
+    imageSrc: "/assets/Drivingshool.jpg",
+  },
+  tutoringcenters: {
+    id: "tutoringcenters",
+    name: "Tutoring centers",
+    imageSrc: "/assets/Tutoringcenter.jpg",
   },
   // homerepair: {
   //   id: "homerepair",

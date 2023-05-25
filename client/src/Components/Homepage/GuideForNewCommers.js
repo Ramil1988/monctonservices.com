@@ -221,10 +221,18 @@ const Guide = () => {
                 >
                   link.
                 </StyledAnchor>
-                You can also study at an Autoshool and gain three years of
+                You can also study at an Driving school and gain three years of
                 driving experience after completion. That will effect on your
-                car insurance fee. The total list of insurance companies you can
-                find in this
+                car insurance fee. Wa gathered for you all Driving schools in
+                Moncton here in this{" "}
+                <StyledAnchor
+                  href="https://monctonservices.com/drivingschool"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  link,
+                </StyledAnchor>
+                as well as insurance companies in this
                 <StyledAnchor
                   href="https://monctonservices.com/insurance"
                   target="_blank"

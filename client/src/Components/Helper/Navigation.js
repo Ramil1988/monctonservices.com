@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import styled from "styled-components";
 
@@ -7,8 +8,25 @@ const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // An array to keep track of the history of navigations
+  const historyStack = React.useRef([]);
+
+  // Add to historyStack every time location changes
+  useEffect(() => {
+    historyStack.current.push(location.pathname);
+  }, [location.pathname]);
+
   const goBack = () => {
-    navigate(-1);
+    // If historyStack has more than one element
+    if (historyStack.current.length > 1) {
+      // Navigate back
+      navigate(-1);
+      // And remove the last added path from historyStack
+      historyStack.current.pop();
+    } else {
+      // If no previous page, navigate to the root page
+      navigate("/");
+    }
   };
 
   if (location.pathname === "/") {

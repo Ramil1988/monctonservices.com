@@ -137,7 +137,7 @@ const TabButton = styled.button`
   border-radius: 20px;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
-  box-shadow: ${(props) => (props.active ? "0px 4px 10px black" : "none")};
+  box-shadow: ${(props) => (props.active ? "0px 4px 4px black" : "none")};
 
   &:hover {
     background: ${(props) => (props.active ? "black" : "#eeeeee")};

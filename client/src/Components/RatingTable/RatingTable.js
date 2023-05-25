@@ -12,6 +12,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import CopyButton from "../Company/CoppyButton";
 import Maps from "../Company/Maps";
+import { serviceTypes } from "../serviceTypes";
+import { thingsToDo } from "../ThingsToDo";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
@@ -23,6 +25,44 @@ const RatingTable = () => {
   const [filteredCompanies, setFilteredCompanies] = useState(companies);
   const [open, setOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filterCompanies = (companies) => {
+    return companies.filter((company) =>
+      company.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  useEffect(() => {
+    let filtered = companies;
+
+    if (selectedCity !== "All") {
+      filtered = filtered.filter((company) =>
+        company.address.toLowerCase().includes(selectedCity.toLowerCase())
+      );
+    }
+
+    if (searchQuery) {
+      filtered = filterCompanies(filtered);
+    }
+
+    setFilteredCompanies(filtered);
+  }, [companies, selectedCity, searchQuery]);
+
+  let selectedServicetype;
+  if (serviceTypes[serviceType]) {
+    selectedServicetype = serviceTypes;
+  } else if (thingsToDo[serviceType]) {
+    selectedServicetype = thingsToDo;
+  } else {
+    console.error(
+      `serviceType ${serviceType} not found in serviceTypes or thingsToDo`
+    );
+  }
 
   const handleDialogOpen = (company) => {
     setSelectedCompany(company);
@@ -106,6 +146,9 @@ const RatingTable = () => {
 
   return (
     <Wrapper>
+      <TableHeading>
+        Where to find best {selectedServicetype[serviceType].name} in Moncton
+      </TableHeading>
       <CenteredWrapper>
         <FilterWrapper>
           <FilterLabel>Filter by city:</FilterLabel>
@@ -114,12 +157,15 @@ const RatingTable = () => {
             <option value="Moncton">Moncton</option>
             <option value="Dieppe">Dieppe</option>
             <option value="Riverview">Riverview</option>
-          </FilterSelect>
+          </FilterSelect>{" "}
+          <FilterLabel>Search by name:</FilterLabel>
+          <FilterInput
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
         </FilterWrapper>
       </CenteredWrapper>
-      <TableHeading>
-        {serviceType.replace(/\b\w/g, (l) => l.toUpperCase())} Rating
-      </TableHeading>
       <Table>
         <thead>
           <tr>
@@ -160,7 +206,6 @@ const RatingTable = () => {
           })}
         </tbody>
       </Table>
-
       <CenteredDialog
         open={open}
         onClose={handleDialogClose}
@@ -211,6 +256,25 @@ const RatingTable = () => {
   );
 };
 
+const FilterInput = styled.input`
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #003262;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+
+  &:focus {
+    border-color: #003262;
+  }
+`;
+
 const CenteredDialog = styled(Dialog)`
   display: flex;
   align-items: center;
@@ -239,10 +303,15 @@ const FilterWrapper = styled.div`
   background-color: #003262;
   padding: 10px;
   border-radius: 5px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const FilterLabel = styled.label`
-  margin-right: 0.5rem;
+  margin: 1rem;
   color: #fff;
   font-size: 1.1rem;
   font-weight: bold;
