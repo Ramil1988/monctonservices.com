@@ -125,7 +125,6 @@ const CompanyCreateForm = () => {
             onChange={handleNewCompanyChange}
           />
         </Label>
-        Image URL:
         <UploadCompanyImage
           newCompany={newCompany}
           setNewCompany={setNewCompany}

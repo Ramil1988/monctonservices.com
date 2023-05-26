@@ -26,7 +26,7 @@ export const thingsToDo = {
   },
   museums: {
     id: "museums",
-    name: "Museums",
+    name: "Museums, Cultural centres, Public libraries",
     imageSrc: "/assets/Museums.jpg",
   },
   childrenentertainment: {

@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import Maps from "./Maps";
 import NotificationBox from "../Helper/NotificationBox";
 import CopyButton from "./CoppyButton";
+import { serviceTypes } from "../serviceTypes";
+import { thingsToDo } from "../ThingsToDo";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
@@ -35,6 +37,24 @@ const Company = () => {
       console.error("Error fetching company:", error);
     }
   };
+
+  let selectedServicetype;
+  if (company && (serviceTypes || thingsToDo)) {
+    if (serviceTypes && serviceTypes[company.serviceType.toLowerCase()]) {
+      selectedServicetype =
+        serviceTypes[company.serviceType.toLowerCase()].name;
+    } else if (
+      thingsToDo &&
+      thingsToDo[company.serviceType.toLowerCase()] &&
+      thingsToDo[company.serviceType.toLowerCase()].name
+    ) {
+      selectedServicetype = thingsToDo[company.serviceType.toLowerCase()].name;
+    } else {
+      console.error(
+        `Service type ${company.serviceType} not found in serviceTypes or thingsToDo`
+      );
+    }
+  }
 
   useEffect(() => {
     if (company && Array.isArray(company.reviews)) {
@@ -210,7 +230,7 @@ const Company = () => {
         <Image src={company.image} />
         <InfoBox>
           <InfoTitle>Service type</InfoTitle>
-          <Address>{company.serviceType}</Address>
+          <Address>{selectedServicetype}</Address>
           <InfoTitle>Address</InfoTitle>
           <StyledWrapper>
             <Address>{company.address}</Address>

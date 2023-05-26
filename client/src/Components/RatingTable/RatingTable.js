@@ -257,6 +257,7 @@ const RatingTable = () => {
 };
 
 const FilterInput = styled.input`
+  margin-right: 20px;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;

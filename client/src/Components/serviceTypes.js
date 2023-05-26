@@ -91,6 +91,16 @@ export const serviceTypes = {
     name: "Tutoring centers",
     imageSrc: "/assets/Tutoringcenter.jpg",
   },
+  computermobilerepair: {
+    id: "computermobilerepair",
+    name: "Computer and mobile repairs",
+    imageSrc: "/assets/Computermobilerepair.jpg",
+  },
+  taxis: {
+    id: "taxis",
+    name: "Taxis",
+    imageSrc: "/assets/Taxis.jpg",
+  },
   // homerepair: {
   //   id: "homerepair",
   //   name: "Home repair",
