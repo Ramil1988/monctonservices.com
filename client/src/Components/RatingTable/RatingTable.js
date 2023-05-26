@@ -274,6 +274,10 @@ const FilterInput = styled.input`
   &:focus {
     border-color: #003262;
   }
+
+  @media (max-width: 768px) {
+    margin: 0px 20px 20px 20px;
+  }
 `;
 
 const CenteredDialog = styled(Dialog)`
