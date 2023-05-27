@@ -54,7 +54,7 @@ express()
       const urls = getUrls();
       const sitemapUrls = urls.map((url) => ({ url }));
       sitemap = sm.createSitemap({
-        hostname: "https://monctonservices.com",
+        hostname: "https://monctonservices-com.onrender.com",
         cacheTime: 600000,
         urls: sitemapUrls,
       });
