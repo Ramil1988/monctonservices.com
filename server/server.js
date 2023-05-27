@@ -3,6 +3,7 @@
 const express = require("express");
 const morgan = require("morgan");
 var cors = require("cors");
+const expressSitemapXml = require("express-sitemap-xml");
 
 const PORT = 3000;
 
@@ -33,6 +34,14 @@ const {
   deleteComment,
 } = require("./handlers");
 
+const getUrls = function () {
+  return ["/", "/searchresults", "/about", "/guide", "/events"];
+};
+
+const sm = require("sitemap");
+
+let sitemap;
+
 express()
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
@@ -43,6 +52,10 @@ express()
   .use("/", express.static(__dirname + "/"))
   .use(express.static("public"))
   .use(cors())
+  .use(
+    "/sitemap.xml",
+    expressSitemapXml(getUrls, "https://monctonservices.com")
+  )
 
   // POST REST endpoints
   .post("/company", createCompany)
@@ -63,6 +76,19 @@ express()
   .get("/user/reviews/:id", getUserReviews)
   .get("/user/favorites/:userId", getUserFavorites)
   .get("/allEvents", getAllEvents)
+  .get("/sitemap.xml", function (req, res) {
+    if (!sitemap) {
+      const urls = getUrls();
+      const sitemapUrls = urls.map((url) => ({ url }));
+      sitemap = sm.createSitemap({
+        hostname: "https://monctonservices.com",
+        cacheTime: 600000, // 600 sec - cache purge period
+        urls: sitemapUrls,
+      });
+    }
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap.toString());
+  })
 
   // PATCH REST endpoints
   .patch("/company/:id", updateCompany)
