@@ -13,6 +13,13 @@ const CityEvents = () => {
 
   const ROOT_API = "https://monctonservices-com.onrender.com";
 
+  const currentDate = moment().startOf("day");
+
+  const startFrom = currentPage * itemsPerPage;
+  const selectedEvents = cityEvents.slice(startFrom, startFrom + itemsPerPage);
+  const totalPages = Math.ceil(cityEvents.length / itemsPerPage);
+  const pageNumbers = [...Array(totalPages).keys()].map((num) => num + 1);
+
   const fetchAllevents = async () => {
     try {
       const response = await fetch(`${ROOT_API}/allEvents`);
@@ -22,6 +29,7 @@ const CityEvents = () => {
       );
 
       setEvents(sortedEvents);
+      console.log(sortedEvents.length); // log the length here
     } catch (error) {
       console.error("Error fetching companies:", error);
     }
@@ -42,73 +50,71 @@ const CityEvents = () => {
     };
   });
 
-  const currentDate = moment().startOf("day");
-
-  const startFrom = currentPage * itemsPerPage;
-  const selectedEvents = cityEvents.slice(startFrom, startFrom + itemsPerPage);
-
-  const totalPages = Math.ceil(cityEvents.length / itemsPerPage);
-  const pageNumbers = [...Array(totalPages).keys()].map((num) => num + 1);
-
   return (
     <>
-      <CalendarWrapper>
-        <Calendar
-          localizer={localizer}
-          events={eventsForCalendar}
-          views={["month"]}
-          startAccessor="start"
-          endAccessor="end"
-          onSelectEvent={(event) => {
-            window.open(event.resource.link, "_blank");
-          }}
-          popup
-        />
-      </CalendarWrapper>
+      {cityEvents.length > 0 && (
+        <>
+          <CalendarWrapper>
+            <Calendar
+              localizer={localizer}
+              events={eventsForCalendar}
+              views={["month"]}
+              startAccessor="start"
+              endAccessor="end"
+              onSelectEvent={(event) => {
+                window.open(event.resource.link, "_blank");
+              }}
+              popup
+            />
+          </CalendarWrapper>
 
-      <StyledHeader>The upcoming events to visit in Moncton</StyledHeader>
-      <EventList>
-        {selectedEvents
-          .filter((event) => moment(event.endDate).isSameOrAfter(currentDate))
-          .map((event) => (
-            <EventItem key={event.title}>
-              <EventDetails>
-                <EventTitle>{event.title}</EventTitle>
-                <DetailsButton
-                  onClick={() => window.open(event.link, "_blank")}
-                >
-                  <QuestionMarkLabel>?</QuestionMarkLabel>
-                </DetailsButton>
-              </EventDetails>
-              <Wrapper>
-                <Label>When:</Label>
-                <EventDate>
-                  {moment(event.startDate).format("DD-MM-YYYY")}
-                </EventDate>{" "}
-                -
-                <EventDate>
-                  {moment(event.endDate).format("DD-MM-YYYY")}
-                </EventDate>
-              </Wrapper>
-              <Wrapper>
-                <Label>Where:</Label>
-                <EventLocation>{event.location}</EventLocation>
-              </Wrapper>
-              <EventDescription>{event.description}</EventDescription>
-            </EventItem>
-          ))}
-      </EventList>
-      <StyledPagination>
-        {pageNumbers.map((number) => (
-          <StyledPageButton
-            key={number}
-            active={number === currentPage}
-            onClick={() => setCurrentPage(number)}
-          >
-            {number}
-          </StyledPageButton>
-        ))}
-      </StyledPagination>
+          <StyledHeader>The upcoming events to visit in Moncton</StyledHeader>
+          <EventList>
+            {selectedEvents
+              .filter((event) =>
+                moment(event.endDate).isSameOrAfter(currentDate)
+              )
+              .map((event) => (
+                <EventItem key={event.title}>
+                  <EventDetails>
+                    <EventTitle>{event.title}</EventTitle>
+                    <DetailsButton
+                      onClick={() => window.open(event.link, "_blank")}
+                    >
+                      <QuestionMarkLabel>?</QuestionMarkLabel>
+                    </DetailsButton>
+                  </EventDetails>
+                  <Wrapper>
+                    <Label>When:</Label>
+                    <EventDate>
+                      {moment(event.startDate).format("DD-MM-YYYY")}
+                    </EventDate>{" "}
+                    -
+                    <EventDate>
+                      {moment(event.endDate).format("DD-MM-YYYY")}
+                    </EventDate>
+                  </Wrapper>
+                  <Wrapper>
+                    <Label>Where:</Label>
+                    <EventLocation>{event.location}</EventLocation>
+                  </Wrapper>
+                  <EventDescription>{event.description}</EventDescription>
+                </EventItem>
+              ))}
+          </EventList>
+          <StyledPagination>
+            {pageNumbers.map((number) => (
+              <StyledPageButton
+                key={number}
+                active={number === currentPage}
+                onClick={() => setCurrentPage(number)}
+              >
+                {number}
+              </StyledPageButton>
+            ))}
+          </StyledPagination>
+        </>
+      )}
     </>
   );
 };
