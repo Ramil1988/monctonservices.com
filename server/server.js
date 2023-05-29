@@ -4,6 +4,8 @@
 const express = require("express");
 const morgan = require("morgan");
 var cors = require("cors");
+const path = require("path");
+const sm = require("sitemap");
 
 const PORT = 3000;
 
@@ -34,16 +36,33 @@ const {
   deleteComment,
 } = require("./handlers");
 
+let sitemap;
+
+const getUrls = function () {
+  return ["/", "/searchresults", "/about", "/guide", "/events"];
+};
+
 express()
   .use(morgan("tiny"))
-  .use(express.static("./server/assets"))
+  .use(express.static(path.join(__dirname, "public")))
   .use(express.json({ limit: "50mb" }))
   .use(express.urlencoded({ limit: "50mb", extended: true }))
-  .use(express.json())
-  .use(express.urlencoded({ extended: false }))
-  .use("/", express.static(__dirname + "/"))
-  .use(express.static("public"))
   .use(cors())
+
+  // Static route for sitemap
+  .get("/sitemap.xml", function (req, res) {
+    if (!sitemap) {
+      const urls = getUrls();
+      const sitemapUrls = urls.map((url) => ({ url }));
+      sitemap = sm.createSitemap({
+        hostname: "https://monctonservices-com.onrender.com",
+        cacheTime: 600000,
+        urls: sitemapUrls,
+      });
+    }
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap.toString());
+  })
 
   // POST REST endpoints
   .post("/company", createCompany)
@@ -71,11 +90,15 @@ express()
   .patch("/review/:id", updateReview)
 
   //DELETE REST endpoints
-
   .delete("/company/:id", deleteCompany)
   .delete("/user/:id", deleteUser)
   .delete("/allReviews/company/:id", deleteAllReviewsForCompany)
   .delete("/review/:id", deleteReview)
   .delete("/review/:reviewId/comments/:commentDate", deleteComment)
+
+  // All other routes are handled by React
+  .get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  })
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
