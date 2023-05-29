@@ -44,7 +44,7 @@ const CityEvents = () => {
 
   const currentDate = moment().startOf("day");
 
-  const startFrom = (currentPage - 1) * itemsPerPage;
+  const startFrom = currentPage * itemsPerPage;
   const selectedEvents = cityEvents.slice(startFrom, startFrom + itemsPerPage);
 
   const totalPages = Math.ceil(cityEvents.length / itemsPerPage);

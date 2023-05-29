@@ -130,7 +130,6 @@ const SearchResults = () => {
         value={value}
         onChange={(ev) => setValue(ev.target.value)}
       />
-
       <StyledClearButton onClick={() => setValue("")}>Clear</StyledClearButton>
       <StyledUl>{renderList()}</StyledUl>
       {renderPagination()}
@@ -139,7 +138,11 @@ const SearchResults = () => {
 };
 
 const StyledSearchWrapper = styled.div`
-  width: 97%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 100%;
   padding: 20px;
   background: lightgray;
@@ -148,35 +151,6 @@ const StyledSearchWrapper = styled.div`
   & h1 {
     color: black;
   }
-`;
-
-const StyledUl = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-const StyledLi = styled.li`
-  margin: 15px 0;
-  width: 250px;
-  padding: 5px 10px;
-  &:hover {
-    transform: scale(1.1);
-  }
-  & a {
-    text-decoration: none;
-    color: black;
-  }
-`;
-
-const StyledType = styled.li`
-  font-weight: bold;
-  margin-top: 10px;
-  font-size: 20px;
-  padding: 5px 10px;
-  color: black;
-  border: 2px solid white;
-  display: inline-block;
-  margin-right: 10px;
 `;
 
 const StyledInputsuggestion = styled.input`
@@ -194,6 +168,35 @@ const StyledInputsuggestion = styled.input`
     outline: none;
     border: 1px solid black;
   }
+`;
+
+const StyledUl = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const StyledLi = styled.li`
+  margin: 15px 0;
+  width: 100%;
+  padding: 5px 10px;
+  &:hover {
+    transform: scale(1.2);
+  }
+  & a {
+    text-decoration: none;
+    color: black;
+  }
+`;
+
+const StyledType = styled.li`
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 20px;
+  padding: 5px 10px;
+  color: black;
+  border: 2px solid white;
+  display: inline-block;
+  margin-right: 10px;
 `;
 
 const StyledSelect = styled.select`

@@ -24,6 +24,7 @@ import CityEvents from "./Homepage/Events";
 const App = () => {
   const { currentUser } = useContext(UserContext);
   const allowedUserId = "google-oauth2|116851775782187261081";
+
   const ScrollToTop = () => {
     const [isVisible, setIsVisible] = useState(false);
 

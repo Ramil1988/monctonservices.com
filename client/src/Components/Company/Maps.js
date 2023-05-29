@@ -5,7 +5,7 @@ const Maps = (address) => {
 
   return (
     <Wrapper>
-      <iframe width="300" height="300" src={mapSrc}></iframe>
+      <iframe width="100%" height="300" src={mapSrc}></iframe>
     </Wrapper>
   );
 };

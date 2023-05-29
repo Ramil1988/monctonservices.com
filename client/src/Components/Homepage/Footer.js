@@ -28,7 +28,7 @@ const Footer = () => {
   );
 };
 
-const Logo = styled.div`
+const Logo = styled(NavLink)`
   display: block;
 
   & img {

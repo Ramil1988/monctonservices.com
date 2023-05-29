@@ -347,7 +347,7 @@ const Notification = styled.div`
   margin: auto;
   padding: 15px;
   max-width: 400px;
-  height: 40px;
+  height: 80px;
   justify-content: center;
   align-items: center;
   text-align: center;

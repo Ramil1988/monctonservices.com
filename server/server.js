@@ -1,5 +1,4 @@
 "use strict";
-"use strict1";
 
 const express = require("express");
 const morgan = require("morgan");
@@ -38,9 +37,9 @@ const {
 
 let sitemap;
 
-const getUrls = function () {
-  return ["/", "/searchresults", "/about", "/guide", "/events"];
-};
+// const getUrls = function () {
+//   return ["/", "/searchresults", "/about", "/guide", "/events"];
+// };
 
 express()
   .use(morgan("tiny"))
@@ -50,19 +49,19 @@ express()
   .use(cors())
 
   // Static route for sitemap
-  .get("/sitemap.xml", function (req, res) {
-    if (!sitemap) {
-      const urls = getUrls();
-      const sitemapUrls = urls.map((url) => ({ url }));
-      sitemap = sm.createSitemap({
-        hostname: "https://monctonservices-com.onrender.com",
-        cacheTime: 600000,
-        urls: sitemapUrls,
-      });
-    }
-    res.header("Content-Type", "application/xml");
-    res.send(sitemap.toString());
-  })
+  // .get("/sitemap.xml", function (req, res) {
+  //   if (!sitemap) {
+  //     const urls = getUrls();
+  //     const sitemapUrls = urls.map((url) => ({ url }));
+  //     sitemap = sm.createSitemap({
+  //       hostname: "https://monctonservices-com.onrender.com",
+  //       cacheTime: 600000,
+  //       urls: sitemapUrls,
+  //     });
+  //   }
+  //   res.header("Content-Type", "application/xml");
+  //   res.send(sitemap.toString());
+  // })
 
   // POST REST endpoints
   .post("/company", createCompany)
@@ -96,9 +95,9 @@ express()
   .delete("/review/:id", deleteReview)
   .delete("/review/:reviewId/comments/:commentDate", deleteComment)
 
-  // All other routes are handled by React
-  .get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  })
+
+  // .get("*", (req, res) => {
+  //   res.sendFile(path.join(__dirname, "public", "index.html"));
+  // })
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

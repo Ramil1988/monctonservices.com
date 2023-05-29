@@ -391,13 +391,20 @@ const FavoriteGrid = styled.div`
   grid-gap: 0.5rem;
   padding: 1rem;
 
-  @media (min-width: 1000px) {
+  @media (min-width: 1251px) {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  @media (max-width: 767px) {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-gap: 1rem;
+  @media (max-width: 1250px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
@@ -422,6 +429,8 @@ const Bookmark = styled.div`
 `;
 
 const StyledNavLink = styled(Link)`
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 1rem;
   color: black;
   text-decoration: none;
@@ -446,6 +455,9 @@ const RemoveFavoriteButton = styled(IconButton)`
 `;
 
 const FavoriteName = styled.h3`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;

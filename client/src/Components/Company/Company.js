@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
@@ -28,9 +29,16 @@ const Company = () => {
   const [dateError, setDateError] = useState(false);
   const [formValid, setFormValid] = useState(true);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   const fetchCompanyById = async () => {
     try {
       const response = await fetch(`${ROOT_API}/company/${companyId}`);
+      if (!response.ok) throw new Error("Failed to fetch company");
       const data = await response.json();
       setCompany(data.data);
     } catch (error) {
@@ -39,16 +47,16 @@ const Company = () => {
   };
 
   let selectedServicetype;
-  if (company && (serviceTypes || thingsToDo)) {
-    if (serviceTypes && serviceTypes[company.serviceType.toLowerCase()]) {
-      selectedServicetype =
-        serviceTypes[company.serviceType.toLowerCase()].name;
+  if (company && company.serviceType && (serviceTypes || thingsToDo)) {
+    const serviceTypeLower = company.serviceType.toLowerCase();
+    if (serviceTypes && serviceTypes[serviceTypeLower]) {
+      selectedServicetype = serviceTypes[serviceTypeLower].name;
     } else if (
       thingsToDo &&
-      thingsToDo[company.serviceType.toLowerCase()] &&
-      thingsToDo[company.serviceType.toLowerCase()].name
+      thingsToDo[serviceTypeLower] &&
+      thingsToDo[serviceTypeLower].name
     ) {
-      selectedServicetype = thingsToDo[company.serviceType.toLowerCase()].name;
+      selectedServicetype = thingsToDo[serviceTypeLower].name;
     } else {
       console.error(
         `Service type ${company.serviceType} not found in serviceTypes or thingsToDo`
@@ -227,27 +235,23 @@ const Company = () => {
         </ButtonContainer>
       </Header>
       <Content>
-        <Image src={company.image} />
-        <InfoBox>
-          <InfoTitle>Service type</InfoTitle>
-          <Address>{selectedServicetype}</Address>
-          <InfoTitle>Address</InfoTitle>
-          <StyledWrapper>
-            <Address>{company.address}</Address>
-            <CopyButton textToCopy={company.address} />
-          </StyledWrapper>
-          <Maps address={company.address}></Maps>
-          <InfoTitle>Phone Number</InfoTitle>
-          <StyledWrapper>
-            {" "}
-            <PhoneNumber>{company.phoneNumber}</PhoneNumber>
-            <CopyButton textToCopy={company.phoneNumber} />
-          </StyledWrapper>
+        <InfoWrapper>
+          {" "}
+          <Image src={company.image} />
+          {company.phoneNumber && (
+            <>
+              <InfoTitle>Phone Number</InfoTitle>
+              <StyledWrapper>
+                <PhoneNumber>{company.phoneNumber}</PhoneNumber>
+                <CopyButton textToCopy={company.phoneNumber} />
+              </StyledWrapper>
+            </>
+          )}
           {company.website && (
             <>
               <InfoTitle>Website</InfoTitle>
               <StyledWrapper>
-                <PhoneNumber>{company.website}</PhoneNumber>
+                <Website>{company.website}</Website>
                 <CopyButton textToCopy={company.website} />
               </StyledWrapper>
             </>
@@ -260,6 +264,16 @@ const Company = () => {
               {averageGrade}
             </AverageGrade>
           </AverageRating>
+        </InfoWrapper>
+        <InfoBox>
+          <InfoTitle>Service type</InfoTitle>
+          <Address>{selectedServicetype}</Address>
+          <InfoTitle>Address</InfoTitle>
+          <StyledWrapper>
+            <Address>{company.address}</Address>
+            <CopyButton textToCopy={company.address} />
+          </StyledWrapper>
+          <Maps address={company.address}></Maps>
         </InfoBox>
       </Content>
       <BigText>Reviews left by customers</BigText>
@@ -315,6 +329,9 @@ const Company = () => {
                   error={dateError}
                   onChange={handleDateChange}
                 />
+                {!formValid && dateError && (
+                  <Warning>The review date cannot be a future date.</Warning>
+                )}
               </FieldWrapper>
               <FieldWrapper>
                 <FieldTitle>Title</FieldTitle>
@@ -344,7 +361,13 @@ const Company = () => {
             </FormWrapper>
           </StyledDialogContent>
           <DialogActions>
-            <CancelButton type="button" onClick={() => setOpen(false)}>
+            <CancelButton
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setFormValid(true);
+              }}
+            >
               Cancel
             </CancelButton>
             <SubmitButton
@@ -370,6 +393,10 @@ const Company = () => {
   );
 };
 
+const Warning = styled.p`
+  color: red;
+`;
+
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -385,6 +412,16 @@ const Wrapper = styled.div`
 
   @media (max-width: 768px) {
     margin: 20px 20px 120px 20px;
+  }
+`;
+
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+
+  @media (max-width: 768px) {
+    width: 90vw;
   }
 `;
 
@@ -451,24 +488,23 @@ const Content = styled.div`
   margin-top: 20px;
   gap: 20px;
 
-  @media (max-width: 1130px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     gap: 10px;
   }
 `;
 
 const Image = styled.img`
+  margin-bottom: 20px;
   max-width: 500px;
-  max-height: 300px;
-  width: auto;
-  height: auto;
+  max-height: 270px;
   border-radius: 5px;
 
   &:hover {
     transform: scale(1.15);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     width: 100%;
     height: auto;
 
@@ -508,15 +544,17 @@ const Address = styled.p`
   margin: 5px 0px 20px;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 50%;
-
+  max-width: 80%;
+  white-space: nowrap;
   @media (max-width: 767px) {
-    max-width: 80%;
-    margin: 5px;
+    max-width: 100%;
+    margin-bottom: 10px;
   }
 `;
 
 const PhoneNumber = styled(Address)``;
+
+const Website = styled(Address)``;
 
 const AverageRating = styled.span`
   font-size: 1rem;
