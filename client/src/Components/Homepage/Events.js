@@ -8,17 +8,10 @@ const localizer = momentLocalizer(moment);
 
 const CityEvents = () => {
   const [cityEvents, setEvents] = useState([]);
-  const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
 
   const ROOT_API = "https://monctonservices-com.onrender.com";
 
   const currentDate = moment().startOf("day");
-
-  const startFrom = currentPage * itemsPerPage;
-  const selectedEvents = cityEvents.slice(startFrom, startFrom + itemsPerPage);
-  const totalPages = Math.ceil(cityEvents.length / itemsPerPage);
-  const pageNumbers = [...Array(totalPages).keys()].map((num) => num + 1);
 
   const fetchAllevents = async () => {
     try {
@@ -70,7 +63,7 @@ const CityEvents = () => {
 
           <StyledHeader>The upcoming events to visit in Moncton</StyledHeader>
           <EventList>
-            {selectedEvents
+            {cityEvents
               .filter((event) =>
                 moment(event.endDate).isSameOrAfter(currentDate)
               )
@@ -102,17 +95,6 @@ const CityEvents = () => {
                 </EventItem>
               ))}
           </EventList>
-          <StyledPagination>
-            {pageNumbers.map((number) => (
-              <StyledPageButton
-                key={number}
-                active={number === currentPage}
-                onClick={() => setCurrentPage(number)}
-              >
-                {number}
-              </StyledPageButton>
-            ))}
-          </StyledPagination>
         </>
       )}
     </>
@@ -262,31 +244,6 @@ const EventDescription = styled.p`
   font-size: 1rem;
   line-height: 1.5;
   color: #666;
-`;
-
-const StyledPagination = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-`;
-
-const StyledPageButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ active }) => (active ? "black" : "white")};
-  color: ${({ active }) => (active ? "white" : "black")};
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  margin: 0 5px;
-  border: 1px solid white;
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export default CityEvents;

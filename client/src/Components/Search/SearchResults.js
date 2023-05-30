@@ -188,7 +188,7 @@ const StyledLi = styled.li`
   width: 100%;
   padding: 5px 10px;
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1.05);
   }
   & a {
     text-decoration: none;
@@ -252,8 +252,6 @@ const StyledPageButton = styled.button`
   color: ${({ active }) => (active ? "white" : "black")};
   border-radius: 50%;
   width: 30px;
-  height: 30px;
-  line-height: 30px;
   text-align: center;
   margin: 0 5px;
   border: 1px solid white;
