@@ -151,6 +151,10 @@ const StyledSearchWrapper = styled.div`
   & h1 {
     color: black;
   }
+
+  @media (max-width: 1200px) {
+    padding: 10px;
+  }
 `;
 
 const StyledInputsuggestion = styled.input`
@@ -167,6 +171,10 @@ const StyledInputsuggestion = styled.input`
   &:focus {
     outline: none;
     border: 1px solid black;
+  }
+
+  @media (max-width: 1200px) {
+    width: 80%;
   }
 `;
 
@@ -232,6 +240,11 @@ const StyledPagination = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  max-width: 100%;
+
+  @media (max-width: 1200px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const StyledPageButton = styled.button`
@@ -248,6 +261,10 @@ const StyledPageButton = styled.button`
 
   &:hover {
     transform: scale(1.1);
+  }
+
+  @media (max-width: 1200px) {
+    margin: 10px;
   }
 `;
 
