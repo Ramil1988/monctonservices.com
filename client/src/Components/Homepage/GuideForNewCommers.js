@@ -96,9 +96,9 @@ const Guide = () => {
                 immediately. You must have some kind of ID (for example, a
                 foreign passport) and the address of the rental place. Ask the
                 operator to send info by email to check the opening of the
-                profile. There are two major Internet providers in Moncton:
-                Bell, Rogers and Eastlink. Call them and schedule an appointment
-                for Internet set up.
+                profile. The major Internet providers in Moncton: Bell, Rogers
+                and Eastlink. Call them and schedule an appointment for Internet
+                set up.
               </SectionText>
             </SectionTextWrapper>
           </Section>
