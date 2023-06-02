@@ -72,11 +72,6 @@ const ItemDiv = styled.div`
     padding: 20px;
   }
 
-  ${({ index }) => css`
-    animation: ${scaleAnimation} 10s ease-in-out infinite;
-    animation-delay: ${index * 1}s;
-  `}
-
   &:hover {
     ${({ index }) => css`
       animation: ${scaleAnimation} 0.5s ease-in-out infinite;
