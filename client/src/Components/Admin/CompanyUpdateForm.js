@@ -83,6 +83,24 @@ const CompanyUpdateForm = ({ company, onUpdate, onDelete }) => {
             onChange={handleChange}
           />
         </Label>
+        <Label>
+          Lat:
+          <Input
+            type="text"
+            name="lat"
+            value={updatedCompany.lat}
+            onChange={handleChange}
+          />
+        </Label>
+        <Label>
+          Lang:
+          <Input
+            type="text"
+            name="lang"
+            value={updatedCompany.lang}
+            onChange={handleChange}
+          />
+        </Label>
         Image URL:
         <UploadCompanyImage
           newCompany={updatedCompany}

@@ -15,6 +15,8 @@ const CompanyCreateForm = () => {
     phoneNumber: "",
     website: "",
     image: "",
+    lat: "",
+    lang: "",
   });
 
   const fetchCompanies = async () => {
@@ -122,6 +124,24 @@ const CompanyCreateForm = () => {
             type="text"
             name="website"
             value={newCompany.website}
+            onChange={handleNewCompanyChange}
+          />
+        </Label>
+        <Label>
+          Lat:
+          <Input
+            type="text"
+            name="lat"
+            value={newCompany.lat}
+            onChange={handleNewCompanyChange}
+          />
+        </Label>
+        <Label>
+          Lang:
+          <Input
+            type="text"
+            name="lang"
+            value={newCompany.lang}
             onChange={handleNewCompanyChange}
           />
         </Label>

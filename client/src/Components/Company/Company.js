@@ -225,6 +225,9 @@ const Company = () => {
 
   return (
     <Wrapper>
+      {/* <p>
+        <a href="mailto:someone@example.com">Send email</a>
+      </p> */}
       <Header>
         <Title>{company.name}</Title>
         <ButtonContainer>

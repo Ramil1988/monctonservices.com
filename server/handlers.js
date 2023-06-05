@@ -22,8 +22,16 @@ client.connect();
 
 const createCompany = async (req, res) => {
   try {
-    const { serviceType, name, address, phoneNumber, website, image } =
-      req.body;
+    const {
+      serviceType,
+      name,
+      address,
+      phoneNumber,
+      website,
+      image,
+      lat,
+      lang,
+    } = req.body;
 
     await client.connect();
 
@@ -34,6 +42,8 @@ const createCompany = async (req, res) => {
       phoneNumber: phoneNumber,
       website: website,
       reviews: [],
+      lat: lat,
+      lang: lang,
     };
 
     let newImage;
@@ -565,8 +575,16 @@ const getAllEvents = async (req, res) => {
 const updateCompany = async (req, res) => {
   try {
     const { id } = req.params;
-    const { serviceType, name, address, phoneNumber, website, image } =
-      req.body;
+    const {
+      serviceType,
+      name,
+      address,
+      phoneNumber,
+      website,
+      image,
+      lat,
+      lang,
+    } = req.body;
 
     await client.connect();
 
@@ -576,6 +594,8 @@ const updateCompany = async (req, res) => {
     if (address) updatedFields.address = address;
     if (phoneNumber) updatedFields.phoneNumber = phoneNumber;
     if (website) updatedFields.website = website;
+    if (lat) updatedFields.lat = lat;
+    if (lang) updatedFields.lat = lang;
 
     let newImage;
 
