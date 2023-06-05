@@ -595,7 +595,7 @@ const updateCompany = async (req, res) => {
     if (phoneNumber) updatedFields.phoneNumber = phoneNumber;
     if (website) updatedFields.website = website;
     if (lat) updatedFields.lat = lat;
-    if (lang) updatedFields.lat = lang;
+    if (lang) updatedFields.lang = lang;
 
     let newImage;
 
