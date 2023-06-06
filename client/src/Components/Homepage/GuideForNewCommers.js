@@ -54,10 +54,10 @@ const Guide = () => {
           <Section>
             <SectionTextWrapper>
               <SectionTitle>
-                Step 2: Start searching for an appartment
+                Step 2: Start searching for an apartment
               </SectionTitle>
               <SectionText>
-                We gathered for you local companies that provide appartments for
+                We gathered for you local companies that provide apartments for
                 rent. Use this
                 <StyledAnchor
                   href="https://monctonservices.com/propertymanagement"
@@ -77,7 +77,7 @@ const Guide = () => {
           <Section>
             <SectionTextWrapper>
               <SectionTitle>
-                Step 3: Once found an appartment, reach out to NB Power and
+                Step 3: Once found an apartment, reach out to NB Power and
                 Internet provider to get your power and Internet set up
               </SectionTitle>
               <SectionText>

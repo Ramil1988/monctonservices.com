@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Link } from "react-router-dom";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.js";
 import styled from "styled-components";
@@ -48,8 +47,7 @@ const MapComponent = ({ companies }) => {
           const link = `<a href="/company/${company._id}" id="company-${company._id}">${company.name}</a>`;
           const marker = L.marker([company.lat, company.lang], {
             icon: L.AwesomeMarkers.icon({
-              icon: "star", // Replace with the desired icon name (e.g., 'star', 'coffee', 'home', etc.)
-              markerColor: "black",
+              icon: "map-marker",
             }),
           })
             .bindPopup(link)
@@ -65,11 +63,15 @@ const MapComponent = ({ companies }) => {
           });
 
           marker.on("mouseover", () => {
-            marker.bindTooltip(company.name).openTooltip();
+            if (window.innerWidth > 768) {
+              marker.bindTooltip(company.name).openTooltip();
+            }
           });
 
           marker.on("mouseout", () => {
-            marker.unbindTooltip();
+            if (window.innerWidth > 768) {
+              marker.unbindTooltip();
+            }
           });
 
           newMarkers.push(marker);

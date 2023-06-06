@@ -156,6 +156,10 @@ const RatingTable = () => {
 
   return (
     <Wrapper>
+      <TableHeading>
+        Where to find the best {selectedServiceType[serviceType].name} in
+        Moncton
+      </TableHeading>
       <ButtonContainer>
         <ToggleButton active={showTable} onClick={handleShowTable}>
           Show Rating Table
@@ -164,10 +168,7 @@ const RatingTable = () => {
           Show on the Map
         </ToggleButton>
       </ButtonContainer>
-      <TableHeading>
-        Where to find the best {selectedServiceType[serviceType].name} in
-        Moncton
-      </TableHeading>
+
       {showTable ? (
         <>
           <CenteredWrapper>
