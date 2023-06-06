@@ -15,6 +15,7 @@ import Maps from "../Company/Maps";
 import { serviceTypes } from "../serviceTypes";
 import { thingsToDo } from "../ThingsToDo";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import MapComponent from "./Map";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
 
@@ -26,6 +27,7 @@ const RatingTable = () => {
   const [open, setOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showTable, setShowTable] = useState(true);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -53,11 +55,11 @@ const RatingTable = () => {
     setFilteredCompanies(filtered);
   }, [companies, selectedCity, searchQuery]);
 
-  let selectedServicetype;
+  let selectedServiceType;
   if (serviceTypes[serviceType]) {
-    selectedServicetype = serviceTypes;
+    selectedServiceType = serviceTypes;
   } else if (thingsToDo[serviceType]) {
-    selectedServicetype = thingsToDo;
+    selectedServiceType = thingsToDo;
   } else {
     console.error(
       `serviceType ${serviceType} not found in serviceTypes or thingsToDo`
@@ -144,117 +146,168 @@ const RatingTable = () => {
     );
   }
 
+  const handleShowTable = () => {
+    setShowTable(true);
+  };
+
+  const handleShowMap = () => {
+    setShowTable(false);
+  };
+
   return (
     <Wrapper>
+      <ButtonContainer>
+        <ToggleButton active={showTable} onClick={handleShowTable}>
+          Show Rating Table
+        </ToggleButton>
+        <ToggleButton active={!showTable} onClick={handleShowMap}>
+          Show on the Map
+        </ToggleButton>
+      </ButtonContainer>
       <TableHeading>
-        Where to find best {selectedServicetype[serviceType].name} in Moncton
+        Where to find the best {selectedServiceType[serviceType].name} in
+        Moncton
       </TableHeading>
-      <CenteredWrapper>
-        <FilterWrapper>
-          <FilterLabel>Filter by city:</FilterLabel>
-          <FilterSelect value={selectedCity} onChange={handleCityFilterChange}>
-            <option value="All">All</option>
-            <option value="Moncton">Moncton</option>
-            <option value="Dieppe">Dieppe</option>
-            <option value="Riverview">Riverview</option>
-          </FilterSelect>{" "}
-          <FilterLabel>Search by name:</FilterLabel>
-          <FilterInput
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-        </FilterWrapper>
-      </CenteredWrapper>
-      <Table>
-        <thead>
-          <tr>
-            <Th>Place</Th>
-            <Th>Company Name</Th>
-            <Th>Average Rating</Th>
-            <Th>Reviews</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCompanies.map((company, index) => {
-            const averageRating =
-              company.reviews.length > 0
-                ? (
-                    company.reviews.reduce(
-                      (sum, review) => sum + review.grade,
-                      0
-                    ) / company.reviews.length
-                  ).toFixed(1)
-                : 0;
-            return (
-              <tr key={company._id}>
-                <Td>{index + 1}</Td>
-                <Td>
-                  <StyledLink to={`/company/${company._id}`}>
-                    {company.name}
-                  </StyledLink>
-                  <QuestionButton onClick={() => handleDialogOpen(company)}>
-                    <AiOutlineQuestionCircle size="1.2em" />
-                  </QuestionButton>
-                </Td>
-                <Td>
-                  <StarWrapper>{renderStars(averageRating)}</StarWrapper>
-                </Td>
-                <Td>{company.reviews.length}</Td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-      <CenteredDialog
-        open={open}
-        onClose={handleDialogClose}
-        fullWidth={true}
-        onMouseEnter={() => handleDialogOpen(selectedCompany)}
-        onMouseLeave={() => handleDialogClose()}
-      >
-        {selectedCompany ? (
-          <>
-            <DialogTitle id="dialog-title" style={{ paddingRight: "100px" }}>
-              {selectedCompany.name}
-              <IconButton
-                edge="end"
-                color="inherit"
-                onClick={handleDialogClose}
-                aria-label="close"
-                style={{
-                  position: "absolute",
-                  right: "10px",
-                  top: "10px",
-                  marginRight: "20px",
-                }}
+      {showTable ? (
+        <>
+          <CenteredWrapper>
+            <FilterWrapper>
+              <FilterLabel>Filter by city:</FilterLabel>
+              <FilterSelect
+                value={selectedCity}
+                onChange={handleCityFilterChange}
               >
-                <CloseIcon />
-              </IconButton>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentStyled>
-                <span>Address</span>: {selectedCompany.address}
-                <CopyButton textToCopy={selectedCompany.address} />
-              </DialogContentStyled>
-              {selectedCompany.phoneNumber && (
-                <>
+                <option value="All">All</option>
+                <option value="Moncton">Moncton</option>
+                <option value="Dieppe">Dieppe</option>
+                <option value="Riverview">Riverview</option>
+              </FilterSelect>
+              <FilterLabel>Search by name:</FilterLabel>
+              <FilterInput
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+            </FilterWrapper>
+          </CenteredWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <Th>Place</Th>
+                <Th>Company Name</Th>
+                <Th>Average Rating</Th>
+                <Th>Reviews</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCompanies.map((company, index) => {
+                const averageRating =
+                  company.reviews.length > 0
+                    ? (
+                        company.reviews.reduce(
+                          (sum, review) => sum + review.grade,
+                          0
+                        ) / company.reviews.length
+                      ).toFixed(1)
+                    : 0;
+                return (
+                  <tr key={company._id}>
+                    <Td>{index + 1}</Td>
+                    <Td>
+                      <StyledLink to={`/company/${company._id}`}>
+                        {company.name}
+                      </StyledLink>
+                      <QuestionButton onClick={() => handleDialogOpen(company)}>
+                        <AiOutlineQuestionCircle size="1.2em" />
+                      </QuestionButton>
+                    </Td>
+                    <Td>
+                      <StarWrapper>{renderStars(averageRating)}</StarWrapper>
+                    </Td>
+                    <Td>{company.reviews.length}</Td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+          <CenteredDialog
+            open={open}
+            onClose={handleDialogClose}
+            fullWidth={true}
+            onMouseEnter={() => handleDialogOpen(selectedCompany)}
+            onMouseLeave={() => handleDialogClose()}
+          >
+            {selectedCompany ? (
+              <>
+                <DialogTitle
+                  id="dialog-title"
+                  style={{ paddingRight: "100px" }}
+                >
+                  {selectedCompany.name}
+                  <IconButton
+                    edge="end"
+                    color="inherit"
+                    onClick={handleDialogClose}
+                    aria-label="close"
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "10px",
+                      marginRight: "20px",
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </DialogTitle>
+                <DialogContent>
                   <DialogContentStyled>
-                    <span>Phone number</span>: {selectedCompany.phoneNumber}
-                    <CopyButton textToCopy={selectedCompany.phoneNumber} />
+                    <span>Address</span>: {selectedCompany.address}
+                    <CopyButton textToCopy={selectedCompany.address} />
                   </DialogContentStyled>
-                </>
-              )}
-              <DialogContentText>
-                <Maps address={selectedCompany.address}></Maps>
-              </DialogContentText>
-            </DialogContent>
-          </>
-        ) : null}
-      </CenteredDialog>
+                  {selectedCompany.phoneNumber && (
+                    <>
+                      <DialogContentStyled>
+                        <span>Phone number</span>: {selectedCompany.phoneNumber}
+                        <CopyButton textToCopy={selectedCompany.phoneNumber} />
+                      </DialogContentStyled>
+                    </>
+                  )}
+                  <DialogContentText>
+                    <Maps address={selectedCompany.address}></Maps>
+                  </DialogContentText>
+                </DialogContent>
+              </>
+            ) : null}
+          </CenteredDialog>
+        </>
+      ) : (
+        <MapComponent companies={filteredCompanies} />
+      )}
     </Wrapper>
   );
 };
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+`;
+
+const ToggleButton = styled.button`
+  background-color: ${({ active }) => (active ? "#003262" : "#f2f2f2")};
+  color: ${({ active }) => (active ? "#fff" : "#000")};
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: ${({ active }) => (active ? "#003262" : "#e0e0e0")};
+    color: ${({ active }) => (active ? "#fff" : "#000")};
+  }
+`;
 
 const FilterInput = styled.input`
   margin-right: 20px;

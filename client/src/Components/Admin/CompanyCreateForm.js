@@ -52,6 +52,8 @@ const CompanyCreateForm = () => {
         phoneNumber: "",
         website: "",
         image: "",
+        lat: "",
+        lang: "",
       });
     } catch (error) {
       console.error("Error creating company:", error);
@@ -137,7 +139,7 @@ const CompanyCreateForm = () => {
           />
         </Label>
         <Label>
-          Lang:
+          Long:
           <Input
             type="text"
             name="lang"

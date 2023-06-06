@@ -93,7 +93,7 @@ const CompanyUpdateForm = ({ company, onUpdate, onDelete }) => {
           />
         </Label>
         <Label>
-          Lang:
+          Long:
           <Input
             type="text"
             name="lang"
