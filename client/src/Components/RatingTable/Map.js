@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.js";
-import styled from "styled-components";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet.markercluster";
 
 const MapComponent = ({ companies }) => {
   const mapContainerRef = useRef(null);
   const [map, setMap] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCompanies, setFilteredCompanies] = useState(companies);
-  const [markers, setMarkers] = useState([]);
+  const [markerGroup, setMarkerGroup] = useState(null);
 
   useEffect(() => {
     if (mapContainerRef.current) {
@@ -37,21 +40,31 @@ const MapComponent = ({ companies }) => {
 
   useEffect(() => {
     if (map) {
-      markers.forEach((marker) => {
-        map.removeLayer(marker);
-      });
+      if (markerGroup) {
+        markerGroup.clearLayers();
+      }
 
-      const newMarkers = [];
+      const markerClusterGroup = L.markerClusterGroup();
+
       filteredCompanies.forEach((company) => {
         if (company.lat && company.lang) {
-          const link = `<a href="/company/${company._id}" id="company-${company._id}">${company.name}</a>`;
+          const link = (
+            <a href="/company/${company._id}" id="company-${company._id}">
+              ${company.name}
+            </a>
+          );
           const marker = L.marker([company.lat, company.lang], {
             icon: L.AwesomeMarkers.icon({
               icon: "map-marker",
             }),
           })
+            .on("click", () => {
+              window.location.href = `/company/${company._id}`;
+            })
+            .addTo(markerClusterGroup)
             .bindPopup(link)
-            .addTo(map);
+            .bindTooltip(company.name, { direction: "top" });
+
           marker.on("popupopen", () => {
             const element = document.getElementById(`company-${company._id}`);
             if (element) {
@@ -62,23 +75,12 @@ const MapComponent = ({ companies }) => {
             }
           });
 
-          marker.on("mouseover", () => {
-            if (window.innerWidth > 768) {
-              marker.bindTooltip(company.name).openTooltip();
-            }
-          });
-
-          marker.on("mouseout", () => {
-            if (window.innerWidth > 768) {
-              marker.unbindTooltip();
-            }
-          });
-
-          newMarkers.push(marker);
+          markerClusterGroup.addLayer(marker);
         }
       });
 
-      setMarkers(newMarkers);
+      map.addLayer(markerClusterGroup);
+      setMarkerGroup(markerClusterGroup);
     }
   }, [map, filteredCompanies]);
 
