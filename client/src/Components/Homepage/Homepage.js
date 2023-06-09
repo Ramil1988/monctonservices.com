@@ -5,8 +5,20 @@ import ListOfServices from "./ListOfServices";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
 import MonctonImage from "../../Pictures/Moncton.jpg";
+import MonctonImage1 from "../../Pictures/Moncton1.jpg";
+import MonctonImage2 from "../../Pictures/Moncton2.jpg";
+import MonctonImage3 from "../../Pictures/Moncton3.jpg";
+import MonctonImage4 from "../../Pictures/Moncton4.jpg";
 
 const ROOT_API = "https://monctonservices-com.onrender.com";
+
+const images = [
+  MonctonImage,
+  MonctonImage1,
+  MonctonImage2,
+  MonctonImage3,
+  MonctonImage4,
+];
 
 const Homepage = (props) => {
   const serviceTypes = Object.values(props.serviceTypes);
@@ -14,11 +26,16 @@ const Homepage = (props) => {
   const [reviews, setReviews] = useState([]);
   const [companies, setAllCompanies] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
     fetchAllReviews();
     fetchAllcompanies();
+    const imageInterval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // Changes image every 5 seconds
+    return () => clearInterval(imageInterval);
   }, []);
 
   const fetchAllReviews = async () => {
@@ -37,14 +54,14 @@ const Homepage = (props) => {
       const data = await response.json();
       setAllCompanies(data.data);
     } catch (error) {
-      console.error("Error fetching all reviews:", error);
+      console.error("Error fetching all companies:", error);
     }
   };
 
   return (
     <Wrapper>
       <LandingContainer>
-        <BigImage src={MonctonImage} alt="Moncton" />
+        <BigImage src={images[currentImageIndex]} alt="Carousel" />
         <TextContainer>
           <SloganText>
             We can <HighlightedText>help</HighlightedText> you to find what you
@@ -97,6 +114,12 @@ const Homepage = (props) => {
     </Wrapper>
   );
 };
+
+const fadeInOut = keyframes`
+  0%, 100% {
+    opacity: 0.5;
+  }
+`;
 
 const fadeIn = keyframes`
   from {
@@ -171,6 +194,7 @@ const BigImage = styled.img`
   height: 500px;
   object-fit: cover;
   opacity: 0.5;
+  animation: ${fadeInOut} 5s infinite;
 
   @media (max-width: 768px) {
     height: 300px;
