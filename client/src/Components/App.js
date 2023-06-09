@@ -10,7 +10,7 @@ import { UserContext } from "./UserContext";
 import Navigation from "./Helper/Navigation";
 import Homepage from "./Homepage/Homepage";
 import Profile from "./Profile/Profile";
-import RatingTable from "./RatingTable/RatingTable";
+import MainRatingTable from "./RatingTable/MainRatingTable";
 import Company from "./Company/Company";
 import Header from "./Header/Header";
 import SearchResults from "./Search/SearchResults";
@@ -71,7 +71,7 @@ const App = () => {
           path="/Profile/:profileId"
           element={<Profile items={serviceTypes} />}
         />
-        <Route path="/:serviceType" element={<RatingTable />} />
+        <Route path="/:serviceType" element={<MainRatingTable />} />
         <Route path="/company/:companyId" element={<Company />} />
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/review/:id" element={<Review />} />
