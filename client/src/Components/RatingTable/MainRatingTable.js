@@ -1,4 +1,3 @@
-import React from "react";
 import RatingTable from "./RatingTable";
 import AddCompanyPopup from "./AddCompanyPopup";
 

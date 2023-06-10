@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import logo from "../../Pictures/avatar.png";
 
-const AddCompanyPopup = () => {
+const SuggestionsPopup = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -24,9 +24,9 @@ const AddCompanyPopup = () => {
         <img src={logo} alt="Logo" />
       </ImageContainer>
       <ContentContainer>
-        <p>Do you want to add a new object?</p>
+        <p>Any suggestions?</p>
         <YesButton
-          href="https://docs.google.com/forms/d/e/1FAIpQLSfqCQqxKtZ-kfIYNcn70acZ_lymeNX8EY9l8cz2mp5xRnrZug/viewform?usp=sf_link"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSffu4RY9a9lgezB9TTJGPhQ-y1iicDpno781sITK4zuRqiohw/viewform?usp=sf_link"
           target="_blank"
         >
           Yes
@@ -87,4 +87,4 @@ const YesButton = styled.a`
   margin-top: 10px;
 `;
 
-export default AddCompanyPopup;
+export default SuggestionsPopup;

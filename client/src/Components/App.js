@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import "./index.css";
 import styled from "styled-components";
 import { FaArrowUp } from "react-icons/fa";
-import { serviceTypes } from "./serviceTypes";
-import { thingsToDo } from "./ThingsToDo";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
+import { serviceTypes } from "./serviceTypes";
 import Navigation from "./Helper/Navigation";
-import Homepage from "./Homepage/Homepage";
+import MainHomePage from "./Homepage/MainHomepage";
+import MainEventpage from "./Homepage/MainEventpage";
 import Profile from "./Profile/Profile";
 import MainRatingTable from "./RatingTable/MainRatingTable";
-import Company from "./Company/Company";
+import MainCompanyPage from "./Company/MainCompanyPage";
 import Header from "./Header/Header";
 import SearchResults from "./Search/SearchResults";
 import Review from "./Review/Review";
@@ -19,7 +19,6 @@ import Footer from "./Homepage/Footer";
 import About from "./Header/About";
 import Admin from "./Admin/Admin";
 import Guide from "./Homepage/GuideForNewCommers";
-import CityEvents from "./Homepage/Events";
 
 const App = () => {
   const { currentUser } = useContext(UserContext);
@@ -61,23 +60,18 @@ const App = () => {
       <Navigation />
       <ScrollToTop />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Homepage serviceTypes={serviceTypes} thingsToDo={thingsToDo} />
-          }
-        />
+        <Route path="/" element={<MainHomePage />} />
         <Route
           path="/Profile/:profileId"
           element={<Profile items={serviceTypes} />}
         />
         <Route path="/:serviceType" element={<MainRatingTable />} />
-        <Route path="/company/:companyId" element={<Company />} />
+        <Route path="/company/:companyId" element={<MainCompanyPage />} />
         <Route path="/searchresults" element={<SearchResults />} />
         <Route path="/review/:id" element={<Review />} />
         <Route path="/about" element={<About />} />
         <Route path="/guide" element={<Guide />} />
-        <Route path="/events" element={<CityEvents />} />
+        <Route path="/events" element={<MainEventpage />} />
         <Route path="/superadminpage" element={<Outlet />}>
           <Route
             index
