@@ -47,8 +47,8 @@ const PopupContainer = styled.div`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 
-  @media (max-width: 1200px) {
-    display: none;
+  @media (max-width: 768px) {
+    width: 200px;
   }
 `;
 
@@ -70,6 +70,9 @@ const ImageContainer = styled.div`
     width: 60%;
     height: 150px;
     border-radius: 8px;
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 `;
 
