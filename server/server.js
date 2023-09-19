@@ -84,8 +84,8 @@ express()
   // REST endpoints CV generator
   .post("/user", createNewUser)
   .get("/allUsers1", getAllUsers1)
-  .get("/user/:id", getUserById1)
+  .get("/user1/:id", getUserById1)
   .delete("/allUsers", deleteAllUsers)
-  .delete("/user/:id", deleteUserById)
+  .delete("/user1/:id", deleteUserById)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
