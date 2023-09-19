@@ -4,7 +4,6 @@ const express = require("express");
 const morgan = require("morgan");
 var cors = require("cors");
 const path = require("path");
-const sm = require("sitemap");
 
 const PORT = 3000;
 
@@ -35,11 +34,13 @@ const {
   deleteComment,
 } = require("./handlers");
 
-let sitemap;
-
-// const getUrls = function () {
-//   return ["/", "/searchresults", "/about", "/guide", "/events"];
-// };
+const {
+  createNewUser,
+  getAllUsers1,
+  getUserById1,
+  deleteAllUsers,
+  deleteUserById,
+} = require("./handlers1");
 
 express()
   .use(morgan("tiny"))
@@ -47,21 +48,6 @@ express()
   .use(express.json({ limit: "50mb" }))
   .use(express.urlencoded({ limit: "50mb", extended: true }))
   .use(cors())
-
-  // Static route for sitemap
-  // .get("/sitemap.xml", function (req, res) {
-  //   if (!sitemap) {
-  //     const urls = getUrls();
-  //     const sitemapUrls = urls.map((url) => ({ url }));
-  //     sitemap = sm.createSitemap({
-  //       hostname: "https://monctonservices-com.onrender.com",
-  //       cacheTime: 600000,
-  //       urls: sitemapUrls,
-  //     });
-  //   }
-  //   res.header("Content-Type", "application/xml");
-  //   res.send(sitemap.toString());
-  // })
 
   // POST REST endpoints
   .post("/company", createCompany)
@@ -95,9 +81,11 @@ express()
   .delete("/review/:id", deleteReview)
   .delete("/review/:reviewId/comments/:commentDate", deleteComment)
 
-
-  // .get("*", (req, res) => {
-  //   res.sendFile(path.join(__dirname, "public", "index.html"));
-  // })
+  // REST endpoints CV generator
+  .post("/user", createNewUser)
+  .get("/allUsers1", getAllUsers1)
+  .get("/user/:id", getUserById1)
+  .delete("/allUsers", deleteAllUsers)
+  .delete("/user/:id", deleteUserById)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
