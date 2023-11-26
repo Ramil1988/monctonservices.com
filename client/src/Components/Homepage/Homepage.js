@@ -84,11 +84,11 @@ const Homepage = (props) => {
           <TabButton onClick={() => setCurrentTab(1)} active={currentTab === 1}>
             Things to Do in Moncton
           </TabButton>
-          <NavLink to="/events">
+          {/* <NavLink to="/events">
             <TabButton active={location.pathname === "/events"}>
               City events
             </TabButton>
-          </NavLink>
+          </NavLink> */}
           <NavLink to="/guide">
             <TabButton active={location.pathname === "/guide"}>
               Guide for newcomers
