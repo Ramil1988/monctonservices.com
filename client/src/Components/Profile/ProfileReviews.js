@@ -64,23 +64,14 @@ const ProfileReviews = ({ reviews }) => {
 const ReviewsWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 50px;
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-  }
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
 `;
 
 const ReviewsContainer = styled.div`
   display: flex;
-  gap: 50px;
-  margin: 0px 20px;
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    gap: 20px;
-  }
+  gap: 16px;
 `;
 
 const Review = styled.div`
@@ -90,25 +81,20 @@ const Review = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 30px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: calc(33.33% - 20px);
-  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02),
-    0 6.7px 5.3px rgba(0, 0, 0, 0.028), 0 12.5px 10px rgba(0, 0, 0, 0.035),
-    0 1.3px 17.9px rgba(0, 0, 0, 0.182), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
-    0 100px 80px rgba(0, 0, 0, 0.07);
-  transition: transform 0.2s ease-in-out;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  padding: 18px;
+  width: 320px;
+  transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: translateY(-6px);
     cursor: pointer;
-  }
-
-  @media (max-width: 1024px) {
-    width: 100%;
-    padding: 0 15px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    border-color: var(--primary-start);
   }
 `;
 
@@ -128,66 +114,55 @@ const StyledLink = styled(Link)`
 `;
 
 const ReviewTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-
-  @media (max-width: 767px) {
-    font-size: 20px;
-  }
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
 `;
 
 const ReviewDate = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   text-align: right;
-  color: #777;
-  margin-top: 10px;
-
-  @media (max-width: 767px) {
-    font-size: 12px;
-  }
+  color: var(--muted);
+  margin-top: 4px;
 `;
 
 const ReviewCompany = styled.p`
-  font-size: 16px;
-  margin-bottom: 10px;
-
-  @media (max-width: 1024px) {
-    font-size: 14px;
-  }
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--muted);
 `;
 
 const ReviewGrade = styled.div`
   display: flex;
   align-items: center;
-  font-size: 30px;
-  margin: 15px;
+  font-size: 20px;
+  margin: 8px;
 
   svg {
-    color: gold;
-    margin-right: 2px;
-  }
-
-  @media (max-width: 1024px) {
-    font-size: 24px;
+    color: #fbbf24;
+    margin-right: 6px;
   }
 `;
 
 const ReviewNavigation = styled.button`
-  background-color: transparent;
-  border: none;
-  font-size: 24px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 22px;
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
-  color: ${(props) => (props.disabled ? "#ccc" : "inherit")};
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.22s ease;
   pointer-events: ${(props) => (props.disabled ? "none" : "inherit")};
+  opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 
   &:hover {
-    color: ${(props) => (props.disabled ? "#ccc" : "#666")};
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    border-color: var(--primary-start);
   }
 `;
 
