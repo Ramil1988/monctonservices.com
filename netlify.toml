@@ -12,6 +12,9 @@
 [functions]
   node_bundler = "esbuild"
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 # Ensure SPA routes serve index.html
 [[redirects]]
   from = "/admin/*"
