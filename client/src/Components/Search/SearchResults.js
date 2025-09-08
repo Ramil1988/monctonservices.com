@@ -115,8 +115,8 @@ const SearchResults = () => {
 
   return (
     <StyledSearchWrapper>
-      <h1>
-        Search{" "}
+      <SearchHeader>
+        <Title>Search</Title>
         <StyledSelect
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
@@ -124,13 +124,16 @@ const SearchResults = () => {
           <option value="Name">by company name</option>
           <option value="ServiceType">by service type</option>
         </StyledSelect>
-      </h1>
-      <StyledInputsuggestion
-        type="text"
-        value={value}
-        onChange={(ev) => setValue(ev.target.value)}
-      />
-      <StyledClearButton onClick={() => setValue("")}>Clear</StyledClearButton>
+      </SearchHeader>
+      <Controls>
+        <StyledInputsuggestion
+          type="text"
+          value={value}
+          onChange={(ev) => setValue(ev.target.value)}
+          placeholder="Type to search..."
+        />
+        <StyledClearButton onClick={() => setValue("")}>Clear</StyledClearButton>
+      </Controls>
       <StyledUl>{renderList()}</StyledUl>
       {renderPagination()}
     </StyledSearchWrapper>
@@ -138,101 +141,129 @@ const SearchResults = () => {
 };
 
 const StyledSearchWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+`;
+
+const SearchHeader = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  background: lightgray;
-  transition: background 0.5s;
+  justify-content: space-between;
+  gap: 12px;
+`;
 
-  & h1 {
-    color: black;
-  }
+const Title = styled.h1`
+  color: #e5e7eb;
+  margin: 0;
+`;
 
-  @media (max-width: 1200px) {
-    padding: 10px;
-  }
+const Controls = styled.div`
+  display: flex;
+  gap: 10px;
+  margin: 14px 0 20px;
 `;
 
 const StyledInputsuggestion = styled.input`
-  border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  margin: 20px;
-  width: 250px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  transition: all 0.3s ease-in-out;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 320px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+
+  &::placeholder { color: #94a3b8; }
 
   &:focus {
     outline: none;
-    border: 1px solid black;
+    border-color: rgba(99, 102, 241, 0.45);
   }
 
-  @media (max-width: 1200px) {
-    width: 80%;
+  @media (max-width: 900px) {
+    width: 100%;
   }
 `;
 
 const StyledUl = styled.ul`
   list-style: none;
   padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
 `;
 
 const StyledLi = styled.li`
-  margin: 15px 0;
   width: 100%;
-  padding: 5px 10px;
+  padding: 18px 16px;
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+
   &:hover {
-    transform: scale(1.05);
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    border-color: rgba(99, 102, 241, 0.45);
   }
+
   & a {
     text-decoration: none;
-    color: black;
+    color: inherit;
+    display: block;
   }
 `;
 
 const StyledType = styled.li`
-  font-weight: bold;
-  margin-top: 10px;
-  font-size: 20px;
-  padding: 5px 10px;
-  color: black;
-  border: 2px solid white;
-  display: inline-block;
-  margin-right: 10px;
+  grid-column: 1 / -1;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #e5e7eb;
+  margin: 16px 4px 4px;
 `;
 
 const StyledSelect = styled.select`
-  padding: 10px;
-  font-size: 20px;
+  padding: 10px 12px;
+  font-size: 1rem;
   font-weight: 600;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  appearance: none;
-  background-color: #ffffff;
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(6px);
   &:focus {
     outline: none;
-    border: 1px solid #0071bc;
+    border-color: rgba(99, 102, 241, 0.45);
   }
 `;
 
 const StyledClearButton = styled.button`
-  background-color: white;
-  color: black;
-  border-radius: 5px;
-  padding: 13px 25px;
-  border: 1px solid black;
-  transition: color 0.2s ease-in-out;
-  font-weight: bold;
-  font-size: 15px;
+  background: linear-gradient(90deg, #6366f1, #22d3ee);
+  color: #0b1224;
+  border-radius: 999px;
+  padding: 10px 16px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 
   &:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
   }
 `;
 
@@ -248,28 +279,30 @@ const StyledPagination = styled.div`
 `;
 
 const StyledPageButton = styled.button`
-  background-color: ${({ active }) => (active ? "black" : "white")};
-  color: ${({ active }) => (active ? "white" : "black")};
-  border-radius: 50%;
-  width: 30px;
+  background: ${({ active }) => (active ? "linear-gradient(90deg, #6366f1, #22d3ee)" : "rgba(255,255,255,0.06)")};
+  color: ${({ active }) => (active ? "#0b1224" : "#e5e7eb")};
+  border-radius: 999px;
+  width: 36px;
+  height: 36px;
   text-align: center;
-  margin: 0 5px;
-  border: 1px solid white;
-  transition: color 0.2s ease-in-out;
+  margin: 0 6px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  transition: transform 0.15s ease;
 
-  &:hover {
-    transform: scale(1.1);
-  }
+  &:hover { transform: translateY(-2px); }
 
   @media (max-width: 1200px) {
-    margin: 10px;
+    margin: 8px;
   }
 `;
 
 const HighlightedText = styled.span`
-  font-size: 20px;
-  font-weight: bold;
-  text-decoration: underline;
+  font-size: 1rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 `;
 
 export default SearchResults;

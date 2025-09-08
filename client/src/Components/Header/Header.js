@@ -8,6 +8,7 @@ import { FaBars } from "react-icons/fa";
 
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   const { currentUser } = useContext(UserContext);
@@ -42,6 +43,7 @@ const Header = () => {
           </NavLink>
         </NavLinks>
         <UserWrapper>
+          <ThemeToggle />
           {currentUser && (
             <UserName>
               Hello{" "}
@@ -60,8 +62,9 @@ const Header = () => {
 };
 
 const Wrapper = styled.header`
-  background-color: #ffffff;
+  background-color: var(--header-bg, #ffffff);
   width: 100vw;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
 `;
 
 const InnerWrapper = styled.div`

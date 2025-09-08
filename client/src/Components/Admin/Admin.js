@@ -167,14 +167,32 @@ const SearchInput = styled.input`
 const CompanyList = styled.ul`
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 12px 0 24px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 `;
 
 const CompanyItem = styled.li`
-  background-color: #f8f8f8;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  padding: 14px 16px;
+  transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    border-color: rgba(99, 102, 241, 0.45);
+    cursor: pointer;
+  }
 `;
 
 export default Admin;

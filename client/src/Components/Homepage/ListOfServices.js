@@ -36,7 +36,7 @@ const StyledLink = styled(Link)`
 `;
 
 const Card = styled.div`
-  width: 240px;
+  width: 260px;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@ const Card = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    width: calc(50% - 32px);
+    width: calc(50% - 24px);
     margin: 10px;
     padding: 20px 16px 14px;
   }
@@ -91,10 +91,10 @@ const Accent = styled.div`
 `;
 
 const IconTile = styled.div`
-  height: 84px;
-  width: 84px;
-  margin: 0 auto 10px;
-  border-radius: 18px;
+  height: 112px;
+  width: 112px;
+  margin: 0 auto 12px;
+  border-radius: 22px;
   background: #ffffff;
   display: grid;
   place-items: center;
@@ -102,10 +102,10 @@ const IconTile = styled.div`
 `;
 
 const Icon = styled.img`
-  height: 60px;
-  width: 60px;
+  height: 88px;
+  width: 88px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 16px;
 `;
 
 export default ListOfServices;

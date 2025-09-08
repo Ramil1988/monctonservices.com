@@ -5,3 +5,21 @@
     transform: none !important;
   }
 }
+
+/* Light/Dark theme variables */
+:root.theme-light {
+  --header-bg: #ffffff;
+  --text-color: #0f172a;
+  --app-bg: #f5f7fb;
+}
+
+:root.theme-dark {
+  --header-bg: #0b1224;
+  --text-color: #e5e7eb;
+  --app-bg: #0f172a;
+}
+
+html, body {
+  background: var(--app-bg);
+  color: var(--text-color);
+}
