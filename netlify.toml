@@ -1,15 +1,16 @@
 [build]
-  # Build React app from the client folder
-  base = "client"
-  command = "npm run build"
-  publish = "build"
-  # Functions live outside the base folder
-  functions = "../netlify/functions"
+  # Build from repo root; install root deps for Functions
+  command = "npm --prefix client ci && npm --prefix client run build"
+  publish = "client/build"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
   # CRA treats warnings as errors when CI=true; disable to allow warnings
   CI = "false"
+
+[functions]
+  node_bundler = "esbuild"
 
 # Ensure SPA routes serve index.html
 [[redirects]]
