@@ -18,6 +18,9 @@
   --primary-end: #22c55e;
   --pill-text: #0b1224;
   --panel-bg: rgba(255,255,255,0.78);
+  --accent-1: #60a5fa; /* sky-400 */
+  --accent-2: #a78bfa; /* violet-400 */
+  --accent-3: #34d399; /* emerald-400 */
 }
 
 :root.theme-dark {
@@ -31,6 +34,9 @@
   --primary-end: #22d3ee;
   --pill-text: #0b1224;
   --panel-bg: rgba(15, 23, 42, 0.68);
+  --accent-1: #60a5fa;
+  --accent-2: #a78bfa;
+  --accent-3: #34d399;
 }
 
 html, body {

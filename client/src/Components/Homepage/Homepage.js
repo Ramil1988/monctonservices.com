@@ -189,12 +189,30 @@ const LandingContainer = styled.div`
   margin-bottom: 30px;
   overflow: hidden;
   isolation: isolate;
-  &:after {
+  /* Decorative gradient blobs */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -20% -10% -30% -10%;
+    background:
+      radial-gradient(220px 180px at 15% 20%, var(--accent-1) 0%, transparent 60%),
+      radial-gradient(260px 200px at 85% 30%, var(--accent-2) 0%, transparent 65%),
+      radial-gradient(220px 200px at 70% 80%, var(--accent-3) 0%, transparent 60%);
+    filter: blur(30px) saturate(120%);
+    opacity: 0.35;
+    z-index: 1;
+    pointer-events: none;
+  }
+  /* Soft vignette to improve contrast under the panel */
+  &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(60% 60% at 50% 40%, rgba(99,102,241,0.35) 0%, rgba(14,165,233,0.25) 40%, rgba(2,6,23,0.6) 100%);
+    background:
+      radial-gradient(120% 80% at 50% 20%, rgba(0,0,0,0.25), transparent 60%) ,
+      linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(0,0,0,0) 40%);
     z-index: 1;
+    pointer-events: none;
   }
 `;
 
@@ -202,7 +220,7 @@ const BigImage = styled.img`
   width: 100%;
   height: 520px;
   object-fit: cover;
-  filter: saturate(1.05) contrast(1.05);
+  filter: brightness(0.95) saturate(1.05) contrast(1.05);
   animation: ${fadeInOut} 8s infinite;
 
   @media (max-width: 768px) {
