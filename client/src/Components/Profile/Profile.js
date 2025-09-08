@@ -216,7 +216,7 @@ const blinkCursor = keyframes`
 `;
 
 const SloganText = styled.h1`
-  color: black;
+  color: var(--text);
   margin: 2rem;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -241,8 +241,9 @@ const ProfileWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0.5rem;
-  margin: 2rem 2rem;
-  background-color: #f2f2f2;
+  margin: 2rem auto;
+  max-width: 1200px;
+  color: var(--text);
 
   @media (max-width: 767px) {
     width: 330px;
@@ -278,13 +279,15 @@ const Sidebar = styled.div`
 `;
 
 const SidebarTop = styled.div`
-  background: linear-gradient(135deg, #003262, #005492);
-  padding: 40px;
-  border-radius: 8px 8px 0 0;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  padding: 24px;
+  border-radius: 16px 16px 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
 `;
 
 const ProfileImage = styled.img`
@@ -308,7 +311,7 @@ const NameFields = styled.h3`
   align-items: center;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 5px;
   padding: 5px 20px;
 
@@ -334,7 +337,7 @@ const EditProfile = styled.div`
   display: flex;
   align-items: center;
   font-size: 1rem;
-  color: #fff;
+  color: var(--text);
   cursor: pointer;
   transition: 0.2s;
   margin-top: 20px;
@@ -348,10 +351,12 @@ const EditProfile = styled.div`
 const StatsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
 `;
 
 const Stat = styled.div`
@@ -362,14 +367,14 @@ const Stat = styled.div`
 
 const StatNumber = styled.span`
   font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  font-weight: 800;
+  color: var(--text);
 `;
 
 const StatLabel = styled.span`
   font-size: 14px;
   font-weight: 600;
-  color: #777;
+  color: var(--muted);
 `;
 
 const MainContent = styled.div`
@@ -378,11 +383,12 @@ const MainContent = styled.div`
 `;
 
 const SectionWrapper = styled.div`
-  margin: auto;
-  width: 80%;
+  margin: 0 auto;
+  width: 100%;
 
   & h2 {
-    margin-top: 50px;
+    margin-top: 32px;
+    color: var(--text);
   }
 `;
 
@@ -415,12 +421,14 @@ const FavoriteContainer = styled.div`
 
 const Bookmark = styled.div`
   position: relative;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-  padding: 15px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  padding: 16px;
   width: 90%;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, border-color 0.22s ease;
 
   &:hover {
     transform: scale(1.05);
@@ -432,7 +440,7 @@ const StyledNavLink = styled(Link)`
   white-space: nowrap;
   overflow: hidden;
   font-size: 1rem;
-  color: black;
+  color: var(--text);
   text-decoration: none;
   position: relative;
 `;
@@ -446,11 +454,12 @@ const HeaderWrapper = styled.div`
 const RemoveFavoriteButton = styled(IconButton)`
   color: #e74c3c;
   padding: 0;
-  background-color: #fff;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: 50%;
 
   &:hover {
-    background-color: #f3f3f3;
+    background: var(--surface);
   }
 `;
 

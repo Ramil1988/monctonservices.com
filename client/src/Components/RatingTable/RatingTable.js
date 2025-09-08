@@ -295,39 +295,38 @@ const ButtonContainer = styled.div`
 `;
 
 const ToggleButton = styled.button`
-  background-color: ${({ active }) => (active ? "#003262" : "#f2f2f2")};
-  color: ${({ active }) => (active ? "#fff" : "#000")};
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
+  background: ${({ active }) =>
+    active
+      ? "linear-gradient(90deg, var(--primary-start), var(--primary-end))"
+      : "var(--surface)"};
+  color: ${({ active }) => (active ? "var(--pill-text)" : "var(--text)")};
+  border: 1px solid var(--surface-border);
+  border-radius: 999px;
+  padding: 8px 14px;
   margin: 0 0.5rem;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background-color: ${({ active }) => (active ? "#003262" : "#e0e0e0")};
-    color: ${({ active }) => (active ? "#fff" : "#000")};
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
   }
 `;
 
 const FilterInput = styled.input`
   margin-right: 20px;
   padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #003262;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
   font-weight: bold;
   outline: none;
   cursor: pointer;
 
-  &:hover {
-    background-color: #f2f2f2;
-  }
-
-  &:focus {
-    border-color: #003262;
-  }
+  &:focus { border-color: var(--primary-start); }
 
   @media (max-width: 768px) {
     margin: 0px 20px 20px 20px;
@@ -407,11 +406,11 @@ const Wrapper = styled.div`
   border-radius: 10px;
   padding: 2rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  background-color: #f2f2f2;
+  background: var(--app-bg);
+  color: var(--text);
 
   @media (max-width: 768px) {
     padding: 0.2rem;
-    background-color: white;
   }
 `;
 
@@ -419,7 +418,7 @@ const TableHeading = styled.h2`
   font-size: 2rem;
   font-weight: 500;
   margin-bottom: 1.5rem;
-  color: #003262;
+  color: var(--text);
   text-align: center;
 
   @media (max-width: 768px) {
@@ -434,9 +433,10 @@ const Table = styled.table`
   width: 70%;
   border-collapse: separate;
   border-spacing: 0;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -446,9 +446,9 @@ const Table = styled.table`
 const Th = styled.th`
   text-align: center;
   padding: 16px;
-  background-color: #003262;
-  color: #fff;
-  border: 1px solid white;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
+  border: 1px solid transparent;
   font-weight: 600;
   &:first-child {
     border-top-left-radius: 10px;
@@ -460,7 +460,7 @@ const Th = styled.th`
 
 const Td = styled.td`
   padding: 15px;
-  border: 1px solid #d8d8d8;
+  border: 1px solid var(--surface-border);
   text-align: center;
 
   @media (max-width: 768px) {
@@ -474,7 +474,7 @@ const StarWrapper = styled.span`
 `;
 
 const StyledLink = styled(Link)`
-  color: black;
+  color: var(--text);
   text-decoration: none;
   display: inline-block;
   padding: 4px 8px;
@@ -483,19 +483,19 @@ const StyledLink = styled(Link)`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: lightblue;
+    background-color: var(--surface);
   }
 `;
 
 const QuestionButton = styled.button`
   background-color: transparent;
   border: none;
-  color: #003262;
+  color: var(--text);
   margin-left: 20px;
   cursor: pointer;
 
   &:hover {
-    color: #f2b01e;
+    color: #fbbf24;
   }
 `;
 

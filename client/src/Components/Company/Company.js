@@ -446,8 +446,8 @@ const Header = styled.div`
 
 const Title = styled.h1`
   font-size: 32px;
-  font-weight: bold;
-  color: #ffffff;
+  font-weight: 800;
+  color: var(--text);
 
   @media (max-width: 767px) {
     font-size: 20px;
@@ -464,18 +464,19 @@ const ButtonContainer = styled.div`
 `;
 
 const StyledButton = styled.button`
-  background-color: #ffc107;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
   border: none;
-  border-radius: 4px;
-  color: #003262;
+  border-radius: 999px;
+  color: var(--pill-text);
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 8px 12px;
-  transition: background-color 0.3s;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background-color: #ffb600;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
   }
 
   @media (max-width: 767px) {
@@ -518,18 +519,21 @@ const Image = styled.img`
 `;
 
 const InfoBox = styled.div`
-  background-color: #f8f9fa;
+  background: var(--surface);
+  color: var(--text);
   width: 100%;
-  border-radius: 5px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
 `;
 
 const InfoTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #003262;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text);
 `;
 
 const StyledWrapper = styled.div`
@@ -561,8 +565,8 @@ const Website = styled(Address)``;
 
 const AverageRating = styled.span`
   font-size: 1rem;
-  font-weight: 500;
-  color: #28a745;
+  font-weight: 700;
+  color: #fbbf24;
 `;
 
 const AverageGrade = styled.span`
@@ -773,24 +777,15 @@ const ReviewNavigation = styled.button`
 
 const CancelButton = styled(StyledButton)`
   margin-bottom: 20px;
-  background-color: #dc3545;
-  color: #fff;
-
-  &:hover {
-    background-color: #c82333;
-  }
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  color: var(--pill-text);
 `;
 
 const SubmitButton = styled(StyledButton)`
   margin-bottom: 20px;
-  background-color: ${({ disabled }) => (disabled ? "gray" : "#28a745")};
-  color: #fff;
   margin-right: 20px;
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-
-  &:hover {
-    background-color: ${({ disabled }) => (disabled ? "gray" : "#218838")};
-  }
 `;
 
 const Notification = styled.div`
@@ -798,43 +793,40 @@ const Notification = styled.div`
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  margin: auto;
-  padding: 20px;
-  background-color: ${({ message }) =>
-    message === "The company is already in your favorites" ||
-    message === "Please log in to add a company to favorites" ||
-    message === "Please log in to leave a review"
-      ? "yellow"
-      : "lightgreen"};
-  width: 300px;
-  border-radius: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 24px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  width: 320px;
+  border-radius: 12px;
+  color: var(--text);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
 `;
 
 const NotificationText = styled.p`
-  font-size: 20px;
+  font-size: 0.95rem;
   margin: 0;
-  color: black;
+  color: var(--text);
 `;
 
 const CloseButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: white;
-  font-size: 20px;
+  color: var(--text);
+  font-size: 1rem;
   outline: none;
-  transition: transform 0.3s;
+  transition: transform 0.15s ease;
 
-  &:hover {
-    transform: scale(1.1);
-  }
+  &:hover { transform: translateY(-2px); }
 `;
 
 const CloseIcon = styled.span`
-  font-weight: bold;
-  font-size: 20px;
-  color: black;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text);
 `;
 
 export default Company;
