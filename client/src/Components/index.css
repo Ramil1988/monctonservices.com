@@ -17,6 +17,7 @@
   --primary-start: #2563eb;
   --primary-end: #22c55e;
   --pill-text: #0b1224;
+  --panel-bg: rgba(255,255,255,0.78);
 }
 
 :root.theme-dark {
@@ -29,9 +30,13 @@
   --primary-start: #6366f1;
   --primary-end: #22d3ee;
   --pill-text: #0b1224;
+  --panel-bg: rgba(15, 23, 42, 0.68);
 }
 
 html, body {
   background: var(--app-bg);
   color: var(--text);
 }
+
+/* improve readability */
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }

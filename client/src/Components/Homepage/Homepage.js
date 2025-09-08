@@ -222,8 +222,8 @@ const TextContainer = styled.div`
   text-align: center;
   padding: 1.25rem 1.5rem;
   z-index: 2;
-  backdrop-filter: blur(8px);
-  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  background: var(--panel-bg);
   border: 1px solid var(--surface-border);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
@@ -247,8 +247,8 @@ const SloganText = styled.h1`
   line-height: 1.15;
   color: var(--text);
   letter-spacing: 0.2px;
-  font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 `;
 
 const HighlightedText = styled.span`
@@ -265,12 +265,12 @@ const StatisticText = styled.h2`
   color: var(--muted);
   font-weight: 500;
   & span {
-    color: var(--text);
+    color: #0f172a;
     padding: 2px 10px;
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     border-radius: 999px;
-    border: 1px solid var(--surface-border);
-    background: var(--surface);
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fff;
   }
 `;
 

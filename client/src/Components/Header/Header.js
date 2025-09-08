@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "../../Pictures/logo-black.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
@@ -21,9 +20,9 @@ const Header = () => {
   return (
     <Wrapper>
       <InnerWrapper>
-        <Logo to={`/`} onClick={window.location.reload}>
-          <img src={logo} alt="Logo" />
-        </Logo>
+        <Brand to={`/`} onClick={window.location.reload}>
+          Moncton <em>services</em>
+        </Brand>
         <MenuIcon onClick={toggleMenu}>
           <FaBars />
         </MenuIcon>
@@ -89,15 +88,25 @@ const InnerWrapper = styled.div`
   max-width: 1200px;
 `;
 
-const Logo = styled(NavLink)`
+const Brand = styled(NavLink)`
   display: block;
+  font-weight: 900;
+  font-size: clamp(1.25rem, 1.1rem + 1.2vw, 2rem);
+  letter-spacing: 0.4px;
+  text-decoration: none;
+  color: var(--text);
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 
-  & img {
-    width: 280px;
+  em {
+    font-style: normal;
+    opacity: 0.9;
   }
 
   @media (max-width: 1150px) {
-    display: none;
+    margin-right: 8px;
   }
 `;
 
