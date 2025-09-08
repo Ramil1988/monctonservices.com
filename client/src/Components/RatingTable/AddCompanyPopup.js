@@ -41,10 +41,12 @@ const PopupContainer = styled.div`
   bottom: 20px;
   right: 20px;
   width: 300px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
   z-index: 1000;
 
   @media (max-width: 768px) {
@@ -56,10 +58,11 @@ const CloseButton = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
+  background: transparent;
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: var(--text);
 `;
 
 const ImageContainer = styled.div`
@@ -82,11 +85,11 @@ const ContentContainer = styled.div`
 
 const YesButton = styled.a`
   display: inline-block;
-  padding: 8px 16px;
-  background-color: black;
-  color: white;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 999px;
   margin-top: 10px;
 `;
 

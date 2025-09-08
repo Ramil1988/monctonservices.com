@@ -50,7 +50,7 @@ const UploadProfileImage = ({ user, setUser }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+    <WrapperDialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Upload Profile Image</DialogTitle>
       <DialogContent>
         <UploadNotification msg={errMsg} type="danger" />
@@ -84,7 +84,7 @@ const UploadProfileImage = ({ user, setUser }) => {
           Upload Image
         </SubmitButton>
       </DialogActions>
-    </Dialog>
+    </WrapperDialog>
   );
 };
 
@@ -106,38 +106,35 @@ const ImagePreview = styled.img`
   margin-bottom: 1rem;
 `;
 
+const WrapperDialog = styled(Dialog)`
+  & .MuiPaper-root {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--surface-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  }
+`;
+
 const ButtonBase = styled.button`
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
   margin: 20px 10px;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 `;
 
 const CancelButton = styled(ButtonBase)`
-  background-color: red;
-  color: white;
-
-  &:hover {
-    background-color: #d32f2f;
-  }
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  color: var(--pill-text);
 `;
 
 const SubmitButton = styled(ButtonBase)`
-  color: #fff;
-  background-color: #3f51b5;
-
-  &:hover {
-    background-color: #283593;
-  }
-
-  &:active {
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0, 0.2),
-      0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
-  }
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
 `;
 
 export default UploadProfileImage;
