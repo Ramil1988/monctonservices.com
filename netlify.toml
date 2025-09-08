@@ -8,6 +8,8 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  # CRA treats warnings as errors when CI=true; disable to allow warnings
+  CI = "false"
 
 # Ensure SPA routes serve index.html
 [[redirects]]
