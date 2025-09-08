@@ -207,9 +207,9 @@ const StyledUl = styled.ul`
 const StyledLi = styled.li`
   width: 100%;
   padding: 18px 16px;
-  background: rgba(255,255,255,0.06);
-  color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   backdrop-filter: blur(6px);
@@ -218,7 +218,7 @@ const StyledLi = styled.li`
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-    border-color: rgba(99, 102, 241, 0.45);
+    border-color: var(--primary-start);
   }
 
   & a {
@@ -232,7 +232,7 @@ const StyledType = styled.li`
   grid-column: 1 / -1;
   font-weight: 800;
   font-size: 1.1rem;
-  color: #e5e7eb;
+  color: var(--text);
   margin: 16px 4px 4px;
 `;
 
@@ -240,20 +240,20 @@ const StyledSelect = styled.select`
   padding: 10px 12px;
   font-size: 1rem;
   font-weight: 600;
-  color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
   border-radius: 12px;
-  background: rgba(255,255,255,0.06);
+  background: var(--surface);
   backdrop-filter: blur(6px);
   &:focus {
     outline: none;
-    border-color: rgba(99, 102, 241, 0.45);
+    border-color: var(--primary-start);
   }
 `;
 
 const StyledClearButton = styled.button`
-  background: linear-gradient(90deg, #6366f1, #22d3ee);
-  color: #0b1224;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
   border-radius: 999px;
   padding: 10px 16px;
   border: none;
@@ -279,14 +279,14 @@ const StyledPagination = styled.div`
 `;
 
 const StyledPageButton = styled.button`
-  background: ${({ active }) => (active ? "linear-gradient(90deg, #6366f1, #22d3ee)" : "rgba(255,255,255,0.06)")};
-  color: ${({ active }) => (active ? "#0b1224" : "#e5e7eb")};
+  background: ${({ active }) => (active ? "linear-gradient(90deg, var(--primary-start), var(--primary-end))" : "var(--surface)")};
+  color: ${({ active }) => (active ? "var(--pill-text)" : "var(--text)")};
   border-radius: 999px;
   width: 36px;
   height: 36px;
   text-align: center;
   margin: 0 6px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  border: 1px solid var(--surface-border);
   transition: transform 0.15s ease;
 
   &:hover { transform: translateY(-2px); }

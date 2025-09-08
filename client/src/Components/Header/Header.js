@@ -65,6 +65,19 @@ const Wrapper = styled.header`
   background-color: var(--header-bg, #ffffff);
   width: 100vw;
   border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  /* Decorative blobs like ruStore */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(200px 120px at 85% 30%, rgba(99,102,241,0.25), transparent 60%),
+                radial-gradient(180px 110px at 70% 70%, rgba(34,211,238,0.18), transparent 60%);
+    opacity: 0.8;
+  }
 `;
 
 const InnerWrapper = styled.div`
@@ -119,21 +132,21 @@ const NavLinks = styled.div`
   }
 
   .nav-link {
-    margin-right: 2rem;
-    font-size: 1.2rem;
+    margin-right: 1rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: black;
+    color: var(--text);
     text-decoration: none;
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    background-color: #ffffff;
-    transition: all 0.2s ease-in-out;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    transition: all 0.15s ease-in-out;
 
     &:hover {
-      background-color: #f8f9fa;
+      background-color: var(--surface);
       transform: translateY(-2px);
+      border: 1px solid var(--surface-border);
     }
 
     @media (max-width: 1150px) {
@@ -156,7 +169,7 @@ const UserName = styled.div`
   margin-right: 1rem;
   font-size: 1.2rem;
   font-weight: 600;
-  color: black;
+  color: var(--text);
 
   @media (max-width: 767px) {
     display: none;

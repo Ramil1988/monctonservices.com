@@ -178,9 +178,9 @@ const CompanyList = styled.ul`
 `;
 
 const CompanyItem = styled.li`
-  background: rgba(255,255,255,0.06);
-  color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   backdrop-filter: blur(6px);
@@ -190,7 +190,7 @@ const CompanyItem = styled.li`
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-    border-color: rgba(99, 102, 241, 0.45);
+    border-color: var(--primary-start);
     cursor: pointer;
   }
 `;

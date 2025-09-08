@@ -42,10 +42,10 @@ const Card = styled.div`
   justify-content: center;
   margin: 16px;
   padding: 24px 22px 18px;
-  color: #e5e7eb;
+  color: var(--text);
   font-family: "Raleway", sans-serif;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(6px);
@@ -64,13 +64,13 @@ const Card = styled.div`
   &:hover {
     transform: translateY(-6px);
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-    border-color: rgba(99, 102, 241, 0.45);
+    border-color: var(--primary-start);
   }
 `;
 
 const ItemName = styled.h2`
   text-decoration: none;
-  color: #e5e7eb;
+  color: var(--text);
   font-size: 16px;
   font-weight: 700;
   margin-top: 10px;

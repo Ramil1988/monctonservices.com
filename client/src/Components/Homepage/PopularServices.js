@@ -98,8 +98,8 @@ const ServiceBox = styled.div`
   width: 360px;
   padding: 18px 20px;
   background: rgba(255,255,255,0.06);
-  color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
   border-radius: 16px;
   font-family: "Raleway", sans-serif;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
@@ -110,7 +110,7 @@ const ServiceBox = styled.div`
     transform: translateY(-6px);
     cursor: pointer;
     box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-    border-color: rgba(99, 102, 241, 0.45);
+    border-color: var(--primary-start);
   }
 `;
 
@@ -143,7 +143,7 @@ const Company = styled.li`
 
 const CompanyName = styled.span`
   font-weight: 600;
-  color: #e5e7eb;
+  color: var(--text);
   text-decoration: none;
 `;
 
@@ -158,7 +158,7 @@ const AverageGrade = styled.span`
   display: flex;
   align-items: center;
   font-size: 14px;
-  color: #e5e7eb;
+  color: var(--text);
   margin-right: 5px;
 
   svg {
@@ -169,7 +169,7 @@ const AverageGrade = styled.span`
 
 const CompanyReviews = styled.span`
   font-size: 13px;
-  color: #b0b8c2;
+  color: var(--muted);
 `;
 
 export default PopularServices;

@@ -180,8 +180,8 @@ const TabButton = styled.button`
 
 const Wrapper = styled.div`
   animation: ${fadeIn} 0.6s ease-in;
-  background: linear-gradient(180deg, #0f172a 0%, #0b1224 40%, #0f172a 100%);
-  color: #e5e7eb;
+  background: var(--app-bg);
+  color: var(--text);
 `;
 
 const LandingContainer = styled.div`
@@ -224,7 +224,7 @@ const TextContainer = styled.div`
   z-index: 2;
   backdrop-filter: blur(8px);
   background: rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  border: 1px solid var(--surface-border);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 
@@ -245,7 +245,7 @@ const MainWrapper = styled.div`
 const SloganText = styled.h1`
   font-size: clamp(1.6rem, 2.5vw + 1rem, 3rem);
   line-height: 1.15;
-  color: #e5e7eb;
+  color: var(--text);
   letter-spacing: 0.2px;
   font-weight: 700;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
@@ -262,15 +262,15 @@ const HighlightedText = styled.span`
 const StatisticText = styled.h2`
   margin: 10px 0 0;
   font-size: clamp(1rem, 0.7rem + 1vw, 1.25rem);
-  color: #cbd5e1;
+  color: var(--muted);
   font-weight: 500;
   & span {
-    color: #fff;
+    color: var(--text);
     padding: 2px 10px;
     font-size: 1.35rem;
     border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.25);
-    background: rgba(2,6,23,0.35);
+    border: 1px solid var(--surface-border);
+    background: var(--surface);
   }
 `;
 
@@ -279,8 +279,8 @@ const SearchButton = styled.button`
   padding: 14px 22px;
   font-size: 1rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #6366f1, #22d3ee);
-  color: #0b1224;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
   border: none;
   border-radius: 999px;
   cursor: pointer;
@@ -296,7 +296,7 @@ const SearchButton = styled.button`
 
 const BigText = styled.h1`
   margin: 48px 0 16px;
-  color: #e5e7eb;
+  color: var(--text);
   font-weight: 800;
   font-size: clamp(1.25rem, 1rem + 1.5vw, 2rem);
   letter-spacing: 0.2px;

@@ -92,8 +92,8 @@ const Review = styled.div`
   justify-content: center;
   text-align: center;
   background: rgba(255,255,255,0.06);
-  color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   backdrop-filter: blur(6px);
@@ -105,7 +105,7 @@ const Review = styled.div`
     transform: translateY(-6px);
     cursor: pointer;
     box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-    border-color: rgba(99, 102, 241, 0.45);
+    border-color: var(--primary-start);
   }
 
   @media (max-width: 1150px) {
@@ -137,20 +137,20 @@ const ReviewTitle = styled.h2`
 const ReviewAuthor = styled.p`
   font-size: 14px;
   margin-bottom: 4px;
-  color: #b0b8c2;
+  color: var(--muted);
 `;
 
 const ReviewDate = styled.div`
   font-size: 12px;
   text-align: right;
-  color: #94a3b8;
+  color: var(--muted);
   margin-top: 4px;
 `;
 
 const ReviewCompany = styled.p`
   font-size: 14px;
   margin-bottom: 6px;
-  color: #cbd5e1;
+  color: var(--muted);
 `;
 
 const ReviewGrade = styled.div`
