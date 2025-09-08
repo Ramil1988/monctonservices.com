@@ -84,8 +84,10 @@ const InnerWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  padding: 15px;
+  padding: 12px 16px;
   max-width: 1200px;
+  gap: 12px;
+  flex-wrap: nowrap;
 `;
 
 const Brand = styled(NavLink)`
@@ -123,6 +125,9 @@ const MenuIcon = styled.div`
 const NavLinks = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex: 1 1 auto;
 
   @media (max-width: 1150px) {
     display: ${({ menuOpen }) => (menuOpen ? "flex" : "none")};
@@ -141,8 +146,8 @@ const NavLinks = styled.div`
   }
 
   .nav-link {
-    margin-right: 1rem;
-    font-size: 1rem;
+    margin-right: 0;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text);
     text-decoration: none;
@@ -167,6 +172,8 @@ const NavLinks = styled.div`
 const UserWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
 
   @media (max-width: 1150px) {
     width: 100%;
@@ -175,12 +182,16 @@ const UserWrapper = styled.div`
 `;
 
 const UserName = styled.div`
-  margin-right: 1rem;
-  font-size: 1.2rem;
+  margin-right: 0.25rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text);
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1000px) {
     display: none;
   }
 `;

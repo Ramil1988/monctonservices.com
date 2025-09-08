@@ -69,14 +69,13 @@ const LoginButton = () => {
 };
 
 const LoginIconWrapper = styled(NavLink)`
-  font-size: 24px;
-  margin: 20px;
-  margin-left: 20px;
+  font-size: 22px;
+  margin: 0 6px;
   cursor: pointer;
-  color: black;
+  color: var(--text);
 
   &:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
   }
 `;
 

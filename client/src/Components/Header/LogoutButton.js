@@ -22,27 +22,29 @@ const LogoutButton = () => {
 };
 
 const StyledButton = styled.button`
-  background-color: #fff;
-  color: black;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
   border: none;
-  padding: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
-  margin-left: 1rem;
-  display: flex;
+  margin-left: 0.25rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease-in-out;
+  border-radius: 999px;
+  gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 
   &:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
   }
 `;
 
 const StyledIcon = styled(FaSignOutAlt)`
-  font-size: 1.2rem;
-  margin-right: 0.5rem;
+  font-size: 1rem;
 `;
 
 export default LogoutButton;
