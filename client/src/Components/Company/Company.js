@@ -639,29 +639,27 @@ const StyledTextField = styled.input`
   width: 100%;
   padding: 10px;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
   outline: none;
   font-size: 16px;
-
-  &:focus {
-    border-color: #007bff;
-  }
+  background: var(--surface);
+  color: var(--text);
+  &:focus { border-color: var(--primary-start); }
 `;
 
 const StyledTextArea = styled.textarea`
   width: 100%;
   padding: 10px;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
   outline: none;
   font-size: 16px;
+  background: var(--surface);
+  color: var(--text);
   resize: vertical;
-
-  &:focus {
-    border-color: #007bff;
-  }
+  &:focus { border-color: var(--primary-start); }
 `;
 
 const NoReviewsMessage = styled.p`

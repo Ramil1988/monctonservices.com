@@ -9,6 +9,15 @@ import UserProvider from "./Components/UserContext";
 
 const rootElement = document.getElementById("root");
 
+// Ensure a default theme is applied before initial render
+try {
+  const stored = localStorage.getItem("theme");
+  const mode = stored === "light" || stored === "dark" ? stored : "dark";
+  const root = document.documentElement;
+  root.classList.toggle("theme-dark", mode === "dark");
+  root.classList.toggle("theme-light", mode === "light");
+} catch (_) {}
+
 const AuthWithRedirect = () => {
   const navigate = useNavigate();
   const onRedirectCallback = (appState) => {

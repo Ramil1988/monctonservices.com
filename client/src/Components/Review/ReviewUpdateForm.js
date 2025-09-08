@@ -103,73 +103,52 @@ const InputLabel = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
   box-sizing: border-box;
   font-size: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  &:focus { outline: none; border-color: var(--primary-start); }
 `;
 
 const TextArea = styled.textarea`
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
   resize: vertical;
   min-height: 8rem;
   box-sizing: border-box;
   font-size: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  &:focus { outline: none; border-color: var(--primary-start); }
 `;
 
 const ButtonBase = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  box-sizing: border-box;
-  min-width: 64px;
-  padding: 6px 16px;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  min-height: 36px;
-  line-height: 1.75;
-  border-radius: 4px;
-  letter-spacing: 0.02857em;
-  text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.87);
-  background-color: #e0e0e0;
-  cursor: pointer;
-  outline: none;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 999px;
   border: none;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-
-  &:hover {
-    background-color: #d5d5d5;
-  }
-
-  &:active {
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-      0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-  }
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 `;
 
 const CancelButton = styled(ButtonBase)`
-  background-color: red;
-  color: white;
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  color: var(--pill-text);
 `;
 
 const SubmitButton = styled(ButtonBase)`
   margin-left: 8px;
-  color: #fff;
-  background-color: #3f51b5;
-
-  &:active {
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-      0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
-  }
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
 `;
 
 export default ReviewUpdateForm;

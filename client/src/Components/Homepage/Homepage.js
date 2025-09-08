@@ -150,19 +150,22 @@ const TabMenu = styled.div`
 `;
 
 const TabButton = styled.button`
-  margin: 0 10px;
-  padding: 10px 20px;
-  font-size: 1.1rem;
-  background: ${(props) => (props.active ? "black" : "#ffffff")};
-  color: ${(props) => (props.active ? "#ffffff" : "#333333")};
-  border: none;
-  border-radius: 20px;
+  margin: 0 8px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  background: ${(props) =>
+    props.active
+      ? "linear-gradient(90deg, var(--primary-start), var(--primary-end))"
+      : "var(--surface)"};
+  color: ${(props) => (props.active ? "var(--pill-text)" : "var(--text)")};
+  border: 1px solid var(--surface-border);
+  border-radius: 999px;
   cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-  box-shadow: ${(props) => (props.active ? "0px 4px 4px black" : "none")};
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background: ${(props) => (props.active ? "black" : "#eeeeee")};
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
   }
 
   @media (max-width: 768px) {
