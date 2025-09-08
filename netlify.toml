@@ -1,7 +1,13 @@
 [build]
-  command = "npm --prefix client run build"
-  publish = "client/build"
-  functions = "netlify/functions"
+  # Build React app from the client folder
+  base = "client"
+  command = "npm run build"
+  publish = "build"
+  # Functions live outside the base folder
+  functions = "../netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
 
 # Ensure SPA routes serve index.html
 [[redirects]]
@@ -23,4 +29,3 @@
   from = "/events"
   to = "/index.html"
   status = 200
-
