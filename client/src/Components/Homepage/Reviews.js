@@ -69,21 +69,18 @@ const Reviews = ({ reviews }) => {
 const ReviewsWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 50px 150px 50px 150px;
-
-  @media (max-width: 1150px) {
-    flex-direction: column;
-  }
+  justify-content: center;
+  gap: 16px;
+  margin: 32px auto 0;
 `;
 
 const ReviewsContainer = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
 
   @media (max-width: 1150px) {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 `;
 
@@ -94,21 +91,25 @@ const Review = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 20px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: calc(33.33% - 20px);
-  padding: 20px;
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  width: 320px;
+  padding: 18px;
+  transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: translateY(-6px);
     cursor: pointer;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    border-color: rgba(99, 102, 241, 0.45);
   }
 
   @media (max-width: 1150px) {
-    width: 60vw;
-    padding: 20px;
+    width: 70vw;
   }
 `;
 
@@ -128,56 +129,62 @@ const StyledLink = styled(Link)`
 `;
 
 const ReviewTitle = styled.h2`
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
 `;
 
 const ReviewAuthor = styled.p`
   font-size: 14px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+  color: #b0b8c2;
 `;
 
 const ReviewDate = styled.div`
   font-size: 12px;
   text-align: right;
-  color: #777;
-  margin-top: 5px;
+  color: #94a3b8;
+  margin-top: 4px;
 `;
 
 const ReviewCompany = styled.p`
   font-size: 14px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  color: #cbd5e1;
 `;
 
 const ReviewGrade = styled.div`
   display: flex;
   align-items: center;
-  font-size: 24px;
-  margin: 10px;
+  font-size: 20px;
+  margin: 8px;
 
   svg {
-    color: gold;
-    margin-right: 2px;
+    color: #fbbf24;
+    margin-right: 6px;
   }
 `;
 
 const ReviewNavigation = styled.button`
-  background-color: transparent;
-  margin: 20px;
-  border: none;
-  font-size: 24px;
+  background: rgba(255,255,255,0.08);
+  color: #e5e7eb;
+  margin: 0;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 22px;
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
-  color: ${(props) => (props.disabled ? "#ccc" : "inherit")};
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.22s ease;
   pointer-events: ${(props) => (props.disabled ? "none" : "inherit")};
+  opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 
   &:hover {
-    color: ${(props) => (props.disabled ? "#ccc" : "#666")};
-  }
-
-  @media (max-width: 768px) {
-    margin-bottom: 10px;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    border-color: rgba(99, 102, 241, 0.45);
   }
 `;
 

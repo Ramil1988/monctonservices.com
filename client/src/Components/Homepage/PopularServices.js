@@ -91,31 +91,33 @@ const ServiceBoxesWrapper = styled.div`
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 32px;
 `;
 
 const ServiceBox = styled.div`
-  width: 350px;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  width: 360px;
+  padding: 18px 20px;
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
   font-family: "Raleway", sans-serif;
-  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02),
-    0 6.7px 5.3px rgba(0, 0, 0, 0.028), 0 12.5px 10px rgba(0, 0, 0, 0.035),
-    0 1.3px 17.9px rgba(0, 0, 0, 0.182), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
-    0 100px 80px rgba(0, 0, 0, 0.07);
-  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: translateY(-6px);
     cursor: pointer;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    border-color: rgba(99, 102, 241, 0.45);
   }
 `;
 
 const ServiceTitle = styled.h2`
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
 `;
 
 const TopCompanies = styled.ul`
@@ -140,37 +142,34 @@ const Company = styled.li`
 `;
 
 const CompanyName = styled.span`
-  font-weight: 500;
-  color: #333;
+  font-weight: 600;
+  color: #e5e7eb;
   text-decoration: none;
 `;
 
 const Name = styled(Link)`
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-decoration: none;
   position: relative;
-
-  &:hover {
-    background-color: lightblue;
-  }
+  color: inherit;
 `;
 
 const AverageGrade = styled.span`
   display: flex;
   align-items: center;
   font-size: 14px;
-  color: #333;
+  color: #e5e7eb;
   margin-right: 5px;
 
   svg {
-    color: gold;
-    margin-right: 2px;
+    color: #fbbf24;
+    margin-right: 4px;
   }
 `;
 
 const CompanyReviews = styled.span`
-  font-size: 14px;
-  color: #777;
+  font-size: 13px;
+  color: #b0b8c2;
 `;
 
 export default PopularServices;

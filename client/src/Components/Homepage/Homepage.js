@@ -179,25 +179,34 @@ const TabButton = styled.button`
 `;
 
 const Wrapper = styled.div`
-  animation: ${fadeIn} 1s ease-in;
-  background-color: #f2f2f2;
+  animation: ${fadeIn} 0.6s ease-in;
+  background: linear-gradient(180deg, #0f172a 0%, #0b1224 40%, #0f172a 100%);
+  color: #e5e7eb;
 `;
 
 const LandingContainer = styled.div`
   position: relative;
   margin-bottom: 30px;
   overflow: hidden;
+  isolation: isolate;
+  &:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(60% 60% at 50% 40%, rgba(99,102,241,0.35) 0%, rgba(14,165,233,0.25) 40%, rgba(2,6,23,0.6) 100%);
+    z-index: 1;
+  }
 `;
 
 const BigImage = styled.img`
   width: 100%;
-  height: 500px;
+  height: 520px;
   object-fit: cover;
-  opacity: 0.5;
-  animation: ${fadeInOut} 5s infinite;
+  filter: saturate(1.05) contrast(1.05);
+  animation: ${fadeInOut} 8s infinite;
 
   @media (max-width: 768px) {
-    height: 300px;
+    height: 360px;
   }
 `;
 
@@ -211,94 +220,86 @@ const TextContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 1rem;
+  padding: 1.25rem 1.5rem;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 
   @media (max-width: 768px) {
-    top: 40%;
+    top: 48%;
+    width: calc(100% - 2rem);
+    padding: 1rem;
   }
 `;
 
 const MainWrapper = styled.div`
-  max-width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
   overflow-x: hidden;
 `;
 
 const SloganText = styled.h1`
-  font-size: 2.5rem;
-  color: #333;
-  font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-  }
+  font-size: clamp(1.6rem, 2.5vw + 1rem, 3rem);
+  line-height: 1.15;
+  color: #e5e7eb;
+  letter-spacing: 0.2px;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const HighlightedText = styled.span`
-  color: white;
-  font-weight: bold;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
 `;
 
 const StatisticText = styled.h2`
-  font-style: italic;
-  font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  margin-bottom: 1rem;
-
+  margin: 10px 0 0;
+  font-size: clamp(1rem, 0.7rem + 1vw, 1.25rem);
+  color: #cbd5e1;
+  font-weight: 500;
   & span {
-    color: white;
-    padding: 5px;
-    font-size: 30px;
-    border-radius: 10px;
-    border: 5px solid white;
-  }
-
-  @media (max-width: 860px) {
-    display: none;
+    color: #fff;
+    padding: 2px 10px;
+    font-size: 1.35rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(2,6,23,0.35);
   }
 `;
 
 const SearchButton = styled.button`
-  margin-top: 20px;
-  padding: 20px 30px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  background-color: black;
-  color: #ffffff;
+  margin-top: 16px;
+  padding: 14px 22px;
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #6366f1, #22d3ee);
+  color: #0b1224;
   border: none;
-  border-radius: 5px;
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 10px 25px rgba(34,211,238,0.25);
 
   &:hover {
-    background-color: white;
-    color: black;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-    transform: translateY(-3px);
-  }
-
-  @media (max-width: 768px) {
-    padding: 12px 20px;
-    font-size: 1rem;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(34,211,238,0.35);
+    opacity: 0.95;
   }
 `;
 
 const BigText = styled.h1`
-  margin: 40px 20px;
-  color: black;
-  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  overflow: hidden;
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin: 30px 10px;
-  }
+  margin: 48px 0 16px;
+  color: #e5e7eb;
+  font-weight: 800;
+  font-size: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+  letter-spacing: 0.2px;
 `;
 
 const ButtonWrapper = styled.div`
