@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const ListOfServices = ({ data }) => {
@@ -9,29 +9,21 @@ const ListOfServices = ({ data }) => {
       <List>
         {sortedData.map((item) => {
           return (
-            <ItemDiv key={item.id}>
+            <Card key={item.id}>
               <StyledLink to={`/${item.id}`}>
-                <Item src={item.imageSrc} alt={item.name} />
-                <Divider />
+                <IconTile>
+                  <Icon src={item.imageSrc} alt={item.name} />
+                </IconTile>
+                <Accent />
                 <ItemName>{item.name}</ItemName>
               </StyledLink>
-            </ItemDiv>
+            </Card>
           );
         })}
       </List>
     </>
   );
 };
-
-const scaleAnimation = keyframes`
-  0%, 100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.1);
-  }
-`;
 
 const StyledLink = styled(Link)`
   display: block;
@@ -43,18 +35,18 @@ const StyledLink = styled(Link)`
   transition: transform 0.18s ease, box-shadow 0.22s ease;
 `;
 
-const ItemDiv = styled.div`
-  width: 200px;
+const Card = styled.div`
+  width: 240px;
   text-align: center;
   align-items: center;
   justify-content: center;
-  margin: 18px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  border-radius: 16px;
-  padding: 22px;
+  margin: 16px;
+  padding: 24px 22px 18px;
   color: #e5e7eb;
   font-family: "Raleway", sans-serif;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(6px);
   transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
@@ -64,8 +56,9 @@ const ItemDiv = styled.div`
   }
 
   @media screen and (max-width: 768px) {
+    width: calc(50% - 32px);
     margin: 10px;
-    padding: 18px;
+    padding: 20px 16px 14px;
   }
 
   &:hover {
@@ -80,7 +73,7 @@ const ItemName = styled.h2`
   color: #e5e7eb;
   font-size: 16px;
   font-weight: 700;
-  margin-top: 8px;
+  margin-top: 10px;
 `;
 
 const List = styled.div`
@@ -89,22 +82,30 @@ const List = styled.div`
   flex-wrap: wrap;
 `;
 
-const Divider = styled.div`
-  background: linear-gradient(90deg, rgba(99,102,241,0.5), rgba(34,211,238,0.5));
-  height: 2px;
-  width: 80%;
-  margin: 10px auto 12px;
+const Accent = styled.div`
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
+  height: 3px;
+  width: 88%;
+  margin: 12px auto 0;
   border-radius: 999px;
 `;
 
-const Item = styled.img`
-  height: 72px;
-  border-radius: 16px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+const IconTile = styled.div`
+  height: 84px;
+  width: 84px;
+  margin: 0 auto 10px;
+  border-radius: 18px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+`;
 
-  @media screen and (max-width: 768px) {
-    height: 72px;
-  }
+const Icon = styled.img`
+  height: 60px;
+  width: 60px;
+  object-fit: contain;
+  border-radius: 12px;
 `;
 
 export default ListOfServices;
