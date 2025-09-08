@@ -10,7 +10,7 @@ import MonctonImage2 from "../../Pictures/Moncton2.jpg";
 import MonctonImage3 from "../../Pictures/Moncton3.jpg";
 import MonctonImage4 from "../../Pictures/Moncton4.jpg";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const images = [
   MonctonImage,

@@ -1,0 +1,26 @@
+[build]
+  command = "npm --prefix client run build"
+  publish = "client/build"
+  functions = "netlify/functions"
+
+# Ensure SPA routes serve index.html
+[[redirects]]
+  from = "/admin/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/company/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/review/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/events"
+  to = "/index.html"
+  status = 200
+

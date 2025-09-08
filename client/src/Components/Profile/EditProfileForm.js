@@ -8,7 +8,7 @@ import { UserContext } from "../UserContext";
 
 import { useEffect, useState, useContext } from "react";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const EditProfileForm = ({ open, handleClose, handleRefreshData }) => {
   const [user, setUser] = useState();

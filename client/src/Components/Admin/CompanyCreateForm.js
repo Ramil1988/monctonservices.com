@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import UploadCompanyImage from "./UploadCompanyImage";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const CompanyCreateForm = () => {
   const [setCompanies] = useState([]);

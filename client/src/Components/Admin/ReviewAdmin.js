@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const ReviewAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");

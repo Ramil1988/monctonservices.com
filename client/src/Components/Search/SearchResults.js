@@ -10,7 +10,7 @@ const SearchResults = () => {
   const itemsPerPage = 10;
   const [searchType, setSearchType] = useState("Name");
 
-  const ROOT_API = "https://monctonservices-com.onrender.com";
+  const ROOT_API = "/.netlify/functions/api";
 
   useEffect(() => {
     const fetchCompanies = async () => {

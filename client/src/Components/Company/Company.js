@@ -15,7 +15,7 @@ import CopyButton from "./CoppyButton";
 import { serviceTypes } from "../serviceTypes";
 import { thingsToDo } from "../ThingsToDo";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const Company = () => {
   const { companyId } = useParams();

@@ -5,7 +5,7 @@ import CompanyCreateForm from "./CompanyCreateForm";
 import ReviewAdmin from "./ReviewAdmin";
 import EventsAddForm from "./EventsAddForm";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const Admin = () => {
   const [companies, setCompanies] = useState([]);

@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { UserContext } from "../UserContext";
 import { useLocation } from "react-router-dom";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();

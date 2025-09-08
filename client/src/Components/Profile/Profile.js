@@ -13,7 +13,7 @@ import EditProfileForm from "./EditProfileForm";
 import UploadProfileImage from "./UploadProfileImage";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const Profile = () => {
   const [user, setUser] = useState();

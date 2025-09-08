@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export const UserContext = createContext(null);
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const UserProvider = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useAuth0();

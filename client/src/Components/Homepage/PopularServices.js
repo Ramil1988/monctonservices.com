@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { serviceTypes } from "../serviceTypes";
 import { AiFillStar } from "react-icons/ai";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const PopularServices = () => {
   const [servicesData, setServicesData] = useState([]);

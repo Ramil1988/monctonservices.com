@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const ProfileReviews = ({ reviews }) => {
   const [startIndex, setStartIndex] = useState(0);

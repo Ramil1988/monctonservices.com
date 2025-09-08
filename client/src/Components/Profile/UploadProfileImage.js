@@ -7,7 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 
 import { useState } from "react";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const UploadProfileImage = ({ user, setUser }) => {
   const [previewSource] = useState("");

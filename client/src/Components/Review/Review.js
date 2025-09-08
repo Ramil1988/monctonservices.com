@@ -5,7 +5,7 @@ import Spinner from "../Helper/Spinner";
 import ReviewUpdateForm from "./ReviewUpdateForm";
 import { UserContext } from "../UserContext";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const Review = () => {
   const [review, setReview] = useState(null);

@@ -42,7 +42,7 @@ const {
   deleteUserById,
 } = require("./handlers1");
 
-express()
+const app = express()
   .use(morgan("tiny"))
   .use(express.static(path.join(__dirname, "public")))
   .use(express.json({ limit: "50mb" }))
@@ -86,6 +86,11 @@ express()
   .get("/allUsers1", getAllUsers1)
   .get("/user1/:id", getUserById1)
   .delete("/allUsers", deleteAllUsers)
-  .delete("/user1/:id", deleteUserById)
+  .delete("/user1/:id", deleteUserById);
 
-  .listen(PORT, () => console.info(`Listening on port ${PORT}`));
+// Export the Express app for serverless usage. Only listen when run directly.
+module.exports = app;
+
+if (require.main === module) {
+  app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
+}

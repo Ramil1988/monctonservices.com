@@ -17,7 +17,7 @@ import { thingsToDo } from "../ThingsToDo";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import MapComponent from "./Map";
 
-const ROOT_API = "https://monctonservices-com.onrender.com";
+const ROOT_API = "/.netlify/functions/api";
 
 const RatingTable = () => {
   const { serviceType } = useParams();

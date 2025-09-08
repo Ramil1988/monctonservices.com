@@ -9,7 +9,7 @@ const localizer = momentLocalizer(moment);
 const CityEvents = () => {
   const [cityEvents, setEvents] = useState([]);
 
-  const ROOT_API = "https://monctonservices-com.onrender.com";
+  const ROOT_API = "/.netlify/functions/api";
 
   const currentDate = moment().startOf("day");
 
