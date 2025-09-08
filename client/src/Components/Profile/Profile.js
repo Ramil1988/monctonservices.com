@@ -324,8 +324,9 @@ const NameFields = styled.h3`
 
 const StyledSpan = styled.span`
   font-style: italic;
-  font-weight: 300;
-  font-size: 1.2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--muted);
   margin-right: 10px;
 
   @media (max-width: 767px) {

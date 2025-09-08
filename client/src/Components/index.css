@@ -46,3 +46,19 @@ html, body {
 
 /* improve readability */
 body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+/* Default theme (dark) as a safe fallback if no class is present */
+:root {
+  --app-bg: #0f172a;
+  --header-bg: #0b1224;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --surface: rgba(255,255,255,0.06);
+  --surface-border: rgba(148, 163, 184, 0.22);
+  --primary-start: #6366f1;
+  --primary-end: #22d3ee;
+  --pill-text: #0b1224;
+  --panel-bg: rgba(15, 23, 42, 0.68);
+  --accent-1: #60a5fa;
+  --accent-2: #a78bfa;
+  --accent-3: #34d399;
+}
