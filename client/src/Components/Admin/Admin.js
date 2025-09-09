@@ -141,27 +141,29 @@ const AdminWrapper = styled.div`
 `;
 
 const SearchButton = styled.button`
-  padding: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #ffffff;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
   cursor: pointer;
-  &:hover {
-    background-color: #0071bc;
-    color: #ffffff;
-  }
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(34,211,238,0.25); }
 `;
 
 const SearchInput = styled.input`
   width: calc(100% - 110px);
-  padding: 10px;
-  border: 2px solid #333;
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  font-size: 1rem;
   margin-bottom: 20px;
   margin-right: 10px;
+  &:focus { outline: none; border-color: var(--primary-start); }
 `;
 
 const CompanyList = styled.ul`

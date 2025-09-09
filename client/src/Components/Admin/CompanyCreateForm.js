@@ -159,14 +159,14 @@ const CompanyCreateForm = () => {
 };
 
 const Notification = styled.div`
-  background-color: #00cc00;
-  color: #ffffff;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 12px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin: 16px 0 20px;
 `;
 
 const Form = styled.form`
@@ -176,41 +176,43 @@ const Form = styled.form`
 `;
 
 const Label = styled.label`
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
   display: flex;
   flex-direction: column;
+  margin-top: 8px;
 `;
 
 const Input = styled.input`
-  padding: 8px;
-  border: 2px solid #333;
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  font-size: 1rem;
+  margin-top: 6px;
+  &:focus { outline: none; border-color: var(--primary-start); }
 `;
 
 const Button = styled.button`
-  width: 20%;
-  padding: 10px 20px;
+  width: 220px;
+  padding: 10px 16px;
   margin-top: 20px;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
-  background-color: #333;
-  color: #fff;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 
-  &:hover {
-    background-color: #444;
-  }
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(34,211,238,0.25); }
 
   &[type="button"] {
-    background-color: #cc0000;
-
-    &:hover {
-      background-color: #e60000;
-    }
+    background: linear-gradient(90deg, #ef4444, #f97316);
+    color: var(--pill-text);
   }
 `;
 
