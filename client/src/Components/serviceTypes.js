@@ -1,3 +1,34 @@
+// serviceTypes.js - Google API service types with React Icons
+import {
+  FaPalette, // Art gallery
+  FaCookie, // Bakery
+  FaGlassWhiskey, // Bar
+  FaBook, // Book store
+  FaCoffee, // Cafe
+  FaWrench, // Car repair
+  FaStore, // Clothing/Department/Store
+  FaUserMd, // Doctor
+  FaSeedling, // Florist
+  FaUtensils, // Food/Restaurant
+  FaShoppingCart, // Grocery/Supermarket
+  FaHeartbeat, // Health
+  FaHospital, // Hospital
+  FaBox, // Meal takeaway
+  FaTruck, // Moving company
+  FaGraduationCap, // Schools
+  FaUniversity, // University
+  FaShoppingBag, // Shopping mall
+  FaWarehouse, // Storage
+  FaShieldAlt, // Insurance agency
+  FaGem, // Jewelry store
+  FaMusic, // Night club
+  FaPlane, // Travel agency
+  FaBuilding, // Government/Buildings
+  FaHome, // Default fallback
+  FaMapMarkerAlt, // General location
+} from "react-icons/fa";
+
+// Keep your original serviceTypes for backward compatibility
 export const serviceTypes = {
   hotels: {
     id: "hotels",
@@ -14,7 +45,6 @@ export const serviceTypes = {
     name: "Auto dealers",
     imageSrc: "/assets/AutoDealers.jpg",
   },
-
   walkinClinics: {
     id: "walkinClinics",
     name: "Walk in clinics",
@@ -35,7 +65,6 @@ export const serviceTypes = {
     name: "Plumbing companies",
     imageSrc: "/assets/plumbing.jpg",
   },
-
   banks: {
     id: "banks",
     name: "Banks",
@@ -101,9 +130,221 @@ export const serviceTypes = {
     name: "Taxis",
     imageSrc: "/assets/Taxis.jpg",
   },
-  // homerepair: {
-  //   id: "homerepair",
-  //   name: "Home repair",
-  //   imageSrc: "/assets/HomeRepair.jpg",
-  // },
+};
+
+// Google API service types with icons
+export const googleServiceTypes = {
+  art_gallery: {
+    id: "art_gallery",
+    name: "Art gallery",
+    icon: FaPalette,
+    color: "#8B5CF6",
+  },
+  bakery: {
+    id: "bakery",
+    name: "Bakery",
+    icon: FaCookie,
+    color: "#D97706",
+  },
+  bar: {
+    id: "bar",
+    name: "Bar",
+    icon: FaGlassWhiskey,
+    color: "#DC2626",
+  },
+  book_store: {
+    id: "book_store",
+    name: "Book store",
+    icon: FaBook,
+    color: "#1D4ED8",
+  },
+  cafe: {
+    id: "cafe",
+    name: "Cafe",
+    icon: FaCoffee,
+    color: "#92400E",
+  },
+  car_repair: {
+    id: "car_repair",
+    name: "Car repair",
+    icon: FaWrench,
+    color: "#374151",
+  },
+  clothing_store: {
+    id: "clothing_store",
+    name: "Clothing store",
+    icon: FaStore,
+    color: "#EC4899",
+  },
+  department_store: {
+    id: "department_store",
+    name: "Department store",
+    icon: FaStore,
+    color: "#059669",
+  },
+  doctor: {
+    id: "doctor",
+    name: "Doctor",
+    icon: FaUserMd,
+    color: "#EF4444",
+  },
+  florist: {
+    id: "florist",
+    name: "Florist",
+    icon: FaSeedling,
+    color: "#10B981",
+  },
+  food: {
+    id: "food",
+    name: "Food",
+    icon: FaUtensils,
+    color: "#F59E0B",
+  },
+  grocery_or_supermarket: {
+    id: "grocery_or_supermarket",
+    name: "Grocery or supermarket",
+    icon: FaShoppingCart,
+    color: "#059669",
+  },
+  health: {
+    id: "health",
+    name: "Health",
+    icon: FaHeartbeat,
+    color: "#EF4444",
+  },
+  hospital: {
+    id: "hospital",
+    name: "Hospital",
+    icon: FaHospital,
+    color: "#DC2626",
+  },
+  meal_takeaway: {
+    id: "meal_takeaway",
+    name: "Meal takeaway",
+    icon: FaBox,
+    color: "#F59E0B",
+  },
+  moving_company: {
+    id: "moving_company",
+    name: "Moving company",
+    icon: FaTruck,
+    color: "#6B7280",
+  },
+  primary_school: {
+    id: "primary_school",
+    name: "Primary school",
+    icon: FaGraduationCap,
+    color: "#3B82F6",
+  },
+  restaurant: {
+    id: "restaurant",
+    name: "Restaurant",
+    icon: FaUtensils,
+    color: "#F59E0B",
+  },
+  school: {
+    id: "school",
+    name: "School",
+    icon: FaGraduationCap,
+    color: "#1E40AF",
+  },
+  secondary_school: {
+    id: "secondary_school",
+    name: "Secondary school",
+    icon: FaUniversity,
+    color: "#7C3AED",
+  },
+  shoe_store: {
+    id: "shoe_store",
+    name: "Shoe store",
+    icon: FaStore,
+    color: "#374151",
+  },
+  shopping_mall: {
+    id: "shopping_mall",
+    name: "Shopping mall",
+    icon: FaShoppingBag,
+    color: "#EC4899",
+  },
+  storage: {
+    id: "storage",
+    name: "Storage",
+    icon: FaWarehouse,
+    color: "#6B7280",
+  },
+  store: {
+    id: "store",
+    name: "Store",
+    icon: FaStore,
+    color: "#059669",
+  },
+  supermarket: {
+    id: "supermarket",
+    name: "Supermarket",
+    icon: FaShoppingCart,
+    color: "#10B981",
+  },
+  insurance_agency: {
+    id: "insurance_agency",
+    name: "Insurance agency",
+    icon: FaShieldAlt,
+    color: "#1E40AF",
+  },
+  jewelry_store: {
+    id: "jewelry_store",
+    name: "Jewelry store",
+    icon: FaGem,
+    color: "#8B5CF6",
+  },
+  night_club: {
+    id: "night_club",
+    name: "Night club",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  travel_agency: {
+    id: "travel_agency",
+    name: "Travel agency",
+    icon: FaPlane,
+    color: "#0369A1",
+  },
+  university: {
+    id: "university",
+    name: "University",
+    icon: FaUniversity,
+    color: "#7C3AED",
+  },
+  local_government_office: {
+    id: "local_government_office",
+    name: "Local government office",
+    icon: FaBuilding,
+    color: "#374151",
+  },
+};
+
+// Helper function to get service type by key with fallback
+export const getServiceType = (key) => {
+  // Try Google service types first
+  if (googleServiceTypes[key]) {
+    return googleServiceTypes[key];
+  }
+
+  // Try original service types
+  if (serviceTypes[key]) {
+    return serviceTypes[key];
+  }
+
+  // Try with spaces converted to underscores
+  const underscoreKey = key.replace(/\s+/g, "_").toLowerCase();
+  if (googleServiceTypes[underscoreKey]) {
+    return googleServiceTypes[underscoreKey];
+  }
+
+  // Return default fallback
+  return {
+    id: key,
+    name: key.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase()),
+    icon: FaMapMarkerAlt,
+    color: "#6B7280",
+  };
 };

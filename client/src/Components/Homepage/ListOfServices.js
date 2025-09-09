@@ -12,10 +12,17 @@ const ListOfServices = ({ data }) => {
             <Card key={item.id}>
               <StyledLink to={`/${item.id}`}>
                 <IconTile>
-                  {item.imageSrc ? (
+                  {item.icon ? (
+                    <IconComponent
+                      as={item.icon}
+                      color={item.color || "var(--primary-start)"}
+                    />
+                  ) : item.imageSrc ? (
                     <Icon src={item.imageSrc} alt={item.name} />
                   ) : (
-                    <FallbackIcon>{(item.name || item.id || "?").charAt(0)}</FallbackIcon>
+                    <FallbackIcon>
+                      {(item.name || item.id || "?").charAt(0)}
+                    </FallbackIcon>
                   )}
                 </IconTile>
                 <Accent />
@@ -53,7 +60,8 @@ const Card = styled.div`
   border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(6px);
-  transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  transition: transform 0.18s ease, box-shadow 0.22s ease,
+    border-color 0.22s ease;
 
   a:link {
     text-decoration: none;
@@ -102,7 +110,17 @@ const IconTile = styled.div`
   background: #ffffff;
   display: grid;
   place-items: center;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+`;
+
+const IconComponent = styled.div`
+  font-size: 48px;
+  color: ${(props) => props.color || "var(--primary-start)"};
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const Icon = styled.img`
