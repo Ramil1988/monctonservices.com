@@ -1,38 +1,46 @@
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const ListOfServices = ({ data }) => {
   const sortedData = [...data].sort((a, b) => a.name.localeCompare(b.name));
 
+  console.log("ListOfServices received data:", sortedData);
+
   return (
-    <>
-      <List>
-        {sortedData.map((item) => {
-          return (
-            <Card key={item.id}>
-              <StyledLink to={`/${item.id}`}>
-                <IconTile>
-                  {item.icon ? (
-                    <IconComponent
-                      as={item.icon}
-                      color={item.color || "var(--primary-start)"}
-                    />
-                  ) : item.imageSrc ? (
-                    <Icon src={item.imageSrc} alt={item.name} />
-                  ) : (
-                    <FallbackIcon>
-                      {(item.name || item.id || "?").charAt(0)}
-                    </FallbackIcon>
-                  )}
-                </IconTile>
-                <Accent />
-                <ItemName>{item.name}</ItemName>
-              </StyledLink>
-            </Card>
-          );
-        })}
-      </List>
-    </>
+    <List>
+      {sortedData.map((item) => {
+        console.log(
+          "Rendering item:",
+          item.name,
+          "has icon:",
+          !!item.icon,
+          "icon type:",
+          typeof item.icon
+        );
+        return (
+          <Card key={item.id}>
+            <StyledLink to={`/${item.id}`}>
+              <IconTile>
+                {item.icon ? (
+                  <IconWrapper color={item.color || "#6366f1"}>
+                    {React.createElement(item.icon, { size: 48 })}
+                  </IconWrapper>
+                ) : item.imageSrc ? (
+                  <Icon src={item.imageSrc} alt={item.name} />
+                ) : (
+                  <FallbackIcon>
+                    {(item.name || item.id || "?").charAt(0)}
+                  </FallbackIcon>
+                )}
+              </IconTile>
+              <Accent />
+              <ItemName>{item.name}</ItemName>
+            </StyledLink>
+          </Card>
+        );
+      })}
+    </List>
   );
 };
 
@@ -62,10 +70,6 @@ const Card = styled.div`
   backdrop-filter: blur(6px);
   transition: transform 0.18s ease, box-shadow 0.22s ease,
     border-color 0.22s ease;
-
-  a:link {
-    text-decoration: none;
-  }
 
   @media screen and (max-width: 768px) {
     width: calc(50% - 24px);
@@ -114,8 +118,7 @@ const IconTile = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  font-size: 48px;
-  color: ${(props) => props.color || "var(--primary-start)"};
+  color: ${(props) => props.color || "#6366f1"};
   transition: transform 0.2s ease;
   display: flex;
   align-items: center;
@@ -123,6 +126,11 @@ const IconWrapper = styled.div`
 
   &:hover {
     transform: scale(1.1);
+  }
+
+  svg {
+    width: 48px;
+    height: 48px;
   }
 `;
 
