@@ -216,7 +216,7 @@ const blinkCursor = keyframes`
 `;
 
 const SloganText = styled.h1`
-  color: var(--text);
+  color: var(--muted);
   margin: 2rem;
   font-family: "Aeroport", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -279,7 +279,7 @@ const Sidebar = styled.div`
 `;
 
 const SidebarTop = styled.div`
-  background: var(--surface);
+  background: var(--surface-strong);
   border: 1px solid var(--surface-border);
   padding: 24px;
   border-radius: 16px 16px 0 0;
@@ -353,7 +353,7 @@ const StatsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   padding: 16px;
-  background: var(--surface);
+  background: var(--surface-strong);
   border: 1px solid var(--surface-border);
   border-radius: 0 0 16px 16px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.25);
@@ -422,7 +422,7 @@ const FavoriteContainer = styled.div`
 
 const Bookmark = styled.div`
   position: relative;
-  background: var(--surface);
+  background: var(--surface-strong);
   color: var(--text);
   border: 1px solid var(--surface-border);
   border-radius: 16px;

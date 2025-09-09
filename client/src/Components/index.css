@@ -21,6 +21,7 @@
   --accent-1: #60a5fa; /* sky-400 */
   --accent-2: #a78bfa; /* violet-400 */
   --accent-3: #34d399; /* emerald-400 */
+  --surface-strong: #ffffff;
 }
 
 :root.theme-dark {
@@ -37,6 +38,7 @@
   --accent-1: #60a5fa;
   --accent-2: #a78bfa;
   --accent-3: #34d399;
+  --surface-strong: rgba(255,255,255,0.12);
 }
 
 html, body {
