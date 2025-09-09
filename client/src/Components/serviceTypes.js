@@ -320,6 +320,19 @@ export const googleServiceTypes = {
     icon: FaBuilding,
     color: "#374151",
   },
+  // Add some common service types that might be missing
+  beauty_salon: {
+    id: "beauty_salon",
+    name: "Beauty salon",
+    icon: FaStore,
+    color: "#EC4899",
+  },
+  convenience_store: {
+    id: "convenience_store",
+    name: "Convenience store",
+    icon: FaStore,
+    color: "#6B7280",
+  },
 };
 
 // Helper function to get service type by key with fallback

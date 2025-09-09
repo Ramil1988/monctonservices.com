@@ -113,10 +113,13 @@ const IconTile = styled.div`
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 `;
 
-const IconComponent = styled.div`
+const IconWrapper = styled.div`
   font-size: 48px;
   color: ${(props) => props.color || "var(--primary-start)"};
   transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: scale(1.1);
