@@ -4,6 +4,7 @@ import CompanyUpdateForm from "./CompanyUpdateForm";
 import CompanyCreateForm from "./CompanyCreateForm";
 import ReviewAdmin from "./ReviewAdmin";
 import EventsAddForm from "./EventsAddForm";
+import { serviceTypes } from "../serviceTypes";
 
 const ROOT_API = "/.netlify/functions/api";
 
@@ -12,6 +13,10 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [matches, setMatches] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedServiceType, setSelectedServiceType] = useState("hotels");
+  const [importCity, setImportCity] = useState("Moncton, NB");
+  const [adminSecret, setAdminSecret] = useState("");
+  const [importStatus, setImportStatus] = useState("");
 
   const fetchCompanies = async () => {
     try {
@@ -78,6 +83,35 @@ const Admin = () => {
     }
   };
 
+  const handleImport = async () => {
+    setImportStatus("Importing...");
+    try {
+      const resp = await fetch(
+        `${ROOT_API}/admin/import/${selectedServiceType}?city=${encodeURIComponent(
+          importCity
+        )}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-secret": adminSecret || "",
+          },
+        }
+      );
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.message || "Import failed");
+      setImportStatus(
+        `OK: ${data.data?.inserted || 0} new, ${
+          data.data?.updated || 0
+        } updated (fetched ${data.data?.totalFetched || 0}).`
+      );
+      // Refresh companies cache in UI
+      fetchCompanies();
+    } catch (e) {
+      setImportStatus(`Error: ${e.message}`);
+    }
+  };
+
   return (
     <AdminWrapper>
       <Title>Admin Page</Title>
@@ -111,6 +145,41 @@ const Admin = () => {
         />
       )}
       <CompanyCreateForm />
+      <ImportCard>
+        <h2>Import companies from Google</h2>
+        <ImportRow>
+          <Label>Service type</Label>
+          <Select
+            value={selectedServiceType}
+            onChange={(e) => setSelectedServiceType(e.target.value)}
+          >
+            {Object.values(serviceTypes).map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </Select>
+        </ImportRow>
+        <ImportRow>
+          <Label>City/Area</Label>
+          <Input
+            type="text"
+            value={importCity}
+            onChange={(e) => setImportCity(e.target.value)}
+          />
+        </ImportRow>
+        <ImportRow>
+          <Label>Admin secret</Label>
+          <Input
+            type="password"
+            placeholder="Enter secret to authorize"
+            value={adminSecret}
+            onChange={(e) => setAdminSecret(e.target.value)}
+          />
+        </ImportRow>
+        <SearchButton onClick={handleImport}>Import</SearchButton>
+        {importStatus && <ImportStatus>{importStatus}</ImportStatus>}
+      </ImportCard>
       <ReviewAdmin />
       <EventsAddForm />
     </AdminWrapper>
@@ -195,6 +264,54 @@ const CompanyItem = styled.li`
     border-color: var(--primary-start);
     cursor: pointer;
   }
+`;
+
+const ImportCard = styled.div`
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+`;
+
+const ImportRow = styled.div`
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin: 10px 0;
+`;
+
+const Label = styled.label`
+  font-weight: 700;
+  color: var(--text);
+`;
+
+const Select = styled.select`
+  padding: 10px 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  font-size: 1rem;
+  &:focus { outline: none; border-color: var(--primary-start); }
+`;
+
+const Input = styled.input`
+  padding: 10px 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  font-size: 1rem;
+  &:focus { outline: none; border-color: var(--primary-start); }
+`;
+
+const ImportStatus = styled.div`
+  margin-top: 12px;
+  color: var(--muted);
 `;
 
 export default Admin;
