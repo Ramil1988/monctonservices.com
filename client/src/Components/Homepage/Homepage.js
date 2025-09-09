@@ -21,8 +21,9 @@ const images = [
 ];
 
 const Homepage = (props) => {
-  const serviceTypes = Object.values(props.serviceTypes);
-  const thingsToDo = Object.values(props.thingsToDo);
+  const serviceTypes = Array.isArray(props.serviceTypes)
+    ? props.serviceTypes
+    : Object.values(props.serviceTypes || {});
   const [reviews, setReviews] = useState([]);
   const [companies, setAllCompanies] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
@@ -78,36 +79,23 @@ const Homepage = (props) => {
       </LandingContainer>
       <MainWrapper>
         <TabMenu>
-          <TabButton onClick={() => setCurrentTab(0)} active={currentTab === 0}>
+          <TabButton onClick={() => setCurrentTab(0)} active={true}>
             Services in Moncton
           </TabButton>
-          <TabButton onClick={() => setCurrentTab(1)} active={currentTab === 1}>
-            Things to Do in Moncton
-          </TabButton>
-          {/* <NavLink to="/events">
-            <TabButton active={location.pathname === "/events"}>
-              City events
-            </TabButton>
-          </NavLink> */}
           <NavLink to="/guide">
             <TabButton active={location.pathname === "/guide"}>
               Guide for newcomers
             </TabButton>
           </NavLink>
         </TabMenu>
-        {currentTab === 0 ? (
+        <BigText>Services in Moncton</BigText>
+        <ListOfServices data={serviceTypes} />
+        {serviceTypes && serviceTypes.length > 0 && (
           <>
-            <BigText>Services in Moncton</BigText>
-            <ListOfServices data={serviceTypes} />
+            <BigText>Popular Services</BigText>
+            <PopularServices types={serviceTypes.slice(0, 3)} />
           </>
-        ) : currentTab === 1 ? (
-          <>
-            <BigText>Things to Do in Moncton</BigText>
-            <ListOfServices data={thingsToDo} />
-          </>
-        ) : null}
-        <BigText>Popular Services</BigText>
-        <PopularServices />
+        )}
         <BigText>Recent reviews</BigText>
         <Reviews reviews={reviews} />
       </MainWrapper>

@@ -21,6 +21,19 @@ const Admin = () => {
   const [purgeStatus, setPurgeStatus] = useState("");
 
   // No curated list by default; use discovery to populate
+  // Load saved list for current city on mount and when the city changes
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(`placeTypes:${importCity}`);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          setPlaceTypes(parsed);
+          setSelectedServiceType(parsed[0]?.id || "");
+        }
+      }
+    } catch (_) {}
+  }, [importCity]);
 
   const fetchCompanies = async () => {
     try {
@@ -186,6 +199,10 @@ const Admin = () => {
                 setPlaceTypes(list);
                 setSelectedServiceType(list[0]?.id || "");
                 setImportStatus(`Discovered ${list.length} types for ${data.city}`);
+                try {
+                  localStorage.setItem(`placeTypes:${importCity}`, JSON.stringify(list));
+                  localStorage.setItem("placeTypesCity", importCity);
+                } catch (_) {}
               } catch (e) {
                 setImportStatus(`Error: ${e.message}`);
               }

@@ -1,26 +1,22 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { serviceTypes } from "../serviceTypes";
 import { AiFillStar } from "react-icons/ai";
 
 const ROOT_API = "/.netlify/functions/api";
 
-const PopularServices = () => {
+const PopularServices = ({ types = [] }) => {
   const [servicesData, setServicesData] = useState([]);
 
   useEffect(() => {
     fetchTopCompaniesByServiceTypes();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(types)]);
 
   const fetchTopCompaniesByServiceTypes = async () => {
     const servicesWithTopCompanies = [];
 
-    const selectedServiceTypes = [
-      serviceTypes.hotels,
-      serviceTypes.beautysalons,
-      serviceTypes.dentalclinics,
-    ];
+    const selectedServiceTypes = types.slice(0, 3);
 
     for (const serviceType of selectedServiceTypes) {
       try {

@@ -12,7 +12,11 @@ const ListOfServices = ({ data }) => {
             <Card key={item.id}>
               <StyledLink to={`/${item.id}`}>
                 <IconTile>
-                  <Icon src={item.imageSrc} alt={item.name} />
+                  {item.imageSrc ? (
+                    <Icon src={item.imageSrc} alt={item.name} />
+                  ) : (
+                    <FallbackIcon>{(item.name || item.id || "?").charAt(0)}</FallbackIcon>
+                  )}
                 </IconTile>
                 <Accent />
                 <ItemName>{item.name}</ItemName>
@@ -106,6 +110,18 @@ const Icon = styled.img`
   width: 88px;
   object-fit: contain;
   border-radius: 16px;
+`;
+
+const FallbackIcon = styled.div`
+  height: 60px;
+  width: 60px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--pill-text);
+  background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
 `;
 
 export default ListOfServices;
