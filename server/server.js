@@ -42,7 +42,7 @@ const {
   deleteUserById,
 } = require("./handlers1");
 
-const { importCompaniesFromGoogle, listPlaceTypes } = require("./googlePlacesImporter");
+const { importCompaniesFromGoogle, listPlaceTypes, discoverPlaceTypes } = require("./googlePlacesImporter");
 
 const app = express()
   .use(morgan("tiny"))
@@ -94,6 +94,37 @@ const app = express()
 // Example: POST /.netlify/functions/api/admin/import/hotels?city=Moncton,%20NB
 app.post("/admin/import/:serviceType", importCompaniesFromGoogle);
 app.get("/admin/place-types", listPlaceTypes);
+app.get("/admin/discover-place-types", discoverPlaceTypes);
+
+// Admin: purge companies (non-google or all)
+app.post("/admin/companies/purge", async (req, res) => {
+  try {
+    const { ADMIN_SECRET, MONGO_URI } = process.env;
+    const adminSecret = req.headers["x-admin-secret"];
+    if (ADMIN_SECRET && adminSecret !== ADMIN_SECRET) {
+      return res.status(401).json({ status: 401, message: "Unauthorized" });
+    }
+    const { mode } = req.query; // 'non-google' | 'all'
+    if (!mode || !["non-google", "all"].includes(mode)) {
+      return res.status(400).json({ status: 400, message: "Invalid mode" });
+    }
+    const { MongoClient } = require("mongodb");
+    const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db("MonctonServicesCom");
+    const companies = db.collection("companies");
+    let filter = {};
+    if (mode === "non-google") {
+      filter = { $or: [ { source: { $exists: false } }, { source: { $ne: "google" } } ] };
+    }
+    const result = await companies.deleteMany(filter);
+    await client.close();
+    return res.status(200).json({ status: 200, message: "Purge complete", data: { deleted: result.deletedCount, mode } });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ status: 500, message: e.message });
+  }
+});
 
 // Export the Express app for serverless usage. Only listen when run directly.
 module.exports = app;

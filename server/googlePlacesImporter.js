@@ -92,6 +92,12 @@ async function fetchPlaceDetails(placeId) {
   return { phoneNumber: formatted_phone_number || "", website: website || "" };
 }
 
+function humanizeType(type) {
+  if (!type) return "";
+  const s = type.replace(/_/g, " ");
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 // POST /admin/import/:serviceType?city=Moncton,%20NB
 const importCompaniesFromGoogle = async (req, res) => {
   try {
@@ -102,8 +108,11 @@ const importCompaniesFromGoogle = async (req, res) => {
 
     const { serviceType } = req.params;
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
-
-    const mapping = TYPE_QUERY_MAP[serviceType];
+    let mapping = TYPE_QUERY_MAP[serviceType];
+    // Fallback: allow raw Google type id or free text query
+    if (!mapping) {
+      mapping = { query: serviceType.replace(/_/g, " "), display: humanizeType(serviceType) };
+    }
     if (!mapping) {
       return res.status(400).json({
         status: 400,
@@ -157,6 +166,7 @@ const importCompaniesFromGoogle = async (req, res) => {
 
       const doc = {
         _id: placeId,
+        source: "google",
         serviceType: mapping.display,
         name,
         address,
@@ -199,4 +209,36 @@ const importCompaniesFromGoogle = async (req, res) => {
 module.exports = { importCompaniesFromGoogle };
 module.exports.listPlaceTypes = (req, res) => {
   res.status(200).json({ status: 200, data: PLACE_TYPES });
+};
+
+// Discover place types for a city by sampling a few generic queries
+module.exports.discoverPlaceTypes = async (req, res) => {
+  try {
+    const { ADMIN_SECRET } = process.env;
+    const adminSecret = req.headers["x-admin-secret"];
+    if (ADMIN_SECRET && adminSecret !== ADMIN_SECRET) {
+      return res.status(401).json({ status: 401, message: "Unauthorized" });
+    }
+    const city = req.query.city || IMPORT_CITY || "Moncton, NB";
+    const seeds = (req.query.seeds || "restaurant,store,service,clinic,school,shop").split(",");
+    const set = new Set();
+    for (const seed of seeds) {
+      const results = await fetchTextSearchAllPages(`${seed.trim()} in ${city}`);
+      for (const r of results) {
+        if (Array.isArray(r.types)) {
+          r.types.forEach((t) => {
+            if (!t || t === "point_of_interest" || t === "establishment") return;
+            set.add(t);
+          });
+        }
+      }
+    }
+    const data = Array.from(set)
+      .sort()
+      .map((t) => ({ id: t, name: humanizeType(t), query: t.replace(/_/g, " ") }));
+    return res.status(200).json({ status: 200, data, city });
+  } catch (e) {
+    console.error("discoverPlaceTypes error", e);
+    return res.status(500).json({ status: 500, message: e.message });
+  }
 };

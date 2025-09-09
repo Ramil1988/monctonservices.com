@@ -18,6 +18,8 @@ const Admin = () => {
   const [adminSecret, setAdminSecret] = useState("");
   const [importStatus, setImportStatus] = useState("");
   const [placeTypes, setPlaceTypes] = useState([]);
+  const [discoveredTypes, setDiscoveredTypes] = useState([]);
+  const [purgeStatus, setPurgeStatus] = useState("");
 
   useEffect(() => {
     const loadTypes = async () => {
@@ -181,6 +183,39 @@ const Admin = () => {
                 ]}
           </Select>
         </ImportRow>
+        <RowButtons>
+          <SearchButton
+            onClick={async () => {
+              setImportStatus("Discovering types...");
+              try {
+                const resp = await fetch(
+                  `${ROOT_API}/admin/discover-place-types?city=${encodeURIComponent(
+                    importCity
+                  )}`,
+                  { headers: { "x-admin-secret": adminSecret || "" } }
+                );
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data.message || "Failed to discover");
+                setDiscoveredTypes(data.data || []);
+                setImportStatus(`Discovered ${data.data?.length || 0} types for ${data.city}`);
+              } catch (e) {
+                setImportStatus(`Error: ${e.message}`);
+              }
+            }}
+          >
+            Discover types for city
+          </SearchButton>
+          <SearchButton
+            onClick={() => {
+              if (discoveredTypes.length > 0) {
+                setPlaceTypes(discoveredTypes);
+                setSelectedServiceType(discoveredTypes[0].id);
+              }
+            }}
+          >
+            Use discovered list
+          </SearchButton>
+        </RowButtons>
         <ImportRow>
           <Label>City/Area</Label>
           <Input
@@ -200,6 +235,63 @@ const Admin = () => {
         </ImportRow>
         <SearchButton onClick={handleImport}>Import</SearchButton>
         {importStatus && <ImportStatus>{importStatus}</ImportStatus>}
+
+        <Divider />
+        <h3>Switch entirely to Google data</h3>
+        <p style={{ color: "var(--muted)", marginTop: 4 }}>
+          Remove previously added companies (manual/non‑Google). This keeps only
+          records imported via Google.
+        </p>
+        <RowButtons>
+          <DangerButton
+            onClick={async () => {
+              setPurgeStatus("Purging non‑Google companies...");
+              try {
+                const resp = await fetch(
+                  `${ROOT_API}/admin/companies/purge?mode=non-google`,
+                  {
+                    method: "POST",
+                    headers: { "x-admin-secret": adminSecret || "" },
+                  }
+                );
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data.message || "Purge failed");
+                setPurgeStatus(
+                  `Removed ${data.data?.deleted || 0} non‑Google companies.`
+                );
+                fetchCompanies();
+              } catch (e) {
+                setPurgeStatus(`Error: ${e.message}`);
+              }
+            }}
+          >
+            Purge non‑Google
+          </DangerButton>
+          <DangerButton
+            onClick={async () => {
+              if (!window.confirm("Delete ALL companies? This cannot be undone.")) return;
+              setPurgeStatus("Purging ALL companies...");
+              try {
+                const resp = await fetch(
+                  `${ROOT_API}/admin/companies/purge?mode=all`,
+                  {
+                    method: "POST",
+                    headers: { "x-admin-secret": adminSecret || "" },
+                  }
+                );
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data.message || "Purge failed");
+                setPurgeStatus(`Removed ${data.data?.deleted || 0} companies.`);
+                fetchCompanies();
+              } catch (e) {
+                setPurgeStatus(`Error: ${e.message}`);
+              }
+            }}
+          >
+            Purge ALL
+          </DangerButton>
+        </RowButtons>
+        {purgeStatus && <ImportStatus>{purgeStatus}</ImportStatus>}
       </ImportCard>
       <ReviewAdmin />
       <EventsAddForm />
@@ -333,6 +425,28 @@ const Input = styled.input`
 const ImportStatus = styled.div`
   margin-top: 12px;
   color: var(--muted);
+`;
+
+const Divider = styled.hr`
+  border: none;
+  border-top: 1px solid var(--surface-border);
+  margin: 16px 0;
+`;
+
+const RowButtons = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+`;
+
+const DangerButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  color: var(--pill-text);
+  cursor: pointer;
 `;
 
 export default Admin;
