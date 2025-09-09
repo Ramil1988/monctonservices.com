@@ -98,10 +98,19 @@ function humanizeType(type) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+function getAdminFromHeaders(req) {
+  const h = req.headers || {};
+  const auth = (h.authorization || "").trim();
+  if (auth.toLowerCase().startsWith("bearer ")) {
+    return auth.slice(7).trim();
+  }
+  return (h["x-admin-secret"] || "").toString().trim();
+}
+
 // POST /admin/import/:serviceType?city=Moncton,%20NB
 const importCompaniesFromGoogle = async (req, res) => {
   try {
-    const adminSecret = req.headers["x-admin-secret"];
+    const adminSecret = getAdminFromHeaders(req);
     if (ADMIN_SECRET && adminSecret !== ADMIN_SECRET) {
       return res.status(401).json({ status: 401, message: "Unauthorized" });
     }
@@ -215,7 +224,7 @@ module.exports.listPlaceTypes = (req, res) => {
 module.exports.discoverPlaceTypes = async (req, res) => {
   try {
     const { ADMIN_SECRET } = process.env;
-    const adminSecret = req.headers["x-admin-secret"];
+    const adminSecret = getAdminFromHeaders(req);
     if (ADMIN_SECRET && adminSecret !== ADMIN_SECRET) {
       return res.status(401).json({ status: 401, message: "Unauthorized" });
     }

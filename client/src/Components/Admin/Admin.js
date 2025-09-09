@@ -13,30 +13,14 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [matches, setMatches] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [selectedServiceType, setSelectedServiceType] = useState("hotels");
+  const [selectedServiceType, setSelectedServiceType] = useState("");
   const [importCity, setImportCity] = useState("Moncton, NB");
   const [adminSecret, setAdminSecret] = useState("");
   const [importStatus, setImportStatus] = useState("");
   const [placeTypes, setPlaceTypes] = useState([]);
-  const [discoveredTypes, setDiscoveredTypes] = useState([]);
   const [purgeStatus, setPurgeStatus] = useState("");
 
-  useEffect(() => {
-    const loadTypes = async () => {
-      try {
-        const resp = await fetch(`${ROOT_API}/admin/place-types`);
-        const data = await resp.json();
-        if (resp.ok && Array.isArray(data.data)) {
-          setPlaceTypes(data.data);
-          // Ensure selected value is valid
-          if (!data.data.find((t) => t.id === selectedServiceType)) {
-            setSelectedServiceType(data.data[0]?.id || "hotels");
-          }
-        }
-      } catch (_) {}
-    };
-    loadTypes();
-  }, []);
+  // No curated list by default; use discovery to populate
 
   const fetchCompanies = async () => {
     try {
@@ -169,18 +153,20 @@ const Admin = () => {
         <h2>Import companies from Google</h2>
         <ImportRow>
           <Label>Service type</Label>
-          <Select value={selectedServiceType} onChange={(e) => setSelectedServiceType(e.target.value)}>
-            {placeTypes.length > 0
-              ? placeTypes.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
-                  </option>
-                ))
-              : [
-                  <option key="hotels" value="hotels">
-                    Hotels
-                  </option>,
-                ]}
+          <Select
+            value={selectedServiceType}
+            onChange={(e) => setSelectedServiceType(e.target.value)}
+            disabled={placeTypes.length === 0}
+          >
+            {placeTypes.length === 0 ? (
+              <option>Discover types for city first</option>
+            ) : (
+              placeTypes.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))
+            )}
           </Select>
         </ImportRow>
         <RowButtons>
@@ -192,12 +178,14 @@ const Admin = () => {
                   `${ROOT_API}/admin/discover-place-types?city=${encodeURIComponent(
                     importCity
                   )}`,
-                  { headers: { "x-admin-secret": adminSecret || "" } }
+                  { headers: { "x-admin-secret": (adminSecret || "").trim() } }
                 );
                 const data = await resp.json();
                 if (!resp.ok) throw new Error(data.message || "Failed to discover");
-                setDiscoveredTypes(data.data || []);
-                setImportStatus(`Discovered ${data.data?.length || 0} types for ${data.city}`);
+                const list = data.data || [];
+                setPlaceTypes(list);
+                setSelectedServiceType(list[0]?.id || "");
+                setImportStatus(`Discovered ${list.length} types for ${data.city}`);
               } catch (e) {
                 setImportStatus(`Error: ${e.message}`);
               }
@@ -205,16 +193,7 @@ const Admin = () => {
           >
             Discover types for city
           </SearchButton>
-          <SearchButton
-            onClick={() => {
-              if (discoveredTypes.length > 0) {
-                setPlaceTypes(discoveredTypes);
-                setSelectedServiceType(discoveredTypes[0].id);
-              }
-            }}
-          >
-            Use discovered list
-          </SearchButton>
+          {/* No separate button; discovery now populates list directly */}
         </RowButtons>
         <ImportRow>
           <Label>City/Area</Label>
@@ -233,7 +212,9 @@ const Admin = () => {
             onChange={(e) => setAdminSecret(e.target.value)}
           />
         </ImportRow>
-        <SearchButton onClick={handleImport}>Import</SearchButton>
+        <SearchButton onClick={handleImport} disabled={!selectedServiceType}>
+          Import
+        </SearchButton>
         {importStatus && <ImportStatus>{importStatus}</ImportStatus>}
 
         <Divider />
