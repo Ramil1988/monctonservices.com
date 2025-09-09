@@ -12,8 +12,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import CopyButton from "../Company/CoppyButton";
 import Maps from "../Company/Maps";
-import { serviceTypes } from "../serviceTypes";
-import { thingsToDo } from "../ThingsToDo";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import MapComponent from "./Map";
 
@@ -55,16 +53,9 @@ const RatingTable = () => {
     setFilteredCompanies(filtered);
   }, [companies, selectedCity, searchQuery]);
 
-  let selectedServiceType;
-  if (serviceTypes[serviceType]) {
-    selectedServiceType = serviceTypes;
-  } else if (thingsToDo[serviceType]) {
-    selectedServiceType = thingsToDo;
-  } else {
-    console.error(
-      `serviceType ${serviceType} not found in serviceTypes or thingsToDo`
-    );
-  }
+  const displayName = (serviceType || "")
+    .replace(/_/g, " ")
+    .replace(/^\w/, (c) => c.toUpperCase());
 
   const handleDialogOpen = (company) => {
     setSelectedCompany(company);
@@ -125,16 +116,17 @@ const RatingTable = () => {
     try {
       const response = await fetch(`${ROOT_API}/companies/${serviceType}`);
       const data = await response.json();
-      const companies = data.data;
+      const companies = Array.isArray(data.data) ? data.data : [];
       const sortedCompanies = companies.sort((a, b) => {
-        if (a.reviews.length === 0 && b.reviews.length === 0) {
+        if ((a.reviews?.length || 0) === 0 && (b.reviews?.length || 0) === 0) {
           return a.name.localeCompare(b.name);
         }
-        return b.reviews.length - a.reviews.length;
+        return (b.reviews?.length || 0) - (a.reviews?.length || 0);
       });
       setCompanies(sortedCompanies);
     } catch (error) {
       console.error("Error fetching companies:", error);
+      setCompanies([]);
     }
   };
 
@@ -157,8 +149,7 @@ const RatingTable = () => {
   return (
     <Wrapper>
       <TableHeading>
-        Where to find the best {selectedServiceType[serviceType].name} in
-        Moncton
+        Where to find the best {displayName} in Moncton
       </TableHeading>
       <ButtonContainer>
         <ToggleButton active={showTable} onClick={handleShowTable}>

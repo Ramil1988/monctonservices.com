@@ -293,23 +293,24 @@ const getAllCompanies = async (req, res) => {
   }
 };
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const getCompaniesByServiceType = async (req, res) => {
   try {
     const { serviceType } = req.params;
-    const formattedServiceType =
-      serviceType.charAt(0).toUpperCase() + serviceType.slice(1).toLowerCase();
+    // Support google type ids like "art_gallery" and display names like "Art gallery"
+    const normalized = (serviceType || "").replace(/_/g, " ");
+    const regex = new RegExp(`^${escapeRegex(normalized)}$`, "i");
 
     await client.connect();
 
-    const matchingCompanies = await companies
-      .find({ serviceType: formattedServiceType })
-      .toArray();
+    const matchingCompanies = await companies.find({ serviceType: regex }).toArray();
 
     if (matchingCompanies.length === 0) {
-      return res.status(404).json({
-        status: 404,
+      return res.status(200).json({
+        status: 200,
         message: "No companies found for the specified service type.",
-        data: null,
+        data: [],
       });
     }
 
