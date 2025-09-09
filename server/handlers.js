@@ -295,16 +295,37 @@ const getAllCompanies = async (req, res) => {
 
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+// Build a case-insensitive regex array that matches singular/plural variants
+const buildTypeRegexes = (raw) => {
+  const forms = new Set();
+  const norm = (raw || "").trim().replace(/_/g, " ");
+  if (!norm) return [];
+  forms.add(norm);
+  // Add simple plural/singular alternates
+  if (norm.endsWith("ies")) {
+    forms.add(norm.slice(0, -3) + "y");
+  } else if (norm.endsWith("y")) {
+    forms.add(norm.slice(0, -1) + "ies");
+  }
+  if (norm.endsWith("s")) {
+    forms.add(norm.slice(0, -1));
+  } else {
+    forms.add(norm + "s");
+  }
+  // Deduplicate and convert to regexes
+  return Array.from(forms).map((f) => new RegExp(`^${escapeRegex(f)}$`, "i"));
+};
+
 const getCompaniesByServiceType = async (req, res) => {
   try {
     const { serviceType } = req.params;
-    // Support google type ids like "art_gallery" and display names like "Art gallery"
-    const normalized = (serviceType || "").replace(/_/g, " ");
-    const regex = new RegExp(`^${escapeRegex(normalized)}$`, "i");
+    // Support google type ids like "art_gallery" and display/display plural forms
+    const regexes = buildTypeRegexes(serviceType);
 
     await client.connect();
 
-    const matchingCompanies = await companies.find({ serviceType: regex }).toArray();
+    const query = regexes.length ? { $or: regexes.map((r) => ({ serviceType: r })) } : { _id: null };
+    const matchingCompanies = await companies.find(query).toArray();
 
     if (matchingCompanies.length === 0) {
       return res.status(200).json({

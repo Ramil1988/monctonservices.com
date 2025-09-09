@@ -60,23 +60,38 @@ const TYPE_QUERY_MAP = PLACE_TYPES.reduce((acc, t) => {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchTextSearchAllPages(query) {
-  // Keep to a single page to avoid long function runtimes
-  const url = new URL(
-    "https://maps.googleapis.com/maps/api/place/textsearch/json"
-  );
-  url.searchParams.set("query", query);
-  url.searchParams.set("region", "ca");
-  url.searchParams.set("key", GOOGLE_MAPS_API_KEY);
-  const resp = await fetch(url.href);
-  const data = await resp.json();
-  if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
-    throw new Error(`Google Places error: ${data.status}`);
-  }
-  let results = Array.isArray(data.results) ? data.results : [];
-  const cap = parseInt(MAX_PLACES_RESULTS || "20", 10);
-  if (Number.isFinite(cap) && cap > 0) results = results.slice(0, cap);
-  return results;
+async function fetchTextSearchAllPages(query, pages = 1, capOverride) {
+  const all = [];
+  let next = null;
+  let pageCount = 0;
+  const hardCap = parseInt(capOverride ?? MAX_PLACES_RESULTS ?? "20", 10);
+  do {
+    const url = new URL(
+      "https://maps.googleapis.com/maps/api/place/textsearch/json"
+    );
+    url.searchParams.set("query", query);
+    url.searchParams.set("region", "ca");
+    url.searchParams.set("key", GOOGLE_MAPS_API_KEY);
+    if (next) url.searchParams.set("pagetoken", next);
+    const resp = await fetch(url.href);
+    const data = await resp.json();
+    if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
+      throw new Error(`Google Places error: ${data.status}`);
+    }
+    if (Array.isArray(data.results)) all.push(...data.results);
+    next = data.next_page_token || null;
+    pageCount += 1;
+    if (next && pageCount < pages) {
+      await sleep(2000); // next_page_token delay
+    }
+    // respect hard cap
+    if (Number.isFinite(hardCap) && hardCap > 0 && all.length >= hardCap) {
+      break;
+    }
+  } while (next && pageCount < pages);
+
+  if (Number.isFinite(hardCap) && hardCap > 0) return all.slice(0, hardCap);
+  return all;
 }
 
 async function fetchPlaceDetails(placeId) {
@@ -133,7 +148,9 @@ const importCompaniesFromGoogle = async (req, res) => {
 
     const query = `${mapping.query} in ${city}`;
     await client.connect();
-    const results = await fetchTextSearchAllPages(query);
+    const pages = Math.min(parseInt(req.query.pages || "1", 10) || 1, 3);
+    const maxResults = parseInt(req.query.max || MAX_PLACES_RESULTS || "20", 10) || 20;
+    const results = await fetchTextSearchAllPages(query, pages, maxResults);
 
     // Prefetch existing docs to avoid unnecessary details lookups
     const existing = await companies
@@ -251,9 +268,10 @@ module.exports.discoverPlaceTypes = async (req, res) => {
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
     const onlyNew = req.query.onlyNew === "true";
     const seeds = (req.query.seeds || "restaurant,store,service,clinic,school,shop").split(",");
+    const pages = Math.min(parseInt(req.query.pages || "1", 10) || 1, 3);
     const set = new Set();
     for (const seed of seeds) {
-      const results = await fetchTextSearchAllPages(`${seed.trim()} in ${city}`);
+      const results = await fetchTextSearchAllPages(`${seed.trim()} in ${city}`, pages);
       for (const r of results) {
         if (Array.isArray(r.types)) {
           r.types.forEach((t) => {
