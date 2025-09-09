@@ -42,8 +42,8 @@
 }
 
 html, body {
-  background: var(--app-bg);
-  color: var(--text);
+  background: var(--app-bg) !important;
+  color: var(--text) !important;
 }
 
 /* improve readability */
