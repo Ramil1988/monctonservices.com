@@ -65,6 +65,21 @@ const App = () => {
           path="/Profile/:profileId"
           element={<Profile items={serviceTypes} />}
         />
+        {/* Admin route must be explicit so it doesn't match the serviceType route */}
+        <Route path="/admin" element={<Outlet />}>
+          <Route
+            index
+            element={
+              currentUser &&
+              (currentUser._id === allowedUserId ||
+                (currentUser.data && currentUser.data._id === allowedUserId)) ? (
+                <Admin />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+        </Route>
         <Route path="/:serviceType" element={<MainRatingTable />} />
         <Route path="/company/:companyId" element={<MainCompanyPage />} />
         <Route path="/searchresults" element={<SearchResults />} />
