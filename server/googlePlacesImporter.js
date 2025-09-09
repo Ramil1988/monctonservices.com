@@ -118,6 +118,7 @@ const importCompaniesFromGoogle = async (req, res) => {
 
     const { serviceType } = req.params;
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
+    const onlyNew = req.query.onlyNew === "true";
     let mapping = TYPE_QUERY_MAP[serviceType];
     // Fallback: allow raw Google type id or free text query
     if (!mapping) {
@@ -146,6 +147,7 @@ const importCompaniesFromGoogle = async (req, res) => {
     let inserted = 0;
     let updated = 0;
     let detailedLookups = 0;
+    let skippedExisting = 0;
 
     for (let i = 0; i < results.length; i++) {
       const p = results[i];
@@ -162,6 +164,10 @@ const importCompaniesFromGoogle = async (req, res) => {
       let phoneNumber = "";
       let website = "";
       const existingDoc = existingMap.get(placeId);
+      if (onlyNew && existingDoc) {
+        skippedExisting += 1;
+        continue;
+      }
       const detailsCap = parseInt(MAX_DETAILS_LOOKUPS || "10", 10);
       const needsDetails = !existingDoc || !(existingDoc.phoneNumber || existingDoc.website);
       if (needsDetails && detailedLookups < detailsCap) {
@@ -190,13 +196,23 @@ const importCompaniesFromGoogle = async (req, res) => {
 
       if (req.query.dryRun === "true") continue; // Skip writes for dry runs
 
-      const result = await companies.updateOne(
-        { _id: placeId },
-        { $set: doc },
-        { upsert: true }
-      );
-      if (result.upsertedCount) inserted += 1;
-      else if (result.matchedCount) updated += 1;
+      if (onlyNew) {
+        try {
+          const ins = await companies.insertOne(doc);
+          if (ins.insertedId) inserted += 1;
+        } catch (e) {
+          if (e && e.code === 11000) skippedExisting += 1; // duplicate key
+          else throw e;
+        }
+      } else {
+        const result = await companies.updateOne(
+          { _id: placeId },
+          { $set: doc },
+          { upsert: true }
+        );
+        if (result.upsertedCount) inserted += 1;
+        else if (result.matchedCount) updated += 1;
+      }
     }
 
     return res.status(200).json({
@@ -208,6 +224,8 @@ const importCompaniesFromGoogle = async (req, res) => {
         totalFetched: results.length,
         detailsLookups: detailedLookups,
         dryRun: req.query.dryRun === "true",
+        skippedExisting,
+        onlyNew,
       },
     });
   } catch (error) {
@@ -222,6 +240,7 @@ module.exports.listPlaceTypes = (req, res) => {
 };
 
 // Discover place types for a city by sampling a few generic queries
+// If onlyNew=true, only append types that don't already exist in DB
 module.exports.discoverPlaceTypes = async (req, res) => {
   try {
     const { ADMIN_SECRET } = process.env;
@@ -230,6 +249,7 @@ module.exports.discoverPlaceTypes = async (req, res) => {
       return res.status(401).json({ status: 401, message: "Unauthorized" });
     }
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
+    const onlyNew = req.query.onlyNew === "true";
     const seeds = (req.query.seeds || "restaurant,store,service,clinic,school,shop").split(",");
     const set = new Set();
     for (const seed of seeds) {
@@ -249,15 +269,26 @@ module.exports.discoverPlaceTypes = async (req, res) => {
     // Persist to Mongo so clients can read from DB rather than Google
     try {
       await client.connect();
+      const existingDoc = await serviceTypesCol.findOne({ _id: city });
+      const existing = Array.isArray(existingDoc?.types) ? existingDoc.types : [];
+      let toStore = data;
+      let added = data.length;
+      if (onlyNew && existing.length) {
+        const existingIds = new Set(existing.map((t) => t.id));
+        const newOnes = data.filter((t) => !existingIds.has(t.id));
+        toStore = existing.concat(newOnes);
+        added = newOnes.length;
+      }
       await serviceTypesCol.updateOne(
         { _id: city },
-        { $set: { types: data, updatedAt: new Date(), source: "google" } },
+        { $set: { types: toStore, updatedAt: new Date(), source: "google" } },
         { upsert: true }
       );
+      return res.status(200).json({ status: 200, data: toStore, added, city, onlyNew });
     } catch (e) {
       console.error("persist serviceTypes error", e);
+      return res.status(200).json({ status: 200, data, city, onlyNew, added: 0 });
     }
-    return res.status(200).json({ status: 200, data, city });
   } catch (e) {
     console.error("discoverPlaceTypes error", e);
     return res.status(500).json({ status: 500, message: e.message });

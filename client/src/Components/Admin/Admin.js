@@ -18,6 +18,7 @@ const Admin = () => {
   const [adminSecret, setAdminSecret] = useState("");
   const [importStatus, setImportStatus] = useState("");
   const [placeTypes, setPlaceTypes] = useState([]);
+  const [onlyNew, setOnlyNew] = useState(true);
   const [purgeStatus, setPurgeStatus] = useState("");
 
   // No curated list by default; use discovery to populate
@@ -106,7 +107,7 @@ const Admin = () => {
       const resp = await fetch(
         `${ROOT_API}/admin/import/${selectedServiceType}?city=${encodeURIComponent(
           importCity
-        )}`,
+        )}&onlyNew=${onlyNew}`,
         {
           method: "POST",
           headers: {
@@ -120,7 +121,9 @@ const Admin = () => {
       setImportStatus(
         `OK: ${data.data?.inserted || 0} new, ${
           data.data?.updated || 0
-        } updated (fetched ${data.data?.totalFetched || 0}).`
+        } updated, ${data.data?.skippedExisting || 0} skipped (existing). Fetched ${
+          data.data?.totalFetched || 0
+        }.`
       );
       // Refresh companies cache in UI
       fetchCompanies();
@@ -190,7 +193,7 @@ const Admin = () => {
                 const resp = await fetch(
                   `${ROOT_API}/admin/discover-place-types?city=${encodeURIComponent(
                     importCity
-                  )}`,
+                  )}&onlyNew=${onlyNew}`,
                   { headers: { "x-admin-secret": (adminSecret || "").trim() } }
                 );
                 const data = await resp.json();
@@ -218,6 +221,14 @@ const Admin = () => {
             type="text"
             value={importCity}
             onChange={(e) => setImportCity(e.target.value)}
+          />
+        </ImportRow>
+        <ImportRow>
+          <Label>Only new</Label>
+          <input
+            type="checkbox"
+            checked={onlyNew}
+            onChange={(e) => setOnlyNew(e.target.checked)}
           />
         </ImportRow>
         <ImportRow>
