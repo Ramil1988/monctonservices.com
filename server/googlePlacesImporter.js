@@ -99,13 +99,18 @@ async function fetchPlaceDetails(placeId) {
     "https://maps.googleapis.com/maps/api/place/details/json"
   );
   url.searchParams.set("place_id", placeId);
-  url.searchParams.set("fields", "formatted_phone_number,website");
+  url.searchParams.set(
+    "fields",
+    "formatted_phone_number,international_phone_number,website"
+  );
   url.searchParams.set("key", GOOGLE_MAPS_API_KEY);
   const resp = await fetch(url.href);
   const data = await resp.json();
   if (data.status !== "OK") return {};
-  const { formatted_phone_number, website } = data.result || {};
-  return { phoneNumber: formatted_phone_number || "", website: website || "" };
+  const { formatted_phone_number, international_phone_number, website } =
+    data.result || {};
+  const phone = international_phone_number || formatted_phone_number || "";
+  return { phoneNumber: phone, website: website || "" };
 }
 
 function humanizeType(type) {
@@ -134,6 +139,7 @@ const importCompaniesFromGoogle = async (req, res) => {
     const { serviceType } = req.params;
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
     const onlyNew = req.query.onlyNew === "true";
+    const refreshMissing = req.query.refreshMissing === "true";
     let mapping = TYPE_QUERY_MAP[serviceType];
     // Fallback: allow raw Google type id or free text query
     if (!mapping) {
@@ -181,7 +187,7 @@ const importCompaniesFromGoogle = async (req, res) => {
       let phoneNumber = "";
       let website = "";
       const existingDoc = existingMap.get(placeId);
-      if (onlyNew && existingDoc) {
+      if (onlyNew && existingDoc && !refreshMissing) {
         skippedExisting += 1;
         continue;
       }
@@ -213,7 +219,7 @@ const importCompaniesFromGoogle = async (req, res) => {
 
       if (req.query.dryRun === "true") continue; // Skip writes for dry runs
 
-      if (onlyNew) {
+      if (onlyNew && !refreshMissing) {
         try {
           const ins = await companies.insertOne(doc);
           if (ins.insertedId) inserted += 1;
@@ -243,6 +249,7 @@ const importCompaniesFromGoogle = async (req, res) => {
         dryRun: req.query.dryRun === "true",
         skippedExisting,
         onlyNew,
+        refreshMissing,
       },
     });
   } catch (error) {
