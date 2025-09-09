@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Homepage from "./Homepage";
 import SuggestionsPopup from "./SuggestionsPopup";
-import { serviceTypes } from "../serviceTypes"; // Import the serviceTypes
+import { googleServiceTypes } from "../serviceTypes"; // Import the Google service types
 
 const ROOT_API = "/.netlify/functions/api";
 
@@ -18,22 +18,79 @@ const MainHomePage = () => {
         const data = await resp.json();
         const arr = Array.isArray(data.data) ? data.data : [];
 
-        // Map the API data with the local serviceTypes to get the images
-        const typesWithImages = arr.map((t) => {
-          const localServiceType = serviceTypes[t.id];
+        console.log("Raw API data:", arr); // Debug: see what Google API actually returns
+
+        // Map the Google API data with our icon mappings
+        const typesWithIcons = arr.map((t) => {
+          console.log("Processing service type:", t); // Debug: see the full object structure
+
+          // Try multiple ways to match the service type
+          let serviceTypeData = null;
+
+          // 1. Try exact ID match
+          serviceTypeData = googleServiceTypes[t.id];
+
+          // 2. Try name-based matching (convert spaces to underscores and lowercase)
+          if (!serviceTypeData && t.name) {
+            const nameKey = t.name.toLowerCase().replace(/\s+/g, "_");
+            serviceTypeData = googleServiceTypes[nameKey];
+            console.log(
+              "Trying name-based match:",
+              nameKey,
+              "Found:",
+              !!serviceTypeData
+            );
+          }
+
+          // 3. Try direct name match
+          if (!serviceTypeData && t.name) {
+            const matchingKey = Object.keys(googleServiceTypes).find(
+              (key) =>
+                googleServiceTypes[key].name.toLowerCase() ===
+                t.name.toLowerCase()
+            );
+            if (matchingKey) {
+              serviceTypeData = googleServiceTypes[matchingKey];
+              console.log("Found by name match:", matchingKey, t.name);
+            }
+          }
+
+          console.log(
+            "Final serviceTypeData for",
+            t.name,
+            ":",
+            serviceTypeData
+          );
+
+          if (serviceTypeData) {
+            return {
+              id: t.id,
+              name: t.name,
+              icon: serviceTypeData.icon,
+              color: serviceTypeData.color,
+              hasIcon: true,
+            };
+          }
+
+          // Fallback for unmapped service types
+          console.log("No mapping found for:", t.id, t.name);
           return {
             id: t.id,
             name: t.name,
-            imageSrc: localServiceType?.imageSrc || null, // Add the image source
+            icon: null,
+            color: null,
+            hasIcon: false,
           };
         });
 
-        setTypes(typesWithImages);
+        console.log("Final types with icons:", typesWithIcons); // Debug log
+
+        setTypes(typesWithIcons);
 
         // cache locally for offline/SSR gaps
         localStorage.setItem(
           `placeTypes:${city}`,
-          JSON.stringify(typesWithImages)
+          JSON.stringify(typesWithIcons)
         );
       } catch (_) {
         // fallback to cache
@@ -42,15 +99,16 @@ const MainHomePage = () => {
           if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed)) {
-              // Ensure cached data also has images
-              const parsedWithImages = parsed.map((t) => {
-                const localServiceType = serviceTypes[t.id];
+              // Ensure cached data also has icons (in case we added new mappings)
+              const parsedWithIcons = parsed.map((t) => {
+                const serviceTypeData = googleServiceTypes[t.id];
                 return {
                   ...t,
-                  imageSrc: t.imageSrc || localServiceType?.imageSrc || null,
+                  icon: t.icon || serviceTypeData?.icon || null,
+                  color: t.color || serviceTypeData?.color || null,
                 };
               });
-              setTypes(parsedWithImages);
+              setTypes(parsedWithIcons);
             }
           }
         } catch (_) {}

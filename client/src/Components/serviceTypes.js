@@ -132,10 +132,18 @@ export const serviceTypes = {
   },
 };
 
-// Google API service types with icons
+// Google API service types with icons - Multiple key formats for flexibility
 export const googleServiceTypes = {
+  // Underscore format (API might use this)
   art_gallery: {
     id: "art_gallery",
+    name: "Art gallery",
+    icon: FaPalette,
+    color: "#8B5CF6",
+  },
+  // Space format (API might use this)
+  "art gallery": {
+    id: "art gallery",
     name: "Art gallery",
     icon: FaPalette,
     color: "#8B5CF6",
@@ -158,6 +166,12 @@ export const googleServiceTypes = {
     icon: FaBook,
     color: "#1D4ED8",
   },
+  "book store": {
+    id: "book store",
+    name: "Book store",
+    icon: FaBook,
+    color: "#1D4ED8",
+  },
   cafe: {
     id: "cafe",
     name: "Cafe",
@@ -170,14 +184,32 @@ export const googleServiceTypes = {
     icon: FaWrench,
     color: "#374151",
   },
+  "car repair": {
+    id: "car repair",
+    name: "Car repair",
+    icon: FaWrench,
+    color: "#374151",
+  },
   clothing_store: {
     id: "clothing_store",
     name: "Clothing store",
     icon: FaStore,
     color: "#EC4899",
   },
+  "clothing store": {
+    id: "clothing store",
+    name: "Clothing store",
+    icon: FaStore,
+    color: "#EC4899",
+  },
   department_store: {
     id: "department_store",
+    name: "Department store",
+    icon: FaStore,
+    color: "#059669",
+  },
+  "department store": {
+    id: "department store",
     name: "Department store",
     icon: FaStore,
     color: "#059669",
@@ -206,6 +238,12 @@ export const googleServiceTypes = {
     icon: FaShoppingCart,
     color: "#059669",
   },
+  "grocery or supermarket": {
+    id: "grocery or supermarket",
+    name: "Grocery or supermarket",
+    icon: FaShoppingCart,
+    color: "#059669",
+  },
   health: {
     id: "health",
     name: "Health",
@@ -224,14 +262,32 @@ export const googleServiceTypes = {
     icon: FaBox,
     color: "#F59E0B",
   },
+  "meal takeaway": {
+    id: "meal takeaway",
+    name: "Meal takeaway",
+    icon: FaBox,
+    color: "#F59E0B",
+  },
   moving_company: {
     id: "moving_company",
     name: "Moving company",
     icon: FaTruck,
     color: "#6B7280",
   },
+  "moving company": {
+    id: "moving company",
+    name: "Moving company",
+    icon: FaTruck,
+    color: "#6B7280",
+  },
   primary_school: {
     id: "primary_school",
+    name: "Primary school",
+    icon: FaGraduationCap,
+    color: "#3B82F6",
+  },
+  "primary school": {
+    id: "primary school",
     name: "Primary school",
     icon: FaGraduationCap,
     color: "#3B82F6",
@@ -254,14 +310,32 @@ export const googleServiceTypes = {
     icon: FaUniversity,
     color: "#7C3AED",
   },
+  "secondary school": {
+    id: "secondary school",
+    name: "Secondary school",
+    icon: FaUniversity,
+    color: "#7C3AED",
+  },
   shoe_store: {
     id: "shoe_store",
     name: "Shoe store",
     icon: FaStore,
     color: "#374151",
   },
+  "shoe store": {
+    id: "shoe store",
+    name: "Shoe store",
+    icon: FaStore,
+    color: "#374151",
+  },
   shopping_mall: {
     id: "shopping_mall",
+    name: "Shopping mall",
+    icon: FaShoppingBag,
+    color: "#EC4899",
+  },
+  "shopping mall": {
+    id: "shopping mall",
     name: "Shopping mall",
     icon: FaShoppingBag,
     color: "#EC4899",
@@ -290,8 +364,20 @@ export const googleServiceTypes = {
     icon: FaShieldAlt,
     color: "#1E40AF",
   },
+  "insurance agency": {
+    id: "insurance agency",
+    name: "Insurance agency",
+    icon: FaShieldAlt,
+    color: "#1E40AF",
+  },
   jewelry_store: {
     id: "jewelry_store",
+    name: "Jewelry store",
+    icon: FaGem,
+    color: "#8B5CF6",
+  },
+  "jewelry store": {
+    id: "jewelry store",
     name: "Jewelry store",
     icon: FaGem,
     color: "#8B5CF6",
@@ -302,8 +388,20 @@ export const googleServiceTypes = {
     icon: FaMusic,
     color: "#EC4899",
   },
+  "night club": {
+    id: "night club",
+    name: "Night club",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
   travel_agency: {
     id: "travel_agency",
+    name: "Travel agency",
+    icon: FaPlane,
+    color: "#0369A1",
+  },
+  "travel agency": {
+    id: "travel agency",
     name: "Travel agency",
     icon: FaPlane,
     color: "#0369A1",
@@ -320,15 +418,33 @@ export const googleServiceTypes = {
     icon: FaBuilding,
     color: "#374151",
   },
-  // Add some common service types that might be missing
+  "local government office": {
+    id: "local government office",
+    name: "Local government office",
+    icon: FaBuilding,
+    color: "#374151",
+  },
+  // Additional common variations
   beauty_salon: {
     id: "beauty_salon",
     name: "Beauty salon",
     icon: FaStore,
     color: "#EC4899",
   },
+  "beauty salon": {
+    id: "beauty salon",
+    name: "Beauty salon",
+    icon: FaStore,
+    color: "#EC4899",
+  },
   convenience_store: {
     id: "convenience_store",
+    name: "Convenience store",
+    icon: FaStore,
+    color: "#6B7280",
+  },
+  "convenience store": {
+    id: "convenience store",
     name: "Convenience store",
     icon: FaStore,
     color: "#6B7280",
