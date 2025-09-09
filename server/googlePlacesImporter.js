@@ -14,6 +14,7 @@ const options = {
 const client = new MongoClient(MONGO_URI, options);
 const database = client.db("MonctonServicesCom");
 const companies = database.collection("companies");
+const serviceTypesCol = database.collection("serviceTypes");
 
 // Canonical list of supported types (subset of Google Places taxonomy) used by the importer and exposed to the UI
 const PLACE_TYPES = [
@@ -245,9 +246,34 @@ module.exports.discoverPlaceTypes = async (req, res) => {
     const data = Array.from(set)
       .sort()
       .map((t) => ({ id: t, name: humanizeType(t), query: t.replace(/_/g, " ") }));
+    // Persist to Mongo so clients can read from DB rather than Google
+    try {
+      await client.connect();
+      await serviceTypesCol.updateOne(
+        { _id: city },
+        { $set: { types: data, updatedAt: new Date(), source: "google" } },
+        { upsert: true }
+      );
+    } catch (e) {
+      console.error("persist serviceTypes error", e);
+    }
     return res.status(200).json({ status: 200, data, city });
   } catch (e) {
     console.error("discoverPlaceTypes error", e);
     return res.status(500).json({ status: 500, message: e.message });
+  }
+};
+
+// GET /service-types?city=Moncton,%20NB -> returns saved list from Mongo
+module.exports.getServiceTypesForCity = async (req, res) => {
+  try {
+    const city = req.query.city || IMPORT_CITY || "Moncton, NB";
+    await client.connect();
+    const doc = await serviceTypesCol.findOne({ _id: city });
+    const types = doc?.types || [];
+    return res.status(200).json({ status: 200, city, data: types });
+  } catch (e) {
+    console.error("getServiceTypesForCity error", e);
+    return res.status(500).json({ status: 500, message: e.message, data: [] });
   }
 };

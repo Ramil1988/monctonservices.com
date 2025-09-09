@@ -42,7 +42,7 @@ const {
   deleteUserById,
 } = require("./handlers1");
 
-const { importCompaniesFromGoogle, listPlaceTypes, discoverPlaceTypes } = require("./googlePlacesImporter");
+const { importCompaniesFromGoogle, listPlaceTypes, discoverPlaceTypes, getServiceTypesForCity } = require("./googlePlacesImporter");
 
 const app = express()
   .use(morgan("tiny"))
@@ -95,6 +95,7 @@ const app = express()
 app.post("/admin/import/:serviceType", importCompaniesFromGoogle);
 app.get("/admin/place-types", listPlaceTypes);
 app.get("/admin/discover-place-types", discoverPlaceTypes);
+app.get("/service-types", getServiceTypesForCity);
 
 // Admin: purge companies (non-google or all)
 app.post("/admin/companies/purge", async (req, res) => {
