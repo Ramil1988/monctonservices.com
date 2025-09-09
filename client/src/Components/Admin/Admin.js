@@ -4,7 +4,7 @@ import CompanyUpdateForm from "./CompanyUpdateForm";
 import CompanyCreateForm from "./CompanyCreateForm";
 import ReviewAdmin from "./ReviewAdmin";
 import EventsAddForm from "./EventsAddForm";
-import { serviceTypes } from "../serviceTypes";
+// Fetch Google-aligned types from server
 
 const ROOT_API = "/.netlify/functions/api";
 
@@ -17,6 +17,24 @@ const Admin = () => {
   const [importCity, setImportCity] = useState("Moncton, NB");
   const [adminSecret, setAdminSecret] = useState("");
   const [importStatus, setImportStatus] = useState("");
+  const [placeTypes, setPlaceTypes] = useState([]);
+
+  useEffect(() => {
+    const loadTypes = async () => {
+      try {
+        const resp = await fetch(`${ROOT_API}/admin/place-types`);
+        const data = await resp.json();
+        if (resp.ok && Array.isArray(data.data)) {
+          setPlaceTypes(data.data);
+          // Ensure selected value is valid
+          if (!data.data.find((t) => t.id === selectedServiceType)) {
+            setSelectedServiceType(data.data[0]?.id || "hotels");
+          }
+        }
+      } catch (_) {}
+    };
+    loadTypes();
+  }, []);
 
   const fetchCompanies = async () => {
     try {
@@ -149,15 +167,18 @@ const Admin = () => {
         <h2>Import companies from Google</h2>
         <ImportRow>
           <Label>Service type</Label>
-          <Select
-            value={selectedServiceType}
-            onChange={(e) => setSelectedServiceType(e.target.value)}
-          >
-            {Object.values(serviceTypes).map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
+          <Select value={selectedServiceType} onChange={(e) => setSelectedServiceType(e.target.value)}>
+            {placeTypes.length > 0
+              ? placeTypes.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))
+              : [
+                  <option key="hotels" value="hotels">
+                    Hotels
+                  </option>,
+                ]}
           </Select>
         </ImportRow>
         <ImportRow>

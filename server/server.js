@@ -42,7 +42,7 @@ const {
   deleteUserById,
 } = require("./handlers1");
 
-const { importCompaniesFromGoogle } = require("./googlePlacesImporter");
+const { importCompaniesFromGoogle, listPlaceTypes } = require("./googlePlacesImporter");
 
 const app = express()
   .use(morgan("tiny"))
@@ -93,6 +93,7 @@ const app = express()
 // Admin: import companies via Google Places (protected by ADMIN_SECRET)
 // Example: POST /.netlify/functions/api/admin/import/hotels?city=Moncton,%20NB
 app.post("/admin/import/:serviceType", importCompaniesFromGoogle);
+app.get("/admin/place-types", listPlaceTypes);
 
 // Export the Express app for serverless usage. Only listen when run directly.
 module.exports = app;

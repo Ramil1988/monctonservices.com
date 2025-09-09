@@ -3,7 +3,7 @@
 require("dotenv").config();
 const { MongoClient } = require("mongodb");
 
-const { MONGO_URI, GOOGLE_MAPS_API_KEY, IMPORT_CITY, ADMIN_SECRET } =
+const { MONGO_URI, GOOGLE_MAPS_API_KEY, IMPORT_CITY, ADMIN_SECRET, MAX_PLACES_RESULTS, MAX_DETAILS_LOOKUPS } =
   process.env;
 
 const options = {
@@ -15,29 +15,47 @@ const client = new MongoClient(MONGO_URI, options);
 const database = client.db("MonctonServicesCom");
 const companies = database.collection("companies");
 
-// Map internal serviceType ids to Google Places text queries and display names
-const TYPE_QUERY_MAP = {
-  hotels: { query: "hotels", display: "Hotels" },
-  beautysalons: { query: "beauty salon", display: "Beauty salons" },
-  autodealerships: { query: "car dealer", display: "Auto dealers" },
-  autoservice: { query: "car repair", display: "Auto services" },
-  petclinics: { query: "veterinary care", display: "Pet clinics" },
-  dentalclinics: { query: "dentist", display: "Dental clinics" },
-  banks: { query: "bank", display: "Banks" },
-  insurance: { query: "insurance agency", display: "Insurance companies" },
-  propertymanagement: { query: "apartment rental", display: "Rental appartments" },
-  realestate: { query: "real estate agency", display: "Real Estate agencies" },
-  travel: { query: "travel agency", display: "Travel agencies" },
-  cleaning: { query: "cleaning service", display: "Cleaning service" },
-  event: { query: "event planner", display: "Event agencies" },
-  daycares: { query: "daycare", display: "Daycares, Afterschools, Summer camps" },
-  drivingschool: { query: "driving school", display: "Driving schools" },
-  tutoringcenters: { query: "tutoring center", display: "Tutoring centers" },
-  computermobilerepair: { query: "computer repair", display: "Computer and mobile repairs" },
-  taxis: { query: "taxi service", display: "Taxis" },
-  plumbing: { query: "plumber", display: "Plumbing companies" },
-  walkinClinics: { query: "walk-in clinic", display: "Walk in clinics" },
-};
+// Canonical list of supported types (subset of Google Places taxonomy) used by the importer and exposed to the UI
+const PLACE_TYPES = [
+  { id: "hotels", name: "Hotels", query: "hotels" },
+  { id: "restaurant", name: "Restaurants", query: "restaurant" },
+  { id: "cafe", name: "Cafes", query: "cafe" },
+  { id: "bar", name: "Bars", query: "bar" },
+  { id: "grocery", name: "Grocery stores", query: "grocery store" },
+  { id: "supermarket", name: "Supermarkets", query: "supermarket" },
+  { id: "pharmacy", name: "Pharmacies", query: "pharmacy" },
+  { id: "banks", name: "Banks", query: "bank" },
+  { id: "insurance", name: "Insurance companies", query: "insurance agency" },
+  { id: "autodealerships", name: "Auto dealers", query: "car dealer" },
+  { id: "autoservice", name: "Auto services", query: "car repair" },
+  { id: "gas", name: "Gas stations", query: "gas station" },
+  { id: "petclinics", name: "Pet clinics", query: "veterinary care" },
+  { id: "dentalclinics", name: "Dental clinics", query: "dentist" },
+  { id: "doctor", name: "Doctors", query: "doctor" },
+  { id: "walkinClinics", name: "Walk in clinics", query: "walk-in clinic" },
+  { id: "plumbing", name: "Plumbing companies", query: "plumber" },
+  { id: "realestate", name: "Real Estate agencies", query: "real estate agency" },
+  { id: "propertymanagement", name: "Rental appartments", query: "apartment rental" },
+  { id: "travel", name: "Travel agencies", query: "travel agency" },
+  { id: "event", name: "Event agencies", query: "event planner" },
+  { id: "daycares", name: "Daycares, Afterschools, Summer camps", query: "daycare" },
+  { id: "drivingschool", name: "Driving schools", query: "driving school" },
+  { id: "tutoringcenters", name: "Tutoring centers", query: "tutoring center" },
+  { id: "computermobilerepair", name: "Computer and mobile repairs", query: "computer repair" },
+  { id: "taxis", name: "Taxis", query: "taxi service" },
+  { id: "gym", name: "Gyms", query: "gym" },
+  { id: "hardware", name: "Hardware stores", query: "hardware store" },
+  { id: "homegoods", name: "Home goods stores", query: "home goods store" },
+  { id: "clothing", name: "Clothing stores", query: "clothing store" },
+  { id: "electronics", name: "Electronics stores", query: "electronics store" },
+  { id: "bakery", name: "Bakeries", query: "bakery" }
+];
+
+// Build a lookup map from the canonical list
+const TYPE_QUERY_MAP = PLACE_TYPES.reduce((acc, t) => {
+  acc[t.id] = { query: t.query, display: t.name };
+  return acc;
+}, {});
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -54,7 +72,10 @@ async function fetchTextSearchAllPages(query) {
   if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
     throw new Error(`Google Places error: ${data.status}`);
   }
-  return Array.isArray(data.results) ? data.results : [];
+  let results = Array.isArray(data.results) ? data.results : [];
+  const cap = parseInt(MAX_PLACES_RESULTS || "20", 10);
+  if (Number.isFinite(cap) && cap > 0) results = results.slice(0, cap);
+  return results;
 }
 
 async function fetchPlaceDetails(placeId) {
@@ -94,6 +115,15 @@ const importCompaniesFromGoogle = async (req, res) => {
     await client.connect();
     const results = await fetchTextSearchAllPages(query);
 
+    // Prefetch existing docs to avoid unnecessary details lookups
+    const existing = await companies
+      .find(
+        { _id: { $in: results.map((r) => r.place_id) } },
+        { projection: { _id: 1, phoneNumber: 1, website: 1 } }
+      )
+      .toArray();
+    const existingMap = new Map(existing.map((d) => [d._id, d]));
+
     let inserted = 0;
     let updated = 0;
     let detailedLookups = 0;
@@ -112,11 +142,17 @@ const importCompaniesFromGoogle = async (req, res) => {
 
       let phoneNumber = "";
       let website = "";
-      if (detailedLookups < 10) {
+      const existingDoc = existingMap.get(placeId);
+      const detailsCap = parseInt(MAX_DETAILS_LOOKUPS || "10", 10);
+      const needsDetails = !existingDoc || !(existingDoc.phoneNumber || existingDoc.website);
+      if (needsDetails && detailedLookups < detailsCap) {
         const details = await fetchPlaceDetails(placeId);
         phoneNumber = details.phoneNumber || "";
         website = details.website || "";
         detailedLookups += 1;
+      } else if (existingDoc) {
+        phoneNumber = existingDoc.phoneNumber || "";
+        website = existingDoc.website || "";
       }
 
       const doc = {
@@ -132,6 +168,8 @@ const importCompaniesFromGoogle = async (req, res) => {
         lang,
       };
 
+      if (req.query.dryRun === "true") continue; // Skip writes for dry runs
+
       const result = await companies.updateOne(
         { _id: placeId },
         { $set: doc },
@@ -144,7 +182,13 @@ const importCompaniesFromGoogle = async (req, res) => {
     return res.status(200).json({
       status: 200,
       message: `Imported ${inserted} new and updated ${updated} companies for ${mapping.display}.`,
-      data: { inserted, updated, totalFetched: results.length },
+      data: {
+        inserted,
+        updated,
+        totalFetched: results.length,
+        detailsLookups: detailedLookups,
+        dryRun: req.query.dryRun === "true",
+      },
     });
   } catch (error) {
     console.error("Import error:", error);
@@ -153,3 +197,6 @@ const importCompaniesFromGoogle = async (req, res) => {
 };
 
 module.exports = { importCompaniesFromGoogle };
+module.exports.listPlaceTypes = (req, res) => {
+  res.status(200).json({ status: 200, data: PLACE_TYPES });
+};
