@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Homepage from "./Homepage";
-import SuggestionsPopup from "./SuggestionsPopup";
 import { googleServiceTypes } from "../serviceTypes"; // Import the Google service types
 
 const ROOT_API = "/.netlify/functions/api";
@@ -120,7 +119,6 @@ const MainHomePage = () => {
   return (
     <div>
       <Homepage serviceTypes={types} />
-      <SuggestionsPopup />
     </div>
   );
 };
