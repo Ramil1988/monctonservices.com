@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import ListOfServices from "./ListOfServices";
+import CategorizedServices from "./CategorizedServices";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
 import MonctonImage from "../../Pictures/Moncton.jpg";
@@ -89,7 +89,7 @@ const Homepage = (props) => {
           </NavLink>
         </TabMenu>
         <BigText>Services in Moncton</BigText>
-        <ListOfServices data={serviceTypes} />
+        <CategorizedServices data={serviceTypes} />
         {serviceTypes && serviceTypes.length > 0 && (
           <>
             <BigText>Popular Services</BigText>

@@ -146,7 +146,7 @@ const ServiceCount = styled.span`
 const ExpandIcon = styled.div`
   color: var(--muted);
   transition: transform 0.2s ease, color 0.2s ease;
-  transform: ${props => props.isExpanded ? 'rotate(0deg)' : 'rotate(0deg)'};
+  transform: ${props => props.isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
   
   &:hover {
     color: var(--primary-start);
