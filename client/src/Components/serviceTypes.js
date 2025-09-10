@@ -37,7 +37,7 @@ export const serviceTypes = {
   },
   beautysalons: {
     id: "beautysalons",
-    name: "Beauty salons",
+    name: "Beauty salon",
     imageSrc: "/assets/BeautySalon.jpg",
   },
   autodealerships: {
