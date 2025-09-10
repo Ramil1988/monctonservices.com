@@ -451,6 +451,216 @@ export const googleServiceTypes = {
   },
 };
 
+// Service categories structure
+export const serviceCategories = {
+  stores: {
+    id: "stores",
+    name: "Stores",
+    icon: FaStore,
+    color: "#059669",
+    description: "All kinds of retail stores and shopping",
+    services: [
+      "clothing_store",
+      "clothing store",
+      "department_store", 
+      "department store",
+      "convenience_store",
+      "convenience store",
+      "shoe_store",
+      "shoe store",
+      "book_store",
+      "book store",
+      "jewelry_store", 
+      "jewelry store",
+      "store",
+      "supermarket",
+      "grocery_or_supermarket",
+      "grocery or supermarket"
+    ]
+  },
+  healthcare: {
+    id: "healthcare",
+    name: "Healthcare",
+    icon: FaHeartbeat,
+    color: "#EF4444",
+    description: "Medical services and health facilities",
+    services: [
+      "doctor",
+      "hospital",
+      "health",
+      "walkinClinics",
+      "petclinics",
+      "dentalclinics"
+    ]
+  },
+  food: {
+    id: "food",
+    name: "Food & Dining",
+    icon: FaUtensils,
+    color: "#F59E0B", 
+    description: "Restaurants, cafes, and food services",
+    services: [
+      "restaurant",
+      "cafe",
+      "bakery",
+      "bar",
+      "food",
+      "meal_takeaway",
+      "meal takeaway"
+    ]
+  },
+  automotive: {
+    id: "automotive",
+    name: "Automotive",
+    icon: FaWrench,
+    color: "#374151",
+    description: "Car services and automotive needs",
+    services: [
+      "car_repair",
+      "car repair", 
+      "autodealerships",
+      "autoservice"
+    ]
+  },
+  education: {
+    id: "education", 
+    name: "Education",
+    icon: FaGraduationCap,
+    color: "#3B82F6",
+    description: "Schools, universities and learning centers",
+    services: [
+      "school",
+      "primary_school",
+      "primary school",
+      "secondary_school", 
+      "secondary school",
+      "university",
+      "drivingschool",
+      "tutoringcenters",
+      "daycares"
+    ]
+  },
+  services: {
+    id: "services",
+    name: "Professional Services", 
+    icon: FaBuilding,
+    color: "#6B7280",
+    description: "Business and professional services",
+    services: [
+      "banks",
+      "insurance",
+      "insurance_agency",
+      "insurance agency",
+      "realestate",
+      "travel",
+      "travel_agency",
+      "travel agency",
+      "cleaning",
+      "event",
+      "moving_company",
+      "moving company",
+      "local_government_office",
+      "local government office",
+      "computermobilerepair",
+      "plumbing"
+    ]
+  },
+  hospitality: {
+    id: "hospitality",
+    name: "Hospitality & Accommodation",
+    icon: FaHome,
+    color: "#8B5CF6", 
+    description: "Hotels and accommodation services",
+    services: [
+      "hotels",
+      "propertymanagement"
+    ]
+  },
+  personal_care: {
+    id: "personal_care",
+    name: "Personal Care",
+    icon: FaPalette,
+    color: "#EC4899",
+    description: "Beauty and personal care services", 
+    services: [
+      "beautysalons",
+      "beauty_salon",
+      "beauty salon"
+    ]
+  },
+  entertainment: {
+    id: "entertainment",
+    name: "Entertainment",
+    icon: FaMusic,
+    color: "#EC4899", 
+    description: "Entertainment and leisure activities",
+    services: [
+      "night_club",
+      "night club",
+      "art_gallery", 
+      "art gallery",
+      "shopping_mall",
+      "shopping mall"
+    ]
+  },
+  transportation: {
+    id: "transportation",
+    name: "Transportation",
+    icon: FaTruck,
+    color: "#6B7280",
+    description: "Transportation and logistics services",
+    services: [
+      "taxis",
+      "storage"
+    ]
+  },
+  other: {
+    id: "other", 
+    name: "Other Services",
+    icon: FaMapMarkerAlt,
+    color: "#6B7280",
+    description: "Miscellaneous services",
+    services: [
+      "florist"
+    ]
+  }
+};
+
+// Helper function to get category for a service
+export const getCategoryForService = (serviceKey) => {
+  for (const [categoryId, category] of Object.entries(serviceCategories)) {
+    if (category.services.includes(serviceKey)) {
+      return categoryId;
+    }
+  }
+  return "other";
+};
+
+// Helper function to get services grouped by categories 
+export const getServicesByCategory = (services) => {
+  const categorizedServices = {};
+  
+  // Initialize all categories
+  Object.keys(serviceCategories).forEach(categoryId => {
+    categorizedServices[categoryId] = [];
+  });
+
+  // Group services by category
+  services.forEach(service => {
+    const categoryId = getCategoryForService(service.id);
+    categorizedServices[categoryId].push(service);
+  });
+
+  // Filter out empty categories
+  Object.keys(categorizedServices).forEach(categoryId => {
+    if (categorizedServices[categoryId].length === 0) {
+      delete categorizedServices[categoryId];
+    }
+  });
+
+  return categorizedServices;
+};
+
 // Helper function to get service type by key with fallback
 export const getServiceType = (key) => {
   // Try Google service types first
