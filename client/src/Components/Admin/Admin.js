@@ -20,6 +20,7 @@ const Admin = () => {
   const [placeTypes, setPlaceTypes] = useState([]);
   const [onlyNew, setOnlyNew] = useState(true);
   const [purgeStatus, setPurgeStatus] = useState("");
+  const [dryRun, setDryRun] = useState(false);
 
   // Admin dropdown: show a union list for the cities in the input
   // Build from cached per-city results in localStorage; fall back to stored union
@@ -137,10 +138,11 @@ const Admin = () => {
 
       let agg = { inserted: 0, updated: 0, skippedExisting: 0, totalFetched: 0 };
       for (const city of uniqueCities) {
+        setImportStatus(`Importing selected type for ${city}${dryRun ? " (dry run)" : ""}...`);
         const resp = await fetch(
           `${ROOT_API}/admin/import/${selectedServiceType}?city=${encodeURIComponent(
             city
-          )}&onlyNew=${onlyNew}`,
+          )}&onlyNew=${onlyNew}&dryRun=${dryRun}`,
           {
             method: "POST",
             headers: {
@@ -157,7 +159,7 @@ const Admin = () => {
         agg.totalFetched += data.data?.totalFetched || 0;
       }
       setImportStatus(
-        `OK across ${uniqueCities.length} city(ies): ${agg.inserted} new, ${agg.updated} updated, ${agg.skippedExisting} skipped. Fetched ${agg.totalFetched}.`
+        `${dryRun ? "DRY RUN " : ""}OK across ${uniqueCities.length} city(ies): ${agg.inserted} new, ${agg.updated} updated, ${agg.skippedExisting} skipped. Fetched ${agg.totalFetched}.`
       );
       // Refresh companies cache in UI
       fetchCompanies();
@@ -185,12 +187,12 @@ const Admin = () => {
       for (const city of uniqueCities) {
         for (let i = 0; i < placeTypes.length; i++) {
           const t = placeTypes[i];
-          // preserve UI feedback occasionally
-          if (i % 5 === 0) setImportStatus(`Importing ${i + 1}/${placeTypes.length} for ${city}...`);
+          // progress feedback
+          setImportStatus(`Importing ${i + 1}/${placeTypes.length} for ${city}: ${t.name}${dryRun ? " (dry run)" : ""}...`);
           const resp = await fetch(
             `${ROOT_API}/admin/import/${encodeURIComponent(t.id)}?city=${encodeURIComponent(
               city
-            )}&onlyNew=${onlyNew}`,
+            )}&onlyNew=${onlyNew}&dryRun=${dryRun}`,
             {
               method: "POST",
               headers: {
@@ -208,7 +210,7 @@ const Admin = () => {
         }
       }
       setImportStatus(
-        `ALL DONE across ${uniqueCities.length} city(ies) and ${placeTypes.length} type(s): ${agg.inserted} new, ${agg.updated} updated, ${agg.skippedExisting} skipped. Fetched ${agg.totalFetched}.`
+        `${dryRun ? "DRY RUN " : ""}ALL DONE across ${uniqueCities.length} city(ies) and ${placeTypes.length} type(s): ${agg.inserted} new, ${agg.updated} updated, ${agg.skippedExisting} skipped. Fetched ${agg.totalFetched}.`
       );
       fetchCompanies();
     } catch (e) {
@@ -346,6 +348,14 @@ const Admin = () => {
             type="checkbox"
             checked={onlyNew}
             onChange={(e) => setOnlyNew(e.target.checked)}
+          />
+        </ImportRow>
+        <ImportRow>
+          <Label>Dry run</Label>
+          <input
+            type="checkbox"
+            checked={dryRun}
+            onChange={(e) => setDryRun(e.target.checked)}
           />
         </ImportRow>
         <ImportRow>
