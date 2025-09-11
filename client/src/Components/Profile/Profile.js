@@ -127,12 +127,10 @@ const Profile = () => {
                   {user.name}
                 </NameFields>
                 <NameFields>
-                  <StyledSpan>Nickname</StyledSpan>
-                  {user.nickname}
+                  <StyledSpan>@</StyledSpan>{user.nickname}
                 </NameFields>
                 <NameFields>
-                  <StyledSpan>Email</StyledSpan>
-                  {user.email}
+                  <StyledSpan>✉</StyledSpan> {user.email}
                 </NameFields>
                 <EditProfile onClick={() => setShowEditForm(true)}>
                   <EditIcon fontSize="small" />
@@ -157,10 +155,10 @@ const Profile = () => {
                 </Stat>
               </StatsWrapper>
             </Sidebar>
-            <SloganText>
-              <h1><span>Welcome back,</span> {user.name}!</h1>
+            <WelcomeHeader>
+              <h2>Welcome back, {user.name}!</h2>
               <p>Manage your reviews and favorite businesses</p>
-            </SloganText>
+            </WelcomeHeader>
           </SideWrapper>
           <MainContent>
             <SectionWrapper>
@@ -218,71 +216,55 @@ const blinkCursor = keyframes`
   }
 `;
 
-const SloganText = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 8px;
-  padding: clamp(16px, 4vw, 32px);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(34, 211, 238, 0.1));
-  border-radius: 16px;
+const WelcomeHeader = styled.div`
+  background: var(--surface);
   border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
-  h1 {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: 800;
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
     color: var(--text);
-    margin: 0;
-    line-height: 1.2;
-    
-    span {
-      background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-style: italic;
-    }
+    margin: 0 0 4px 0;
   }
   
   p {
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-size: 0.9rem;
     color: var(--muted);
     margin: 0;
   }
 
   @media (max-width: 768px) {
     text-align: center;
-    align-items: center;
   }
 `;
 
 const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: clamp(12px, 3vw, 24px);
+  padding: 16px;
   margin: 0 auto;
   max-width: 1200px;
   color: var(--text);
-  min-height: calc(100vh - 120px);
-  width: 100%;
+  gap: 24px;
 
   @media (max-width: 768px) {
-    padding: 16px;
+    padding: 12px;
+    gap: 16px;
   }
 `;
 
 const SideWrapper = styled.div`
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: clamp(16px, 4vw, 32px);
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
   width: 100%;
-  margin-bottom: 32px;
 
   @media (max-width: 1024px) {
-    grid-template-columns: 280px 1fr;
-    gap: 24px;
+    grid-template-columns: 260px 1fr;
+    gap: 20px;
   }
 
   @media (max-width: 768px) {
@@ -294,55 +276,34 @@ const SideWrapper = styled.div`
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2px;
   width: 100%;
-  position: sticky;
-  top: 80px;
   height: fit-content;
-
-  @media (max-width: 768px) {
-    position: static;
-  }
 `;
 
 const SidebarTop = styled.div`
   background: var(--surface);
   border: 1px solid var(--surface-border);
-  padding: clamp(16px, 4vw, 32px);
-  border-radius: 16px 16px 0 0;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-  }
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
 const ProfileImage = styled.img`
-  width: clamp(80px, 12vw, 120px);
-  height: clamp(80px, 12vw, 120px);
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--surface-border);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 3px solid var(--surface-border);
+  transition: all 0.2s ease;
 
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
     border-color: var(--primary-start);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
 `;
 
@@ -351,165 +312,124 @@ const GridItem = styled.div`
 `;
 
 const NameFields = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
-  gap: 4px;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  font-weight: 500;
+  font-size: 0.9rem;
   color: var(--text);
-  width: 100%;
+  line-height: 1.4;
   
   &:first-of-type {
-    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-size: 1.3rem;
     font-weight: 700;
-    margin-top: 8px;
+    margin-bottom: 4px;
   }
 `;
 
 const StyledSpan = styled.span`
   font-size: 0.75rem;
-  font-weight: 600;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 2px;
+  font-weight: 500;
 `;
 
 const EditProfile = styled.button`
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--surface-border);
-  border: 1px solid var(--surface-border);
-  border-radius: 8px;
-  padding: 8px 16px;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--primary-start);
+  background: transparent;
+  border: 1px solid var(--primary-start);
+  border-radius: 6px;
+  padding: 6px 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 8px;
+  margin-top: 4px;
 
   &:hover {
     background: var(--primary-start);
     color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 `;
 
 const StatsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  padding: 20px 16px;
+  padding: 16px;
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-top: none;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
 const Stat = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transition: transform 0.2s ease;
-  
-  &:hover {
-    transform: translateY(-2px);
-  }
+  gap: 2px;
 `;
 
 const StatNumber = styled.span`
-  font-size: clamp(20px, 4vw, 28px);
-  font-weight: 800;
-  color: var(--primary-start);
-  line-height: 1;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
 `;
 
 const StatLabel = styled.span`
-  font-size: clamp(12px, 2.5vw, 14px);
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 `;
 
 const MainContent = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 `;
 
 const SectionWrapper = styled.div`
   width: 100%;
 
   & h2 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 600;
     color: var(--text);
-    margin: 0 0 20px 0;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--surface-border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    
-    &::before {
-      content: '';
-      width: 4px;
-      height: 24px;
-      background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-      border-radius: 2px;
-    }
+    margin: 0 0 16px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--surface-border);
   }
 `;
 
 const FavoriteGrid = styled.div`
   display: grid;
-  grid-gap: 0.5rem;
-  padding: 1rem;
-
-  @media (min-width: 1251px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (max-width: 1250px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 1000px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
   }
 `;
 
 const FavoriteContainer = styled.div`
-  margin: 0.5rem;
-  max-width: 250px;
+  width: 100%;
 `;
 
 const Bookmark = styled.div`
   position: relative;
-  background: var(--surface-strong);
+  background: var(--surface);
   color: var(--text);
   border: 1px solid var(--surface-border);
-  border-radius: 16px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-  padding: 16px;
-  width: 90%;
-  transition: transform 0.2s ease-in-out, border-color 0.22s ease;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 12px;
+  width: 100%;
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
     cursor: pointer;
+    border-color: var(--primary-start);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 `;
 
@@ -540,19 +460,24 @@ const RemoveFavoriteButton = styled(IconButton)`
   }
 `;
 
-const FavoriteName = styled.h3`
+const FavoriteName = styled.h4`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
 `;
 
 const FavoriteType = styled.p`
-  font-size: 16px;
-  margin-bottom: 5px;
-  font-style: italic;
+  font-size: 12px;
+  margin: 4px 0 0 0;
+  color: var(--muted);
+  font-style: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default Profile;

@@ -83,26 +83,25 @@ const ReviewsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 2vw, 16px);
-  margin-top: 20px;
+  gap: 12px;
   overflow: hidden;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
 `;
 
 const ReviewsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(12px, 3vw, 20px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
   }
 `;
 
@@ -115,35 +114,17 @@ const Review = styled.div`
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--surface-border);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: clamp(16px, 4vw, 24px);
-  min-height: 160px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  min-height: 140px;
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     border-color: var(--primary-start);
-    
-    &::before {
-      transform: scaleX(1);
-    }
   }
 `;
 
@@ -162,10 +143,10 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const ReviewTitle = styled.h3`
-  font-size: clamp(16px, 3vw, 18px);
-  font-weight: 700;
-  margin-bottom: 8px;
+const ReviewTitle = styled.h4`
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -174,17 +155,15 @@ const ReviewTitle = styled.h3`
 `;
 
 const ReviewDate = styled.div`
-  font-size: clamp(11px, 2vw, 12px);
+  font-size: 11px;
   color: var(--muted);
-  margin: 4px 0;
-  font-weight: 500;
+  margin: 2px 0;
 `;
 
 const ReviewCompany = styled.p`
-  font-size: clamp(13px, 2.5vw, 14px);
-  margin-bottom: 8px;
+  font-size: 13px;
+  margin-bottom: 6px;
   color: var(--muted);
-  font-weight: 500;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -195,12 +174,12 @@ const ReviewGrade = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(16px, 3vw, 18px);
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   margin-top: auto;
-  padding: 8px 12px;
+  padding: 6px 10px;
   background: rgba(251, 191, 36, 0.1);
-  border-radius: 20px;
+  border-radius: 12px;
   gap: 4px;
 
   svg {
@@ -212,12 +191,12 @@ const ReviewNavigation = styled.button`
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--surface-border);
-  width: clamp(36px, 8vw, 48px);
-  height: clamp(36px, 8vw, 48px);
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
-  border-radius: 50%;
-  font-size: clamp(16px, 3vw, 20px);
+  border-radius: 6px;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
   pointer-events: ${(props) => (props.disabled ? "none" : "inherit")};
@@ -225,16 +204,9 @@ const ReviewNavigation = styled.button`
   flex-shrink: 0;
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
     background: var(--primary-start);
     color: white;
     border-color: var(--primary-start);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  @media (max-width: 768px) {
-    position: relative;
-    z-index: 1;
   }
 `;
 
