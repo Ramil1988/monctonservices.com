@@ -332,7 +332,8 @@ const TYPE_SYNONYMS = {
   "taxi service": ["Taxis"],
   "gas station": ["Gas stations"],
   "computer repair": ["Computer and mobile repairs"],
-  "massage therapist": ["Massage therapist", "Massage therapists"],
+  "massage therapist": ["Massage therapist", "Massage therapists", "massage_therapist"],
+  "massage_therapist": ["Massage therapist", "Massage therapists", "massage therapist"],
   supermarket: ["Supermarkets"],
   grocery: ["Grocery stores"],
   lodging: ["Hotels"],
@@ -360,8 +361,14 @@ const buildTypeRegexes = (raw) => {
   if (Array.isArray(synonyms)) {
     synonyms.forEach((s) => forms.add(s));
   }
-  // Deduplicate and convert to regexes
-  return Array.from(forms).map((f) => new RegExp(`^${escapeRegex(f)}$`, "i"));
+  // Build regexes: exact matches plus special fuzzy for Massage Therapist
+  const regexes = [];
+  forms.forEach((f) => regexes.push(new RegExp(`^${escapeRegex(f)}$`, "i")));
+  const lower = norm.toLowerCase();
+  if (lower.includes("massage") && lower.includes("therap")) {
+    regexes.push(/massage\s*.*therap/i);
+  }
+  return regexes;
 };
 
 const getCompaniesByServiceType = async (req, res) => {

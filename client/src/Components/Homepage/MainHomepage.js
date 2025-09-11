@@ -38,6 +38,29 @@ const MainHomePage = () => {
         return { id: t.id, name: t.name, icon: null, color: null, hasIcon: false, source: 'google' };
       };
 
+      // Canonical id: prefer underscored key if both underscored and spaced exist
+      const normalizeId = (raw) => {
+        if (!raw) return "";
+        let s = String(raw).trim().toLowerCase();
+        const underscored = s.replace(/\s+/g, "_");
+        const candidates = [underscored, s];
+        // simple plural normalization
+        if (underscored.endsWith("ies")) candidates.push(underscored.slice(0, -3) + "y");
+        if (underscored.endsWith("s")) candidates.push(underscored.slice(0, -1));
+        
+        // Always prefer underscored version if both exist (e.g., "massage_therapist" over "massage therapist")
+        if (googleServiceTypes[underscored] && googleServiceTypes[s]) {
+          return underscored;
+        }
+        
+        for (const k of candidates) if (googleServiceTypes[k]) return k;
+        const byName = Object.keys(googleServiceTypes).find(
+          (k) => googleServiceTypes[k].name.toLowerCase() === s
+        );
+        if (byName) return byName;
+        return underscored;
+      };
+
       try {
         // try live fetch for all cities
         const results = await Promise.all(
@@ -50,13 +73,16 @@ const MainHomePage = () => {
 
         const unionMap = new Map();
         results.forEach(({ city, list }) => {
-          const mapped = list.map(mapWithIcons);
+          const mapped = list.map(mapWithIcons).map((t) => ({ ...t, id: normalizeId(t.id) }));
           // cache per-city for Admin use and offline fallback
           try {
             localStorage.setItem(`placeTypes:${city}`, JSON.stringify(mapped));
           } catch (_) {}
           mapped.forEach((t) => {
-            if (!unionMap.has(t.id)) unionMap.set(t.id, t);
+            const prev = unionMap.get(t.id);
+            if (!prev) return unionMap.set(t.id, t);
+            // prefer google source if duplicates
+            if (prev.source !== 'google' && t.source === 'google') unionMap.set(t.id, t);
           });
         });
 
@@ -75,7 +101,7 @@ const MainHomePage = () => {
             for (const c of comps) {
               const raw = (c.serviceType || "").trim();
               if (!raw) continue;
-              const id = raw.toLowerCase().replace(/\s+/g, "_");
+              const id = normalize(raw);
               if (existingIds.has(id)) continue;
               if (extrasMap.has(id)) continue;
               const st = getServiceType(id);
@@ -84,6 +110,15 @@ const MainHomePage = () => {
             if (extrasMap.size) {
               unionList = unionList.concat(Array.from(extrasMap.values()));
             }
+            // dedupe by id preferring google source
+            const mergedF = new Map();
+            for (const item of unionList) {
+              const prev = mergedF.get(item.id);
+              if (!prev) { mergedF.set(item.id, item); continue; }
+              const prefer = prev.source === 'google' ? prev : item.source === 'google' ? item : prev;
+              mergedF.set(item.id, { ...prefer, companyCount: (prev?.companyCount || 0) + (item.companyCount || 0) });
+            }
+            unionList = Array.from(mergedF.values());
           }
         } catch (_) {}
         // Manual overrides: always include Auto dealers and Massage therapist
@@ -129,6 +164,12 @@ const MainHomePage = () => {
               // simple plural normalization
               if (base.endsWith("ies")) candidates.add(base.slice(0, -3) + "y");
               if (base.endsWith("s")) candidates.add(base.slice(0, -1));
+              
+              // Always prefer underscored version if both exist (e.g., "massage_therapist" over "massage therapist")
+              if (googleServiceTypes[base] && googleServiceTypes[s]) {
+                return base;
+              }
+              
               // try to match googleServiceTypes keys
               for (const k of candidates) {
                 if (googleServiceTypes[k]) return k;
@@ -190,7 +231,7 @@ const MainHomePage = () => {
             for (const c of comps) {
               const raw = (c.serviceType || "").trim();
               if (!raw) continue;
-              const id = raw.toLowerCase().replace(/\s+/g, "_");
+              const id = normalizeId(raw);
               if (existingIds.has(id)) continue;
               if (extrasMap.has(id)) continue;
               const st = getServiceType(id);
@@ -238,6 +279,12 @@ const MainHomePage = () => {
               const candidates = new Set([s, base]);
               if (base.endsWith("ies")) candidates.add(base.slice(0, -3) + "y");
               if (base.endsWith("s")) candidates.add(base.slice(0, -1));
+              
+              // Always prefer underscored version if both exist (e.g., "massage_therapist" over "massage therapist")
+              if (googleServiceTypes[base] && googleServiceTypes[s]) {
+                return base;
+              }
+              
               for (const k of candidates) {
                 if (googleServiceTypes[k]) return k;
               }
