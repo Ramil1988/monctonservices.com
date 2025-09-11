@@ -18,6 +18,8 @@ const PublicCompanyCreate = () => {
   const [allCompanies, setAllCompanies] = useState([]);
   const [matches, setMatches] = useState([]);
   const [geo, setGeo] = useState(null);
+  const [customTypeEnabled, setCustomTypeEnabled] = useState(false);
+  const [customServiceType, setCustomServiceType] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +34,14 @@ const PublicCompanyCreate = () => {
           list.forEach((t) => { if (!map.has(t.id)) map.set(t.id, t); });
         }
       } catch (_) {}
-      const union = Array.from(map.values()).sort((a,b)=>a.name.localeCompare(b.name));
+      let union = Array.from(map.values()).sort((a,b)=>a.name.localeCompare(b.name));
+      // Ensure key types exist even if discovery missed them
+      const ensure = (id, name) => {
+        if (!union.some(t => t.id === id)) union.push({ id, name });
+      };
+      ensure("car_dealer", "Car dealer");
+      ensure("massage_therapist", "Massage therapist");
+      union = union.sort((a,b)=>a.name.localeCompare(b.name));
       setServiceTypes(union);
       if (union.length && !form.serviceType) setForm((f)=>({...f, serviceType: union[0].id }));
     };
@@ -86,6 +95,12 @@ const PublicCompanyCreate = () => {
     e.preventDefault();
     setStatus("Submitting...");
     try {
+      // Validate service type
+      const chosenType = customTypeEnabled ? (customServiceType || "").trim() : (form.serviceType || "");
+      if (!chosenType) {
+        setStatus("Please select or enter a service type");
+        return;
+      }
       // Validate tri-city
       const addr = (form.address || '').toLowerCase();
       const tri = ["moncton", "dieppe", "riverview"];
@@ -98,7 +113,7 @@ const PublicCompanyCreate = () => {
       const resp = await fetch(`${ROOT_API}/company`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, serviceType: chosenType }),
       });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.message || "Failed to create");
@@ -159,11 +174,26 @@ const PublicCompanyCreate = () => {
             </Suggestions>
           )}
           <Label>Service type</Label>
-          <Select name="serviceType" value={form.serviceType} onChange={onChange} required>
-            {serviceTypes.map((t) => (
-              <option key={t.id} value={t.id}>{t.name}</option>
-            ))}
-          </Select>
+          {customTypeEnabled ? (
+            <Row>
+              <Input
+                placeholder="Type service category (e.g., Massage therapist)"
+                value={customServiceType}
+                onChange={(e)=>setCustomServiceType(e.target.value)}
+                required
+              />
+              <GeoButton type="button" onClick={()=>setCustomTypeEnabled(false)}>Use list</GeoButton>
+            </Row>
+          ) : (
+            <Row>
+              <Select name="serviceType" value={form.serviceType} onChange={onChange} required>
+                {serviceTypes.map((t) => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </Select>
+              <GeoButton type="button" onClick={()=>setCustomTypeEnabled(true)}>Custom type</GeoButton>
+            </Row>
+          )}
 
           <Label>Company name</Label>
           <Input name="name" value={form.name} onChange={onChange} required />
