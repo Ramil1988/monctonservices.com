@@ -109,7 +109,7 @@ const Profile = () => {
     <ProfileWrapper>
       {user && (
         <>
-          <SideWrapper>
+          <TopSection>
             <Sidebar>
               <SidebarTop>
                 <ProfileImage
@@ -155,43 +155,43 @@ const Profile = () => {
                 </Stat>
               </StatsWrapper>
             </Sidebar>
-            <WelcomeHeader>
-              <h2>Welcome back, {user.name}!</h2>
-            </WelcomeHeader>
-          </SideWrapper>
-          <MainContent>
-            <SectionWrapper>
-              <h2>Your Reviews</h2>
-              <ProfileReviews reviews={reviews} />
-            </SectionWrapper>
-            <SectionWrapper>
-              <h2>Your Favorites</h2>
-              <FavoriteGrid>
-                {favorites &&
-                  favorites.map((favorite) => (
-                    <FavoriteContainer key={favorite._id}>
-                      <Bookmark>
-                        <HeaderWrapper>
-                          <StyledNavLink to={`/company/${favorite._id}`}>
-                            <FavoriteName>{favorite.name}</FavoriteName>
-                          </StyledNavLink>
-                          <RemoveFavoriteButton
-                            onClick={(event) =>
-                              handleRemoveFavoriteClick(event, favorite._id)
-                            }
-                          >
-                            <CloseIcon />
-                          </RemoveFavoriteButton>
-                        </HeaderWrapper>
+            <WelcomeAndReviews>
+              <WelcomeHeader>
+                <h2>Welcome back, {user.name}!</h2>
+              </WelcomeHeader>
+              <SectionWrapper>
+                <h2>Your Reviews</h2>
+                <ProfileReviews reviews={reviews} />
+              </SectionWrapper>
+            </WelcomeAndReviews>
+          </TopSection>
+          <SectionWrapper>
+            <h2>Your Favorites</h2>
+            <FavoriteGrid>
+              {favorites &&
+                favorites.map((favorite) => (
+                  <FavoriteContainer key={favorite._id}>
+                    <Bookmark>
+                      <HeaderWrapper>
                         <StyledNavLink to={`/company/${favorite._id}`}>
-                          <FavoriteType>{favorite.serviceType}</FavoriteType>
+                          <FavoriteName>{favorite.name}</FavoriteName>
                         </StyledNavLink>
-                      </Bookmark>
-                    </FavoriteContainer>
-                  ))}
-              </FavoriteGrid>
-            </SectionWrapper>
-          </MainContent>
+                        <RemoveFavoriteButton
+                          onClick={(event) =>
+                            handleRemoveFavoriteClick(event, favorite._id)
+                          }
+                        >
+                          <CloseIcon />
+                        </RemoveFavoriteButton>
+                      </HeaderWrapper>
+                      <StyledNavLink to={`/company/${favorite._id}`}>
+                        <FavoriteType>{favorite.serviceType}</FavoriteType>
+                      </StyledNavLink>
+                    </Bookmark>
+                  </FavoriteContainer>
+                ))}
+            </FavoriteGrid>
+          </SectionWrapper>
         </>
       )}
     </ProfileWrapper>
@@ -216,12 +216,12 @@ const blinkCursor = keyframes`
 `;
 
 const WelcomeHeader = styled.div`
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 
   h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
     margin: 0;
   }
 
@@ -245,7 +245,7 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const SideWrapper = styled.div`
+const TopSection = styled.div`
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 16px;
@@ -262,6 +262,13 @@ const SideWrapper = styled.div`
     gap: 8px;
     margin-bottom: 8px;
   }
+`;
+
+const WelcomeAndReviews = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 `;
 
 const Sidebar = styled.div`
@@ -371,12 +378,6 @@ const StatLabel = styled.span`
   color: var(--muted);
 `;
 
-const MainContent = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
 
 const SectionWrapper = styled.div`
   width: 100%;
