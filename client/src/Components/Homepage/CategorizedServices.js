@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -6,14 +6,25 @@ import { serviceCategories, getServicesByCategory } from "../serviceTypes";
 
 const CategorizedServices = ({ data }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
+  const sectionRefs = useRef({});
   
   const categorizedServices = getServicesByCategory(data);
 
   const toggleCategory = (categoryId) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [categoryId]: !prev[categoryId]
-    }));
+    setExpandedCategories((prev) => {
+      const currentlyOpen = !!prev[categoryId];
+      const next = currentlyOpen ? {} : { [categoryId]: true };
+      // Smooth scroll to the category when expanding
+      if (!currentlyOpen) {
+        setTimeout(() => {
+          const el = sectionRefs.current[categoryId];
+          if (el && typeof el.scrollIntoView === 'function') {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 50);
+      }
+      return next;
+    });
   };
 
   return (
@@ -24,7 +35,11 @@ const CategorizedServices = ({ data }) => {
         const isExpanded = expandedCategories[categoryId];
         
         return (
-          <CategorySection key={categoryId}>
+          <CategorySection
+            key={categoryId}
+            isExpanded={isExpanded}
+            ref={(el) => { sectionRefs.current[categoryId] = el; }}
+          >
             <CategoryCard onClick={() => toggleCategory(categoryId)}>
               <CategoryHeader>
                 <CategoryIconWrapper color={category.color}>
@@ -93,6 +108,7 @@ const CategoriesGrid = styled.div`
 
 const CategorySection = styled.div`
   margin-bottom: 14px;
+  ${props => props.isExpanded ? `grid-column: 1 / -1;` : ``}
 `;
 
 const CategoryCard = styled.div`
