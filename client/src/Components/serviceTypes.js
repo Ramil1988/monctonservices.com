@@ -461,6 +461,18 @@ export const googleServiceTypes = {
     icon: FaUniversity,
     color: "#7C3AED",
   },
+  bank: {
+    id: "bank",
+    name: "Bank",
+    icon: FaUniversity,
+    color: "#2563EB",
+  },
+  Bank: {
+    id: "Bank",
+    name: "Bank",
+    icon: FaUniversity,
+    color: "#2563EB",
+  },
   local_government_office: {
     id: "local_government_office",
     name: "Local government office",
@@ -604,6 +616,7 @@ export const serviceCategories = {
     color: "#6B7280",
     description: "Business and professional services (includes Insurance, Travel agency, and Local government)",
     services: [
+      "bank",
       "banks",
       "insurance",
       "insurance_agency",
