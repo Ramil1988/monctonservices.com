@@ -299,6 +299,33 @@ module.exports.geocodeAddress = async (req, res) => {
     }
 
     if (!(data.status === 'OK' && Array.isArray(data.results) && data.results.length > 0)) {
+      // Fallback to OpenStreetMap Nominatim for light usage
+      try {
+        const nomiUrl = new URL('https://nominatim.openstreetmap.org/search');
+        nomiUrl.searchParams.set('format', 'json');
+        nomiUrl.searchParams.set('q', address);
+        nomiUrl.searchParams.set('addressdetails', '1');
+        nomiUrl.searchParams.set('countrycodes', 'ca');
+        const respN = await fetch(nomiUrl.href, { headers: { 'User-Agent': 'MonctonServices/1.0 (+https://monctonservices.com)' } });
+        const jsonN = await respN.json();
+        if (Array.isArray(jsonN) && jsonN.length > 0) {
+          const rN = jsonN[0];
+          const compsN = rN.address || {};
+          const cityN = compsN.city || compsN.town || compsN.village || compsN.hamlet || '';
+          const provinceN = compsN.state || '';
+          const countryN = compsN.country || '';
+          const postalN = compsN.postcode || '';
+          return res.status(200).json({ status: 200, data: {
+            lat: parseFloat(rN.lat),
+            lang: parseFloat(rN.lon),
+            formatted: rN.display_name,
+            city: cityN,
+            province: provinceN,
+            country: countryN,
+            postal_code: postalN,
+          }, message: data.status || 'FALLBACK_NOMINATIM' });
+        }
+      } catch (_) {}
       return res.status(200).json({ status: 200, data: null, message: data.status || 'NO_RESULTS' });
     }
     const r = data.results[0];

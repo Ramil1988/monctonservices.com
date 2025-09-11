@@ -249,6 +249,8 @@ const Input = styled.input`
   background: var(--surface);
   color: var(--text);
   border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const Select = styled.select`
@@ -257,6 +259,8 @@ const Select = styled.select`
   background: var(--surface);
   color: var(--text);
   border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const Submit = styled.button`
@@ -278,14 +282,18 @@ const Status = styled.div`
 const Row = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 
   @media (max-width: 700px){
     grid-template-columns: 1fr;
   }
 `;
 
-const Col = styled.div``;
+const Col = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
 
 const Suggestions = styled.div`
   background: var(--surface);
@@ -313,6 +321,7 @@ const Small = styled.div`
 
 const DetailsRow = styled(Row)`
   margin-top: 6px;
+  grid-template-columns: 1fr 1fr;
 `;
 
 const GeoButton = styled.button`
@@ -322,6 +331,8 @@ const GeoButton = styled.button`
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
+  white-space: nowrap;
+  height: 100%;
 `;
 
 const Back = styled.button`
