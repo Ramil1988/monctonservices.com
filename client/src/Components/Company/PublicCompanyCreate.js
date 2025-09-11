@@ -14,6 +14,8 @@ const PublicCompanyCreate = () => {
     image: "",
   });
   const [status, setStatus] = useState("");
+  const [allCompanies, setAllCompanies] = useState([]);
+  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     const loadTypes = async () => {
@@ -34,9 +36,37 @@ const PublicCompanyCreate = () => {
     loadTypes();
   }, []);
 
+  // Load existing companies (tri-city only) for suggestion/autofill
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        const resp = await fetch(`${ROOT_API}/allCompanies`);
+        const data = await resp.json();
+        const tri = ["moncton", "dieppe", "riverview"];
+        const list = Array.isArray(data.data) ? data.data.filter((c)=>{
+          const a = (c.address || "").toLowerCase();
+          return tri.some((t)=>a.includes(t));
+        }) : [];
+        setAllCompanies(list);
+      } catch (_) {}
+    };
+    loadCompanies();
+  }, []);
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
+    if (name === 'name') {
+      const v = (value || '').toLowerCase().trim();
+      if (v.length >= 2) {
+        const m = allCompanies
+          .filter(c => (c.name || '').toLowerCase().includes(v))
+          .slice(0, 6);
+        setMatches(m);
+      } else {
+        setMatches([]);
+      }
+    }
   };
 
   const onFileChange = async (e) => {
@@ -53,6 +83,12 @@ const PublicCompanyCreate = () => {
     e.preventDefault();
     setStatus("Submitting...");
     try {
+      // Warn if address not in tri-city
+      const addr = (form.address || '').toLowerCase();
+      const tri = ["moncton", "dieppe", "riverview"];
+      if (!tri.some(t => addr.includes(t))) {
+        setStatus("Warning: address seems outside Moncton/Dieppe/Riverview. You can still submit.");
+      }
       const resp = await fetch(`${ROOT_API}/company`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -72,6 +108,23 @@ const PublicCompanyCreate = () => {
       <Card>
         <Title>Add a new company</Title>
         <Form onSubmit={onSubmit}>
+          {matches.length > 0 && (
+            <Suggestions>
+              <Small>Possible duplicates (click to autofill fields):</Small>
+              {matches.map((c) => (
+                <SuggestionRow key={c._id} onClick={() => setForm((f)=>({
+                  ...f,
+                  name: c.name || f.name,
+                  address: c.address || f.address,
+                  phoneNumber: c.phoneNumber || f.phoneNumber,
+                  website: c.website || f.website,
+                }))}>
+                  <b>{c.name}</b>
+                  <span>{c.address}</span>
+                </SuggestionRow>
+              ))}
+            </Suggestions>
+          )}
           <Label>Service type</Label>
           <Select name="serviceType" value={form.serviceType} onChange={onChange} required>
             {serviceTypes.map((t) => (
@@ -98,6 +151,17 @@ const PublicCompanyCreate = () => {
 
           <Label>Image (optional)</Label>
           <Input type="file" accept="image/*" onChange={onFileChange} />
+
+          <DetailsRow>
+            <Col>
+              <Label>Latitude (optional)</Label>
+              <Input name="lat" value={form.lat || ''} onChange={onChange} />
+            </Col>
+            <Col>
+              <Label>Longitude (optional)</Label>
+              <Input name="lang" value={form.lang || ''} onChange={onChange} />
+            </Col>
+          </DetailsRow>
 
           <Submit type="submit">Submit</Submit>
           {status && <Status>{status}</Status>}
@@ -181,3 +245,30 @@ const Row = styled.div`
 
 const Col = styled.div``;
 
+const Suggestions = styled.div`
+  background: var(--surface);
+  border: 1px dashed var(--surface-border);
+  border-radius: 12px;
+  padding: 10px;
+`;
+
+const SuggestionRow = styled.div`
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  &:hover { background: rgba(0,0,0,0.05); }
+  b { color: var(--text); }
+  span { color: var(--muted); font-size: 0.9rem; }
+`;
+
+const Small = styled.div`
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+`;
+
+const DetailsRow = styled(Row)`
+  margin-top: 6px;
+`;

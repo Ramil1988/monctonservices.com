@@ -4,6 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import CategorizedServices from "./CategorizedServices";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
+import { NavLink } from "react-router-dom";
 import MonctonImage from "../../Pictures/Moncton.jpg";
 import MonctonImage1 from "../../Pictures/Moncton1.jpg";
 import MonctonImage2 from "../../Pictures/Moncton2.jpg";
@@ -103,6 +104,7 @@ const Homepage = (props) => {
         <BigText>Recent reviews</BigText>
         <Reviews reviews={reviews} />
       </MainWrapper>
+      <Fab to="/add-company" title="Add a new company">+</Fab>
     </Wrapper>
   );
 };
@@ -349,3 +351,22 @@ const ShowMoreLessButton = styled.button`
 `;
 
 export default Homepage;
+
+const Fab = styled(NavLink)`
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
+  font-size: 32px;
+  line-height: 56px;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+  &:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
+`;
