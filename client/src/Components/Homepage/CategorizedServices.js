@@ -60,6 +60,11 @@ const CategorizedServices = ({ data }) => {
                       </ServiceIconTile>
                       <ServiceAccent />
                       <ServiceName>{service.name}</ServiceName>
+                      {service.source && (
+                        <SourceBadge title={service.source === 'google' ? 'Discovered via Google' : 'Added from companies'}>
+                          {service.source === 'google' ? 'Google' : 'Custom'}
+                        </SourceBadge>
+                      )}
                     </StyledLink>
                   </ServiceCard>
                 ))}
@@ -253,6 +258,17 @@ const ServiceName = styled.h4`
   color: var(--text);
   margin: 0;
   line-height: 1.3;
+`;
+
+const SourceBadge = styled.span`
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--pill-text);
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
 `;
 
 export default CategorizedServices;

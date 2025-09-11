@@ -32,9 +32,10 @@ const MainHomePage = () => {
             icon: serviceTypeData.icon,
             color: serviceTypeData.color,
             hasIcon: true,
+            source: 'google',
           };
         }
-        return { id: t.id, name: t.name, icon: null, color: null, hasIcon: false };
+        return { id: t.id, name: t.name, icon: null, color: null, hasIcon: false, source: 'google' };
       };
 
       try {
@@ -94,6 +95,7 @@ const MainHomePage = () => {
             icon: m?.icon || null,
             color: m?.color || null,
             hasIcon: !!m?.icon,
+            source: 'google',
           });
         }
         if (!unionList.some((t) => t.id === "massage_therapist")) {
@@ -165,6 +167,7 @@ const MainHomePage = () => {
               icon: m?.icon || null,
               color: m?.color || null,
               hasIcon: !!m?.icon,
+              source: 'google',
             });
           }
           if (!unionList.some((t) => t.id === "massage_therapist")) {

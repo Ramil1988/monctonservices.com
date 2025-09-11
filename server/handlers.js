@@ -70,6 +70,7 @@ const createCompany = async (req, res) => {
       reviews: [],
       lat: lat || null,
       lang: lang || null,
+      source: "custom",
     });
 
     return res.status(201).json({

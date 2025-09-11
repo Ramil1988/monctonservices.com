@@ -54,21 +54,18 @@ const Company = () => {
     }
   };
 
-  let selectedServicetype;
-  if (company && company.serviceType && (serviceTypes || thingsToDo)) {
+  let selectedServicetype = "";
+  if (company && company.serviceType) {
     const serviceTypeLower = company.serviceType.toLowerCase();
     if (serviceTypes && serviceTypes[serviceTypeLower]) {
       selectedServicetype = serviceTypes[serviceTypeLower].name;
-    } else if (
-      thingsToDo &&
-      thingsToDo[serviceTypeLower] &&
-      thingsToDo[serviceTypeLower].name
-    ) {
+    } else if (thingsToDo && thingsToDo[serviceTypeLower]?.name) {
       selectedServicetype = thingsToDo[serviceTypeLower].name;
     } else {
-      console.error(
-        `Service type ${company.serviceType} not found in serviceTypes or thingsToDo`
-      );
+      // Fallback: show raw serviceType nicely
+      selectedServicetype = company.serviceType
+        .replace(/_/g, " ")
+        .replace(/^\w/, (c) => c.toUpperCase());
     }
   }
 
@@ -278,7 +275,14 @@ const Company = () => {
         </InfoWrapper>
         <InfoBox>
           <InfoTitle>Service type</InfoTitle>
-          <Address>{selectedServicetype}</Address>
+          <ServiceTypeRow>
+            <Address>{selectedServicetype || "–"}</Address>
+            {company?.source && (
+              <SourcePill title={company.source === 'google' ? 'Imported via Google Maps API' : 'Added by user'}>
+                {company.source === 'google' ? 'Google Maps' : 'Custom'}
+              </SourcePill>
+            )}
+          </ServiceTypeRow>
           <InfoTitle>Address</InfoTitle>
           <StyledWrapper>
             <Address>{company.address}</Address>
@@ -836,3 +840,17 @@ const CloseIcon = styled.span`
 `;
 
 export default Company;
+// styled helpers injected above export if not already defined
+const ServiceTypeRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+const SourcePill = styled.span`
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pill-text);
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+`;
