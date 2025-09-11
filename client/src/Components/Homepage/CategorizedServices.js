@@ -30,7 +30,13 @@ const CategorizedServices = ({ data }) => {
   return (
     <Container>
       <CategoriesGrid>
-      {Object.entries(categorizedServices).map(([categoryId, services]) => {
+      {Object.entries(categorizedServices)
+        .sort(([categoryIdA], [categoryIdB]) => {
+          const categoryA = serviceCategories[categoryIdA];
+          const categoryB = serviceCategories[categoryIdB];
+          return categoryA?.name.localeCompare(categoryB?.name) || 0;
+        })
+        .map(([categoryId, services]) => {
         const category = serviceCategories[categoryId];
         const isExpanded = expandedCategories[categoryId];
         

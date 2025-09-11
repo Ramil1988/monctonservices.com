@@ -16,10 +16,8 @@ const PopularServices = ({ types = [] }) => {
   const fetchTopCompaniesByServiceTypes = async () => {
     const servicesWithTopCompanies = [];
 
-    // Prefer service types that have reviewed companies first
-    const selectedServiceTypes = types.slice(0, 6);
-
-    for (const serviceType of selectedServiceTypes) {
+    // Check all service types to find those with reviews
+    for (const serviceType of types) {
       try {
         const response = await fetch(
           `${ROOT_API}/companies/${serviceType.id}?cities=Moncton,Dieppe,Riverview`
@@ -28,17 +26,21 @@ const PopularServices = ({ types = [] }) => {
         const data = await response.json();
         const companies = Array.isArray(data.data) ? data.data : [];
 
-        const sortedCompanies = companies
-          .slice()
-          .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
-          .slice(0, 5);
-
         const totalReviews = companies.reduce((sum, c) => sum + (c.reviews?.length || 0), 0);
-        servicesWithTopCompanies.push({
-          ...serviceType,
-          topCompanies: sortedCompanies,
-          totalReviews,
-        });
+        
+        // Only include service types that have reviews
+        if (totalReviews > 0) {
+          const sortedCompanies = companies
+            .slice()
+            .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
+            .slice(0, 5);
+
+          servicesWithTopCompanies.push({
+            ...serviceType,
+            topCompanies: sortedCompanies,
+            totalReviews,
+          });
+        }
       } catch (error) {
         console.error(
           `Error fetching companies for ${serviceType.name}:`,
@@ -47,14 +49,9 @@ const PopularServices = ({ types = [] }) => {
       }
     }
 
-    // Order types with any reviews first, then by total reviews desc, and cap to 3
+    // Order by total reviews desc and cap to 3
     const ordered = servicesWithTopCompanies
-      .sort((a, b) => {
-        const aHas = a.totalReviews > 0 ? 1 : 0;
-        const bHas = b.totalReviews > 0 ? 1 : 0;
-        if (aHas !== bHas) return bHas - aHas;
-        return (b.totalReviews || 0) - (a.totalReviews || 0);
-      })
+      .sort((a, b) => (b.totalReviews || 0) - (a.totalReviews || 0))
       .slice(0, 3);
     setServicesData(ordered);
   };

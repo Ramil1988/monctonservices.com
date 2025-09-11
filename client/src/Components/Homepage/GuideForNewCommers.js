@@ -417,15 +417,24 @@ const AboutWrapper = styled.div`
   margin: 20px auto;
   padding: 50px 20px;
   font-family: "Raleway", sans-serif;
-  border-radius: 10px;
-  background: linear-gradient(to right, #f2f2f2, #c4c4c4);
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
 
   @media (max-width: 1040px) {
-    padding: 20px 10px;
+    padding: 30px 15px;
+    margin: 15px auto;
   }
 
   @media (max-width: 768px) {
-    padding: 10px 5px;
+    padding: 20px 12px;
+    margin: 10px;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px 10px;
+    margin: 5px;
   }
 `;
 
@@ -445,53 +454,28 @@ const Header = styled.div`
 
 const TitleWrapper = styled.div`
   text-align: left;
-  margin-left: 50px;
+  margin-left: 30px;
+  flex: 1;
 
   @media (max-width: 1040px) {
-    width: 90%;
     margin-left: 0;
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
+    text-align: center;
   }
 `;
 
 const AboutTitle = styled.h1`
-  font-size: 40px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-
-  @media (max-width: 1040px) {
-    font-size: 30px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 20px;
-  }
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 15px;
+  line-height: 1.2;
 `;
 
 const AboutSubtitle = styled.h2`
-  font-size: 24px;
-  font-weight: normal;
-  color: #333;
-
-  @media (max-width: 1040px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.4;
 `;
 
 const AboutContent = styled.div`
@@ -501,93 +485,82 @@ const AboutContent = styled.div`
 `;
 
 const Section = styled.div`
-  margin: 0px 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0px 15px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: start;
-  min-height: 150px;
+  min-height: 120px;
   animation: ${fadeIn} 2s ease-in;
+  transition: all 0.2s ease-in-out;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    padding: 10px;
+    padding: 18px;
+    margin: 0px 8px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    margin: 0px 5px;
   }
 
   &:hover {
-    transform: scale(1.01);
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-start);
   }
 `;
 
 const SectionTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-grow: 1;
   flex-basis: 0;
   min-width: 0;
-  margin-left: 20px;
 
   @media (max-width: 768px) {
-    margin-left: 0;
+    margin-top: 10px;
   }
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-
-  @media (max-width: 1040px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.3;
 `;
 
 const SectionText = styled.p`
-  font-size: 20px;
-  line-height: 2;
-  color: #333;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
 
   & span {
-    font-weight: bold;
-  }
-
-  @media (max-width: 1040px) {
-    font-size: 18px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-start);
   }
 `;
 
 const StyledAnchor = styled.a`
-  font-weight: bold;
-  color: black;
+  font-weight: 600;
+  color: var(--primary-start);
   text-decoration: none;
-  padding: 4px 8px;
+  padding: 2px 6px;
   border-radius: 4px;
-  transition: background-color 2s ease;
+  transition: all 0.2s ease;
+  margin: 0 2px;
 
   &:hover {
-    background-color: lightblue;
+    background-color: var(--primary-start);
+    color: var(--pill-text);
+    transform: translateY(-1px);
   }
 `;
 

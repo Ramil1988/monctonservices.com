@@ -135,12 +135,13 @@ const NavLinks = styled.div`
     position: absolute;
     top: 80px;
     left: 20px;
-    background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    right: 20px;
+    background-color: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
     padding: 20px;
     z-index: 10;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     align-items: center;
     justify-content: center;
   }
@@ -176,8 +177,13 @@ const UserWrapper = styled.div`
   flex: 0 0 auto;
 
   @media (max-width: 1150px) {
-    width: 100%;
-    justify-content: center;
+    width: auto;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 4px;
   }
 `;
 
