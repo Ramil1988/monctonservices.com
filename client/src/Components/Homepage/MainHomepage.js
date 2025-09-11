@@ -8,112 +8,98 @@ const MainHomePage = () => {
   const [types, setTypes] = useState([]);
 
   useEffect(() => {
-    const load = async () => {
-      const city = localStorage.getItem("placeTypesCity") || "Moncton, NB";
-      try {
-        const resp = await fetch(
-          `${ROOT_API}/service-types?city=${encodeURIComponent(city)}`
-        );
-        const data = await resp.json();
-        const arr = Array.isArray(data.data) ? data.data : [];
+    const loadUnion = async () => {
+      const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
 
-        console.log("Raw API data:", arr); // Debug: see what Google API actually returns
-
-        // Map the Google API data with our icon mappings
-        const typesWithIcons = arr.map((t) => {
-          console.log("Processing service type:", t); // Debug: see the full object structure
-
-          // Try multiple ways to match the service type
-          let serviceTypeData = null;
-
-          // 1. Try exact ID match
-          serviceTypeData = googleServiceTypes[t.id];
-
-          // 2. Try name-based matching (convert spaces to underscores and lowercase)
-          if (!serviceTypeData && t.name) {
-            const nameKey = t.name.toLowerCase().replace(/\s+/g, "_");
-            serviceTypeData = googleServiceTypes[nameKey];
-            console.log(
-              "Trying name-based match:",
-              nameKey,
-              "Found:",
-              !!serviceTypeData
-            );
-          }
-
-          // 3. Try direct name match
-          if (!serviceTypeData && t.name) {
-            const matchingKey = Object.keys(googleServiceTypes).find(
-              (key) =>
-                googleServiceTypes[key].name.toLowerCase() ===
-                t.name.toLowerCase()
-            );
-            if (matchingKey) {
-              serviceTypeData = googleServiceTypes[matchingKey];
-              console.log("Found by name match:", matchingKey, t.name);
-            }
-          }
-
-          console.log(
-            "Final serviceTypeData for",
-            t.name,
-            ":",
-            serviceTypeData
+      // mapper from a raw Google type to our enriched type
+      const mapWithIcons = (t) => {
+        let serviceTypeData = googleServiceTypes[t.id];
+        if (!serviceTypeData && t.name) {
+          const nameKey = t.name.toLowerCase().replace(/\s+/g, "_");
+          serviceTypeData = googleServiceTypes[nameKey];
+        }
+        if (!serviceTypeData && t.name) {
+          const matchingKey = Object.keys(googleServiceTypes).find(
+            (key) => googleServiceTypes[key].name.toLowerCase() === t.name.toLowerCase()
           );
-
-          if (serviceTypeData) {
-            return {
-              id: t.id,
-              name: t.name,
-              icon: serviceTypeData.icon,
-              color: serviceTypeData.color,
-              hasIcon: true,
-            };
-          }
-
-          // Fallback for unmapped service types
-          console.log("No mapping found for:", t.id, t.name);
+          if (matchingKey) serviceTypeData = googleServiceTypes[matchingKey];
+        }
+        if (serviceTypeData) {
           return {
             id: t.id,
             name: t.name,
-            icon: null,
-            color: null,
-            hasIcon: false,
+            icon: serviceTypeData.icon,
+            color: serviceTypeData.color,
+            hasIcon: true,
           };
+        }
+        return { id: t.id, name: t.name, icon: null, color: null, hasIcon: false };
+      };
+
+      try {
+        // try live fetch for all cities
+        const results = await Promise.all(
+          cities.map((city) =>
+            fetch(`${ROOT_API}/service-types?city=${encodeURIComponent(city)}`)
+              .then((r) => r.json())
+              .then((d) => ({ city, list: Array.isArray(d.data) ? d.data : [] }))
+          )
+        );
+
+        const unionMap = new Map();
+        results.forEach(({ city, list }) => {
+          const mapped = list.map(mapWithIcons);
+          // cache per-city for Admin use and offline fallback
+          try {
+            localStorage.setItem(`placeTypes:${city}`, JSON.stringify(mapped));
+          } catch (_) {}
+          mapped.forEach((t) => {
+            if (!unionMap.has(t.id)) unionMap.set(t.id, t);
+          });
         });
 
-        console.log("Final types with icons:", typesWithIcons); // Debug log
-
-        setTypes(typesWithIcons);
-
-        // cache locally for offline/SSR gaps
-        localStorage.setItem(
-          `placeTypes:${city}`,
-          JSON.stringify(typesWithIcons)
+        const unionList = Array.from(unionMap.values()).sort((a, b) =>
+          a.name.localeCompare(b.name)
         );
-      } catch (_) {
-        // fallback to cache
+        setTypes(unionList);
         try {
-          const raw = localStorage.getItem(`placeTypes:${city}`);
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) {
-              // Ensure cached data also has icons (in case we added new mappings)
-              const parsedWithIcons = parsed.map((t) => {
-                const serviceTypeData = googleServiceTypes[t.id];
-                return {
-                  ...t,
-                  icon: t.icon || serviceTypeData?.icon || null,
-                  color: t.color || serviceTypeData?.color || null,
-                };
-              });
-              setTypes(parsedWithIcons);
-            }
-          }
+          localStorage.setItem(`placeTypes:TriCitiesUnion`, JSON.stringify(unionList));
         } catch (_) {}
+      } catch (_) {
+        // fallback to cache: merge any available per-city caches
+        const unionMap = new Map();
+        cities.forEach((city) => {
+          try {
+            const raw = localStorage.getItem(`placeTypes:${city}`);
+            if (!raw) return;
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return;
+            parsed.forEach((t) => {
+              const serviceTypeData = googleServiceTypes[t.id];
+              const enriched = {
+                ...t,
+                icon: t.icon || serviceTypeData?.icon || null,
+                color: t.color || serviceTypeData?.color || null,
+              };
+              if (!unionMap.has(enriched.id)) unionMap.set(enriched.id, enriched);
+            });
+          } catch (_) {}
+        });
+        if (unionMap.size > 0) {
+          const unionList = Array.from(unionMap.values()).sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
+          setTypes(unionList);
+        } else {
+          // last resort
+          try {
+            const raw = localStorage.getItem(`placeTypes:TriCitiesUnion`);
+            if (raw) setTypes(JSON.parse(raw));
+          } catch (_) {}
+        }
       }
     };
-    load();
+    loadUnion();
   }, []);
 
   return (
