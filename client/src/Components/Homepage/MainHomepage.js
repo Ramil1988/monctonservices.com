@@ -110,6 +110,24 @@ const MainHomePage = () => {
           });
         }
         unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
+        // Attach company counts per type (tri-cities only)
+        try {
+          const resp = await fetch(`${ROOT_API}/allCompanies`);
+          if (resp.ok) {
+            const data = await resp.json();
+            const tri = ["moncton", "dieppe", "riverview"];
+            const comps = Array.isArray(data.data)
+              ? data.data.filter((c) => tri.some((t) => (c.address || "").toLowerCase().includes(t)))
+              : [];
+            const counts = new Map();
+            for (const c of comps) {
+              const id = (c.serviceType || "").toLowerCase().replace(/\s+/g, "_");
+              if (!id) continue;
+              counts.set(id, (counts.get(id) || 0) + 1);
+            }
+            unionList = unionList.map((t) => ({ ...t, companyCount: counts.get(t.id) || 0 }));
+          }
+        } catch (_) {}
         setTypes(unionList);
         try {
           localStorage.setItem(`placeTypes:TriCitiesUnion`, JSON.stringify(unionList));
@@ -183,6 +201,22 @@ const MainHomePage = () => {
             });
           }
           unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
+          // Attach counts from cached companies if available
+          try {
+            const compRaw = localStorage.getItem(`allCompaniesCache`);
+            const compList = compRaw ? JSON.parse(compRaw) : [];
+            const tri = ["moncton", "dieppe", "riverview"];
+            const comps = Array.isArray(compList)
+              ? compList.filter((c) => tri.some((t) => (c.address || "").toLowerCase().includes(t)))
+              : [];
+            const counts = new Map();
+            for (const c of comps) {
+              const id = (c.serviceType || "").toLowerCase().replace(/\s+/g, "_");
+              if (!id) continue;
+              counts.set(id, (counts.get(id) || 0) + 1);
+            }
+            unionList = unionList.map((t) => ({ ...t, companyCount: counts.get(t.id) || 0 }));
+          } catch (_) {}
           setTypes(unionList);
         } else {
           // last resort

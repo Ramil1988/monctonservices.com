@@ -80,7 +80,7 @@ const CategorizedServices = ({ data }) => {
                         variant={service.source === 'google' ? 'google' : 'custom'}
                         title={(service.source === 'google') ? 'Discovered via Google' : 'Added from companies'}
                       >
-                        {service.source === 'google' ? 'Google' : 'Custom'}
+                        {(service.source === 'google' ? 'Google' : 'Custom') + ' · ' + (service.companyCount ?? 0)}
                       </SourceBadge>
                     </StyledLink>
                   </ServiceCard>
