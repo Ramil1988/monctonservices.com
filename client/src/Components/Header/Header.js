@@ -26,20 +26,22 @@ const Header = () => {
         <MenuIcon onClick={toggleMenu}>
           <FaBars />
         </MenuIcon>
-        <NavLinks menuOpen={menuOpen}>
-          <NavLink className="nav-link" to="/" onClick={toggleMenu}>
-            Home
-          </NavLink>
-          <NavLink className="nav-link" to="/about" onClick={toggleMenu}>
-            About
-          </NavLink>
-          <NavLink
-            className="nav-link"
-            to="/searchresults"
-            onClick={toggleMenu}
-          >
-            Search
-          </NavLink>
+        <NavLinks menuOpen={menuOpen} onClick={toggleMenu}>
+          <MobileMenuContent onClick={(e) => e.stopPropagation()}>
+            <NavLink className="nav-link" to="/" onClick={toggleMenu}>
+              Home
+            </NavLink>
+            <NavLink className="nav-link" to="/about" onClick={toggleMenu}>
+              About
+            </NavLink>
+            <NavLink
+              className="nav-link"
+              to="/searchresults"
+              onClick={toggleMenu}
+            >
+              Search
+            </NavLink>
+          </MobileMenuContent>
         </NavLinks>
         <UserWrapper>
           <ThemeToggle />
@@ -132,18 +134,17 @@ const NavLinks = styled.div`
   @media (max-width: 1150px) {
     display: ${({ menuOpen }) => (menuOpen ? "flex" : "none")};
     flex-direction: column;
-    position: absolute;
-    top: 80px;
-    left: 20px;
-    right: 20px;
-    background-color: var(--surface);
-    border: 1px solid var(--surface-border);
-    border-radius: 8px;
-    padding: 20px;
-    z-index: 10;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
     align-items: center;
     justify-content: center;
+    padding: 0;
   }
 
   .nav-link {
@@ -199,6 +200,23 @@ const UserName = styled.div`
 
   @media (max-width: 1000px) {
     display: none;
+  }
+`;
+
+const MobileMenuContent = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 280px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+
+  @media (max-width: 1150px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
   }
 `;
 
