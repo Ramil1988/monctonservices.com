@@ -687,6 +687,7 @@ export const serviceCategories = {
       "book store",
       "jewelry_store", 
       "jewelry store",
+      "pet_store",
       "furniture_store",
       "furniture store",
       "home_goods_store",

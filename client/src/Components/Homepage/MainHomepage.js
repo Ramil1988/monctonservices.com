@@ -9,7 +9,27 @@ const MainHomePage = () => {
 
   useEffect(() => {
     const loadUnion = async () => {
-      const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+      // Prefer the last cities used in Admin; else try to infer from localStorage; else tri-cities default
+      let cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+      try {
+        const rawCities = localStorage.getItem("placeTypes:LastCitiesUnion");
+        const parsed = rawCities ? JSON.parse(rawCities) : null;
+        if (Array.isArray(parsed) && parsed.length) {
+          cities = parsed;
+        } else {
+          // try to infer from any cached placeTypes:<city> keys
+          const found = new Set();
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (!key) continue;
+            if (key.startsWith("placeTypes:") && key !== "placeTypes:TriCitiesUnion" && key !== "placeTypesCity") {
+              const cityKey = key.slice("placeTypes:".length);
+              if (cityKey && !cityKey.includes("TriCitiesUnion")) found.add(cityKey);
+            }
+          }
+          if (found.size) cities = Array.from(found);
+        }
+      } catch (_) {}
 
       // mapper from a raw Google type to our enriched type
       const mapWithIcons = (t) => {
@@ -74,6 +94,7 @@ const MainHomePage = () => {
         setTypes(unionList);
         try {
           localStorage.setItem(`placeTypes:TriCitiesUnion`, JSON.stringify(unionList));
+          localStorage.setItem("placeTypes:LastCitiesUnion", JSON.stringify(cities));
         } catch (_) {}
       } catch (_) {
         // fallback to cache: merge any available per-city caches

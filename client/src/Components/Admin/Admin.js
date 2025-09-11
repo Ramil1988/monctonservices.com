@@ -300,6 +300,9 @@ const Admin = () => {
                 }
 
                 setImportStatus(`Discovered types for ${uniqueCities.length} city(ies); total ${totalDiscovered} entries.`);
+                try {
+                  localStorage.setItem("placeTypes:LastCitiesUnion", JSON.stringify(uniqueCities));
+                } catch (_) {}
 
                 // Rebuild union for dropdown (union of the same cities input)
                 try {
