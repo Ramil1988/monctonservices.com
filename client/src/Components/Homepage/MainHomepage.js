@@ -47,17 +47,19 @@ const MainHomePage = () => {
           )
         );
 
-        const combined = [];
+        const unionMap = new Map();
         results.forEach(({ city, list }) => {
-          const mapped = list.map(mapWithIcons).map((t) => ({ ...t, _city: city }));
+          const mapped = list.map(mapWithIcons);
           // cache per-city for Admin use and offline fallback
           try {
             localStorage.setItem(`placeTypes:${city}`, JSON.stringify(mapped));
           } catch (_) {}
-          combined.push(...mapped);
+          mapped.forEach((t) => {
+            if (!unionMap.has(t.id)) unionMap.set(t.id, t);
+          });
         });
 
-        let unionList = combined;
+        let unionList = Array.from(unionMap.values());
         // Manual overrides: always include Auto dealers
         if (!unionList.some((t) => t.id === "car_dealer")) {
           const m = googleServiceTypes["car_dealer"];
@@ -89,13 +91,16 @@ const MainHomePage = () => {
                 ...t,
                 icon: t.icon || serviceTypeData?.icon || null,
                 color: t.color || serviceTypeData?.color || null,
-                _city: city,
               });
             });
           } catch (_) {}
         });
         if (fallback.length > 0) {
-          let unionList = fallback;
+          const map = new Map();
+          fallback.forEach((t) => {
+            if (!map.has(t.id)) map.set(t.id, t);
+          });
+          let unionList = Array.from(map.values());
           if (!unionList.some((t) => t.id === "car_dealer")) {
             const m = googleServiceTypes["car_dealer"];
             unionList.push({
