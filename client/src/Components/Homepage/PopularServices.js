@@ -23,11 +23,13 @@ const PopularServices = ({ types = [] }) => {
         const response = await fetch(
           `${ROOT_API}/companies/${serviceType.id}?cities=Moncton,Dieppe,Riverview`
         );
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const companies = data.data;
+        const companies = Array.isArray(data.data) ? data.data : [];
 
         const sortedCompanies = companies
-          .sort((a, b) => b.reviews.length - a.reviews.length)
+          .slice()
+          .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
           .slice(0, 5);
 
         servicesWithTopCompanies.push({
