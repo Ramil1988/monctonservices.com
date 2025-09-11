@@ -354,7 +354,28 @@ const getCompaniesByServiceType = async (req, res) => {
 
     await client.connect();
 
-    const query = regexes.length ? { $or: regexes.map((r) => ({ serviceType: r })) } : { _id: null };
+    // City filtering: default to tri-cities unless explicitly overridden
+    // Accepts query param `cities` as comma/semicolon/newline-separated list, or `scope=all` to disable filter
+    let cityRegexOr = [];
+    const scope = (req.query.scope || "").toLowerCase();
+    const rawCities = (req.query.cities || "").trim();
+    if (scope !== "all") {
+      let cities = [];
+      if (rawCities) {
+        cities = rawCities.split(/[;,\n]/).map((s) => s.trim()).filter(Boolean);
+      }
+      if (cities.length === 0) {
+        cities = ["Moncton", "Dieppe", "Riverview"];
+      }
+      cityRegexOr = cities.map((c) => ({ address: new RegExp(escapeRegex(c), "i") }));
+    }
+
+    const baseTypeOr = regexes.map((r) => ({ serviceType: r }));
+    const andClauses = [];
+    if (baseTypeOr.length) andClauses.push({ $or: baseTypeOr });
+    if (cityRegexOr.length) andClauses.push({ $or: cityRegexOr });
+    const query = andClauses.length ? { $and: andClauses } : { _id: null };
+
     const matchingCompanies = await companies.find(query).toArray();
 
     if (matchingCompanies.length === 0) {

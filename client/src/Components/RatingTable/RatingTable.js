@@ -114,7 +114,9 @@ const RatingTable = () => {
 
   const fetchCompaniesByServiceType = async (serviceType) => {
     try {
-      const response = await fetch(`${ROOT_API}/companies/${serviceType}`);
+      const response = await fetch(
+        `${ROOT_API}/companies/${serviceType}?cities=Moncton,Dieppe,Riverview`
+      );
       const data = await response.json();
       const companies = Array.isArray(data.data) ? data.data : [];
       const sortedCompanies = companies.sort((a, b) => {
