@@ -79,7 +79,7 @@ const MainHomePage = () => {
               if (existingIds.has(id)) continue;
               if (extrasMap.has(id)) continue;
               const st = getServiceType(id);
-              extrasMap.set(id, { id, name: st.name || raw, icon: st.icon || null, color: st.color || null, hasIcon: !!st.icon });
+              extrasMap.set(id, { id, name: st.name || raw, icon: st.icon || null, color: st.color || null, hasIcon: !!st.icon, source: 'custom' });
             }
             if (extrasMap.size) {
               unionList = unionList.concat(Array.from(extrasMap.values()));
@@ -106,6 +106,7 @@ const MainHomePage = () => {
             icon: m?.icon || null,
             color: m?.color || null,
             hasIcon: !!m?.icon,
+            source: 'google',
           });
         }
         unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
@@ -153,7 +154,7 @@ const MainHomePage = () => {
               if (existingIds.has(id)) continue;
               if (extrasMap.has(id)) continue;
               const st = getServiceType(id);
-              extrasMap.set(id, { id, name: st.name || raw, icon: st.icon || null, color: st.color || null, hasIcon: !!st.icon });
+              extrasMap.set(id, { id, name: st.name || raw, icon: st.icon || null, color: st.color || null, hasIcon: !!st.icon, source: 'custom' });
             }
             if (extrasMap.size) {
               unionList = unionList.concat(Array.from(extrasMap.values()));
@@ -178,6 +179,7 @@ const MainHomePage = () => {
               icon: m?.icon || null,
               color: m?.color || null,
               hasIcon: !!m?.icon,
+              source: 'google',
             });
           }
           unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
@@ -196,6 +198,7 @@ const MainHomePage = () => {
                   icon: m?.icon || null,
                   color: m?.color || null,
                   hasIcon: !!m?.icon,
+                  source: 'google',
                 });
               }
               if (!cached.some((t) => t.id === "massage_therapist")) {
@@ -206,6 +209,7 @@ const MainHomePage = () => {
                   icon: m?.icon || null,
                   color: m?.color || null,
                   hasIcon: !!m?.icon,
+                  source: 'google',
                 });
               }
               setTypes(cached.sort((a, b) => a.name.localeCompare(b.name)));

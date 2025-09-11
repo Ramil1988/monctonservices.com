@@ -73,6 +73,25 @@ const createCompany = async (req, res) => {
       source: "custom",
     });
 
+    // Persist custom/learned service type to per-city serviceTypes docs (tri-cities only)
+    try {
+      const db = client.db("MonctonServicesCom");
+      const serviceTypesCol = db.collection("serviceTypes");
+      const addr = (address || "").toLowerCase();
+      const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+      const cityMatches = cities.filter((c) => addr.includes(c.split(",")[0].toLowerCase()));
+      const idNorm = (serviceType || "").toString().trim().toLowerCase().replace(/\s+/g, "_");
+      const human = (serviceType || "").toString().trim().replace(/_/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+      const entry = { id: idNorm, name: human };
+      for (const city of (cityMatches.length ? cityMatches : cities)) {
+        await serviceTypesCol.updateOne(
+          { _id: city },
+          { $addToSet: { types: entry }, $setOnInsert: { updatedAt: new Date(), source: "custom" } },
+          { upsert: true }
+        );
+      }
+    } catch (_) {}
+
     return res.status(201).json({
       status: 201,
       message: `Company ${name} successfully created.`,
