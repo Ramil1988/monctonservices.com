@@ -18,6 +18,7 @@ const CategorizedServices = ({ data }) => {
 
   return (
     <Container>
+      <CategoriesGrid>
       {Object.entries(categorizedServices).map(([categoryId, services]) => {
         const category = serviceCategories[categoryId];
         const isExpanded = expandedCategories[categoryId];
@@ -74,6 +75,7 @@ const CategorizedServices = ({ data }) => {
           </CategorySection>
         );
       })}
+      </CategoriesGrid>
     </Container>
   );
 };
@@ -81,6 +83,12 @@ const CategorizedServices = ({ data }) => {
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+`;
+
+const CategoriesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 10px;
 `;
 
 const CategorySection = styled.div`
