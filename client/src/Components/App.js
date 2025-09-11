@@ -12,6 +12,7 @@ import MainEventpage from "./Homepage/MainEventpage";
 import Profile from "./Profile/Profile";
 import MainRatingTable from "./RatingTable/MainRatingTable";
 import MainCompanyPage from "./Company/MainCompanyPage";
+import PublicCompanyCreate from "./Company/PublicCompanyCreate";
 import Header from "./Header/Header";
 import SearchResults from "./Search/SearchResults";
 import Review from "./Review/Review";
@@ -83,6 +84,7 @@ const App = () => {
         <Route path="/:serviceType" element={<MainRatingTable />} />
         <Route path="/company/:companyId" element={<MainCompanyPage />} />
         <Route path="/searchresults" element={<SearchResults />} />
+        <Route path="/add-company" element={<PublicCompanyCreate />} />
         <Route path="/review/:id" element={<Review />} />
         <Route path="/about" element={<About />} />
         <Route path="/guide" element={<Guide />} />

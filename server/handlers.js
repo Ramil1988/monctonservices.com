@@ -46,34 +46,28 @@ const createCompany = async (req, res) => {
       lang: lang,
     };
 
-    let newImage;
-
-    await cloudinary.uploader
-      .upload(image, {
-        upload_preset: "moncton_services",
-      })
-      .then((data) => {
-        newImage = data.secure_url;
-        console.log(newImage);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    if (newImage.length >= 0) {
-      await companies.insertOne({
-        _id: uuidv4(),
-        serviceType: serviceType,
-        name: name,
-        address: address,
-        phoneNumber: phoneNumber,
-        image: newImage,
-        website: website,
-        reviews: [],
-      });
-    } else {
-      console.log("no image!");
+    let newImage = "";
+    if (image) {
+      try {
+        const uploaded = await cloudinary.uploader.upload(image, {
+          upload_preset: "moncton_services",
+        });
+        newImage = uploaded?.secure_url || "";
+      } catch (err) {
+        console.log("Image upload failed:", err?.message || err);
+      }
     }
+
+    await companies.insertOne({
+      _id: uuidv4(),
+      serviceType: serviceType,
+      name: name,
+      address: address,
+      phoneNumber: phoneNumber,
+      image: newImage,
+      website: website,
+      reviews: [],
+    });
 
     return res.status(201).json({
       status: 201,
