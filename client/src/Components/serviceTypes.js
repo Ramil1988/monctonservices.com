@@ -15,6 +15,7 @@ import {
   FaHospital, // Hospital
   FaBox, // Meal takeaway
   FaTruck, // Moving company
+  FaCar, // Car rental
   FaGraduationCap, // Schools
   FaUniversity, // University
   FaShoppingBag, // Shopping mall
@@ -184,6 +185,18 @@ export const googleServiceTypes = {
     icon: FaWrench,
     color: "#374151",
   },
+  car_rental: {
+    id: "car_rental",
+    name: "Car rental",
+    icon: FaCar,
+    color: "#0EA5E9",
+  },
+  "car rental": {
+    id: "car rental",
+    name: "Car rental",
+    icon: FaCar,
+    color: "#0EA5E9",
+  },
   "car repair": {
     id: "car repair",
     name: "Car repair",
@@ -207,6 +220,18 @@ export const googleServiceTypes = {
     name: "Department store",
     icon: FaStore,
     color: "#059669",
+  },
+  furniture_store: {
+    id: "furniture_store",
+    name: "Furniture store",
+    icon: FaStore,
+    color: "#0EA5A0",
+  },
+  "furniture store": {
+    id: "furniture store",
+    name: "Furniture store",
+    icon: FaStore,
+    color: "#0EA5A0",
   },
   "department store": {
     id: "department store",
@@ -237,6 +262,18 @@ export const googleServiceTypes = {
     name: "Grocery or supermarket",
     icon: FaShoppingCart,
     color: "#059669",
+  },
+  home_goods_store: {
+    id: "home_goods_store",
+    name: "Home goods store",
+    icon: FaStore,
+    color: "#10B981",
+  },
+  "home goods store": {
+    id: "home goods store",
+    name: "Home goods store",
+    icon: FaStore,
+    color: "#10B981",
   },
   "grocery or supermarket": {
     id: "grocery or supermarket",
@@ -472,6 +509,10 @@ export const serviceCategories = {
       "book store",
       "jewelry_store", 
       "jewelry store",
+      "furniture_store",
+      "furniture store",
+      "home_goods_store",
+      "home goods store",
       "store",
       "supermarket",
       "grocery_or_supermarket",
@@ -518,6 +559,8 @@ export const serviceCategories = {
     services: [
       "car_repair",
       "car repair", 
+      "car_rental",
+      "car rental",
       "autodealerships",
       "autoservice"
     ]
@@ -545,7 +588,7 @@ export const serviceCategories = {
     name: "Professional Services", 
     icon: FaBuilding,
     color: "#6B7280",
-    description: "Business and professional services",
+    description: "Business and professional services (includes Insurance, Travel agency, and Local government)",
     services: [
       "banks",
       "insurance",
@@ -557,8 +600,6 @@ export const serviceCategories = {
       "travel agency",
       "cleaning",
       "event",
-      "moving_company",
-      "moving company",
       "local_government_office",
       "local government office",
       "computermobilerepair",
@@ -611,6 +652,8 @@ export const serviceCategories = {
     description: "Transportation and logistics services",
     services: [
       "taxis",
+      "moving_company",
+      "moving company",
       "storage"
     ]
   },
