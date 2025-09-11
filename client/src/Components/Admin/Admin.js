@@ -168,6 +168,54 @@ const Admin = () => {
     }
   };
 
+  const handleImportAll = async () => {
+    if (!placeTypes.length) {
+      setImportStatus("No service types available to import. Discover first.");
+      return;
+    }
+    setImportStatus("Importing all types...");
+    try {
+      const cities = importCity
+        .split(/[,;\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const uniqueCities = Array.from(new Set(cities.length ? cities : [importCity]));
+
+      let agg = { inserted: 0, updated: 0, skippedExisting: 0, totalFetched: 0 };
+      for (const city of uniqueCities) {
+        for (let i = 0; i < placeTypes.length; i++) {
+          const t = placeTypes[i];
+          // preserve UI feedback occasionally
+          if (i % 5 === 0) setImportStatus(`Importing ${i + 1}/${placeTypes.length} for ${city}...`);
+          const resp = await fetch(
+            `${ROOT_API}/admin/import/${encodeURIComponent(t.id)}?city=${encodeURIComponent(
+              city
+            )}&onlyNew=${onlyNew}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-secret": adminSecret || "",
+              },
+            }
+          );
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.message || `Import failed for ${t.name} in ${city}`);
+          agg.inserted += data.data?.inserted || 0;
+          agg.updated += data.data?.updated || 0;
+          agg.skippedExisting += data.data?.skippedExisting || 0;
+          agg.totalFetched += data.data?.totalFetched || 0;
+        }
+      }
+      setImportStatus(
+        `ALL DONE across ${uniqueCities.length} city(ies) and ${placeTypes.length} type(s): ${agg.inserted} new, ${agg.updated} updated, ${agg.skippedExisting} skipped. Fetched ${agg.totalFetched}.`
+      );
+      fetchCompanies();
+    } catch (e) {
+      setImportStatus(`Error: ${e.message}`);
+    }
+  };
+
   return (
     <AdminWrapper>
       <Title>Admin Page</Title>
@@ -309,9 +357,14 @@ const Admin = () => {
             onChange={(e) => setAdminSecret(e.target.value)}
           />
         </ImportRow>
-        <SearchButton onClick={handleImport} disabled={!selectedServiceType}>
-          Import
-        </SearchButton>
+        <RowButtons>
+          <SearchButton onClick={handleImport} disabled={!selectedServiceType}>
+            Import selected type
+          </SearchButton>
+          <SearchButton onClick={handleImportAll} disabled={!placeTypes.length}>
+            Import ALL types
+          </SearchButton>
+        </RowButtons>
         {importStatus && <ImportStatus>{importStatus}</ImportStatus>}
 
         <Divider />
