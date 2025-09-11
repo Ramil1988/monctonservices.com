@@ -126,17 +126,20 @@ const PublicCompanyCreate = () => {
         setForm((f)=>({ ...f, lat: g.lat || '', lang: g.lang || '', address: g.formatted || f.address }));
         setStatus("Location detected");
       } else {
-        setStatus("Could not detect location");
+        setStatus(`Could not detect location${data?.message ? ` (${data.message})` : ''}`);
       }
     } catch (e) {
-      setStatus("Geocode failed");
+      setStatus(`Geocode failed: ${e.message}`);
     }
   };
 
   return (
     <Wrap>
       <Card>
-        <Title>Add a new company</Title>
+        <HeaderRow>
+          <Back type="button" onClick={() => navigate(-1)}>Back</Back>
+          <Title>Add a new company</Title>
+        </HeaderRow>
         <Form onSubmit={onSubmit}>
           {matches.length > 0 && (
             <Suggestions>
@@ -224,6 +227,12 @@ const Title = styled.h1`
   margin: 0 0 12px;
 `;
 
+const HeaderRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
 const Form = styled.form`
   display: grid;
   grid-template-columns: 1fr;
@@ -308,6 +317,15 @@ const DetailsRow = styled(Row)`
 
 const GeoButton = styled.button`
   padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+`;
+
+const Back = styled.button`
+  padding: 8px 12px;
   border-radius: 12px;
   border: 1px solid var(--surface-border);
   background: var(--surface);

@@ -260,6 +260,63 @@ const importCompaniesFromGoogle = async (req, res) => {
 };
 
 module.exports = { importCompaniesFromGoogle };
+// Geocode an address using Google Geocoding API
+module.exports.geocodeAddress = async (req, res) => {
+  try {
+    const address = (req.query.address || '').toString();
+    if (!address) return res.status(400).json({ status: 400, message: 'address is required' });
+    const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+    const tryGeocode = async (addr, postal) => {
+      const url = new URL(baseUrl);
+      if (addr) url.searchParams.set('address', addr);
+      url.searchParams.set('region', 'ca');
+      url.searchParams.set('key', GOOGLE_MAPS_API_KEY);
+      // Always hint country CA; add postal_code component when looks like Canadian postal code
+      const comps = [];
+      comps.push('country:CA');
+      if (postal) comps.push(`postal_code:${postal}`);
+      url.searchParams.set('components', comps.join('|'));
+      const resp = await fetch(url.href);
+      if (!resp.ok) {
+        return { ok: false, status: resp.status, json: null };
+      }
+      const json = await resp.json();
+      return { ok: true, status: 200, json };
+    };
+
+    // Detect Canadian postal code (e.g., E1A 9B2 or E1A9B2)
+    const postalMatch = address.replace(/\s+/g, '').match(/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/);
+    const postal = postalMatch ? address.replace(/\s+/g, '').toUpperCase() : '';
+
+    // First attempt: given address + country (and postal if detected)
+    let resp1 = await tryGeocode(address, postal);
+    let data = resp1.json || {};
+    // Fallback attempt: if ZERO_RESULTS, append ", New Brunswick, Canada"
+    if (!(data.status === 'OK' && Array.isArray(data.results) && data.results.length > 0)) {
+      const augmented = /canada|nb|new brunswick/i.test(address) ? address : `${address}, New Brunswick, Canada`;
+      resp1 = await tryGeocode(augmented, postal);
+      data = resp1.json || {};
+    }
+
+    if (!(data.status === 'OK' && Array.isArray(data.results) && data.results.length > 0)) {
+      return res.status(200).json({ status: 200, data: null, message: data.status || 'NO_RESULTS' });
+    }
+    const r = data.results[0];
+    const lat = r.geometry?.location?.lat;
+    const lang = r.geometry?.location?.lng;
+    const formatted = r.formatted_address;
+    const comps = r.address_components || [];
+    const pick = (type) => (comps.find(c => c.types.includes(type))?.long_name) || '';
+    const city = pick('locality') || pick('postal_town') || pick('sublocality') || '';
+    const province = pick('administrative_area_level_1');
+    const country = pick('country');
+    const postal_code = pick('postal_code');
+    return res.status(200).json({ status: 200, data: { lat, lang, formatted, city, province, country, postal_code } });
+  } catch (e) {
+    console.error('geocode error', e);
+    return res.status(500).json({ status: 500, message: e.message });
+  }
+};
 module.exports.listPlaceTypes = (req, res) => {
   res.status(200).json({ status: 200, data: PLACE_TYPES });
 };
