@@ -197,6 +197,18 @@ export const googleServiceTypes = {
     icon: FaCar,
     color: "#0EA5E9",
   },
+  car_dealer: {
+    id: "car_dealer",
+    name: "Car dealer",
+    icon: FaCar,
+    color: "#2563EB",
+  },
+  "car dealer": {
+    id: "car dealer",
+    name: "Car dealer",
+    icon: FaCar,
+    color: "#2563EB",
+  },
   "car repair": {
     id: "car repair",
     name: "Car repair",
@@ -561,6 +573,8 @@ export const serviceCategories = {
       "car repair", 
       "car_rental",
       "car rental",
+      "car_dealer",
+      "car dealer",
       "autodealerships",
       "autoservice"
     ]
