@@ -101,7 +101,7 @@ const MainHomePage = () => {
             for (const c of comps) {
               const raw = (c.serviceType || "").trim();
               if (!raw) continue;
-              const id = normalize(raw);
+              const id = normalizeId(raw);
               if (existingIds.has(id)) continue;
               if (extrasMap.has(id)) continue;
               const st = getServiceType(id);
@@ -121,6 +121,25 @@ const MainHomePage = () => {
             unionList = Array.from(mergedF.values());
           }
         } catch (_) {}
+        // Final deduplication by normalized id, preferring Google source
+        const finalMap = new Map();
+        for (const item of unionList) {
+          const normalizedId = normalizeId(item.id);
+          const existing = finalMap.get(normalizedId);
+          if (!existing) {
+            finalMap.set(normalizedId, { ...item, id: normalizedId });
+          } else {
+            // Prefer Google source, merge counts
+            const preferred = existing.source === 'google' ? existing : 
+                            item.source === 'google' ? { ...item, id: normalizedId } : existing;
+            finalMap.set(normalizedId, {
+              ...preferred,
+              companyCount: (existing.companyCount || 0) + (item.companyCount || 0)
+            });
+          }
+        }
+        unionList = Array.from(finalMap.values());
+
         // Manual overrides: always include Auto dealers and Massage therapist
         if (!unionList.some((t) => t.id === "car_dealer")) {
           const m = googleServiceTypes["car_dealer"];
