@@ -124,26 +124,35 @@ const Admin = () => {
   const handleImport = async () => {
     setImportStatus("Importing...");
     try {
-      const resp = await fetch(
-        `${ROOT_API}/admin/import/${selectedServiceType}?city=${encodeURIComponent(
-          importCity
-        )}&onlyNew=${onlyNew}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-secret": adminSecret || "",
-          },
-        }
-      );
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data.message || "Import failed");
+      const cities = importCity
+        .split(/[,;\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const uniqueCities = Array.from(new Set(cities.length ? cities : [importCity]));
+
+      let agg = { inserted: 0, updated: 0, skippedExisting: 0, totalFetched: 0 };
+      for (const city of uniqueCities) {
+        const resp = await fetch(
+          `${ROOT_API}/admin/import/${selectedServiceType}?city=${encodeURIComponent(
+            city
+          )}&onlyNew=${onlyNew}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-secret": adminSecret || "",
+            },
+          }
+        );
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.message || `Import failed for ${city}`);
+        agg.inserted += data.data?.inserted || 0;
+        agg.updated += data.data?.updated || 0;
+        agg.skippedExisting += data.data?.skippedExisting || 0;
+        agg.totalFetched += data.data?.totalFetched || 0;
+      }
       setImportStatus(
-        `OK: ${data.data?.inserted || 0} new, ${
-          data.data?.updated || 0
-        } updated, ${data.data?.skippedExisting || 0} skipped (existing). Fetched ${
-          data.data?.totalFetched || 0
-        }.`
+        `OK across ${uniqueCities.length} city(ies): ${agg.inserted} new, ${agg.updated} updated, ${agg.skippedExisting} skipped. Fetched ${agg.totalFetched}.`
       );
       // Refresh companies cache in UI
       fetchCompanies();
@@ -210,22 +219,32 @@ const Admin = () => {
             onClick={async () => {
               setImportStatus("Discovering types...");
               try {
-                const resp = await fetch(
-                  `${ROOT_API}/admin/discover-place-types?city=${encodeURIComponent(
-                    importCity
-                  )}&onlyNew=${onlyNew}`,
-                  { headers: { "x-admin-secret": (adminSecret || "").trim() } }
-                );
-                const data = await resp.json();
-                if (!resp.ok) throw new Error(data.message || "Failed to discover");
-                const list = data.data || [];
-                setImportStatus(`Discovered ${list.length} types for ${data.city}`);
-                // Save this city's list
-                try {
-                  localStorage.setItem(`placeTypes:${importCity}`, JSON.stringify(list));
-                  localStorage.setItem("placeTypesCity", importCity);
-                } catch (_) {}
-                // Rebuild union for dropdown
+                const cities = importCity
+                  .split(/[,;\n]/)
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+                const uniqueCities = Array.from(new Set(cities.length ? cities : [importCity]));
+
+                let totalDiscovered = 0;
+                for (const city of uniqueCities) {
+                  const resp = await fetch(
+                    `${ROOT_API}/admin/discover-place-types?city=${encodeURIComponent(
+                      city
+                    )}&onlyNew=${onlyNew}`,
+                    { headers: { "x-admin-secret": (adminSecret || "").trim() } }
+                  );
+                  const data = await resp.json();
+                  if (!resp.ok) throw new Error(data.message || `Failed to discover for ${city}`);
+                  const list = data.data || [];
+                  totalDiscovered += list.length;
+                  try {
+                    localStorage.setItem(`placeTypes:${city}`, JSON.stringify(list));
+                  } catch (_) {}
+                }
+
+                setImportStatus(`Discovered types for ${uniqueCities.length} city(ies); total ${totalDiscovered} entries.`);
+
+                // Rebuild union for dropdown (tri-city union)
                 try {
                   const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
                   const unionMap = new Map();
@@ -247,13 +266,7 @@ const Admin = () => {
                   setSelectedServiceType(union[0]?.id || "");
                   localStorage.setItem("placeTypes:TriCitiesUnion", JSON.stringify(union));
                 } catch (_) {
-                  // Fallback: at least show the last discovered list
-                  let fallback = list;
-                  if (!fallback.some((t) => t.id === "car_dealer")) {
-                    fallback = [...fallback, { id: "car_dealer", name: "Car dealer" }];
-                  }
-                  setPlaceTypes(fallback);
-                  setSelectedServiceType(fallback[0]?.id || "");
+                  // ignore
                 }
               } catch (e) {
                 setImportStatus(`Error: ${e.message}`);
@@ -268,6 +281,7 @@ const Admin = () => {
           <Label>City/Area</Label>
           <Input
             type="text"
+            placeholder="e.g. Moncton, NB, Dieppe, NB, Riverview, NB"
             value={importCity}
             onChange={(e) => setImportCity(e.target.value)}
           />
