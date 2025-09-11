@@ -107,7 +107,7 @@ const Homepage = (props) => {
         <BigText>Recent reviews</BigText>
         <Reviews reviews={reviews} />
       </MainWrapper>
-      <Fab to="/add-company" title="Add a new company">+</Fab>
+      <Fab to="/add-company" title="Add a new company">Add new company</Fab>
     </Wrapper>
   );
 };
@@ -359,13 +359,12 @@ const Fab = styled(NavLink)`
   position: fixed;
   right: 20px;
   bottom: 20px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+  padding: 12px 16px;
+  border-radius: 999px;
   background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
   color: var(--pill-text);
-  font-size: 32px;
-  line-height: 56px;
+  font-size: 14px;
+  font-weight: 800;
   text-align: center;
   text-decoration: none;
   box-shadow: 0 10px 24px rgba(0,0,0,0.25);
