@@ -119,9 +119,31 @@ const MainHomePage = () => {
             const comps = Array.isArray(data.data)
               ? data.data.filter((c) => tri.some((t) => (c.address || "").toLowerCase().includes(t)))
               : [];
+            // Normalize raw serviceType to canonical id used by union
+            const normalize = (raw) => {
+              if (!raw) return "";
+              let s = String(raw).trim().toLowerCase();
+              // convert spaces to underscores variant
+              const base = s.replace(/\s+/g, "_");
+              const candidates = new Set([s, base]);
+              // simple plural normalization
+              if (base.endsWith("ies")) candidates.add(base.slice(0, -3) + "y");
+              if (base.endsWith("s")) candidates.add(base.slice(0, -1));
+              // try to match googleServiceTypes keys
+              for (const k of candidates) {
+                if (googleServiceTypes[k]) return k;
+              }
+              // map back via name when possible
+              const byName = Object.keys(googleServiceTypes).find(
+                (k) => googleServiceTypes[k].name.toLowerCase() === s
+              );
+              if (byName) return byName;
+              // default to underscored
+              return base;
+            };
             const counts = new Map();
             for (const c of comps) {
-              const id = (c.serviceType || "").toLowerCase().replace(/\s+/g, "_");
+              const id = normalize(c.serviceType || "");
               if (!id) continue;
               counts.set(id, (counts.get(id) || 0) + 1);
             }
@@ -209,9 +231,25 @@ const MainHomePage = () => {
             const comps = Array.isArray(compList)
               ? compList.filter((c) => tri.some((t) => (c.address || "").toLowerCase().includes(t)))
               : [];
+            const normalize = (raw) => {
+              if (!raw) return "";
+              let s = String(raw).trim().toLowerCase();
+              const base = s.replace(/\s+/g, "_");
+              const candidates = new Set([s, base]);
+              if (base.endsWith("ies")) candidates.add(base.slice(0, -3) + "y");
+              if (base.endsWith("s")) candidates.add(base.slice(0, -1));
+              for (const k of candidates) {
+                if (googleServiceTypes[k]) return k;
+              }
+              const byName = Object.keys(googleServiceTypes).find(
+                (k) => googleServiceTypes[k].name.toLowerCase() === s
+              );
+              if (byName) return byName;
+              return base;
+            };
             const counts = new Map();
             for (const c of comps) {
-              const id = (c.serviceType || "").toLowerCase().replace(/\s+/g, "_");
+              const id = normalize(c.serviceType || "");
               if (!id) continue;
               counts.set(id, (counts.get(id) || 0) + 1);
             }
