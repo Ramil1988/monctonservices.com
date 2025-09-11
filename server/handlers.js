@@ -299,6 +299,8 @@ const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const TYPE_SYNONYMS = {
   "car dealer": ["auto dealer", "auto dealers", "Auto dealer", "Auto dealers"],
   "car dealers": ["auto dealer", "auto dealers", "Auto dealer", "Auto dealers"],
+  "motor vehicle dealer": ["auto dealer", "auto dealers", "Auto dealer", "Auto dealers", "Car dealer", "Car dealers"],
+  "motor vehicle dealers": ["auto dealer", "auto dealers", "Auto dealer", "Auto dealers", "Car dealer", "Car dealers"],
   "veterinary care": ["Pet clinics", "Veterinary care", "Veterinary Care"],
   dentist: ["Dental clinic", "Dental clinics"],
   doctor: ["Doctors"],
