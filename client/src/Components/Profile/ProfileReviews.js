@@ -83,25 +83,25 @@ const ReviewsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   overflow: hidden;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
   }
 `;
 
 const ReviewsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 8px;
   }
 `;
 
@@ -114,10 +114,10 @@ const Review = styled.div`
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--surface-border);
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 16px;
-  min-height: 140px;
+  padding: 12px;
+  min-height: 120px;
   transition: all 0.2s ease;
 
   &:hover {
@@ -144,9 +144,9 @@ const StyledLink = styled(Link)`
 `;
 
 const ReviewTitle = styled.h4`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -161,8 +161,8 @@ const ReviewDate = styled.div`
 `;
 
 const ReviewCompany = styled.p`
-  font-size: 13px;
-  margin-bottom: 6px;
+  font-size: 12px;
+  margin-bottom: 4px;
   color: var(--muted);
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -174,13 +174,13 @@ const ReviewGrade = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   margin-top: auto;
-  padding: 6px 10px;
+  padding: 4px 8px;
   background: rgba(251, 191, 36, 0.1);
-  border-radius: 12px;
-  gap: 4px;
+  border-radius: 8px;
+  gap: 3px;
 
   svg {
     color: #fbbf24;

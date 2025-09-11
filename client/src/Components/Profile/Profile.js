@@ -216,10 +216,10 @@ const blinkCursor = keyframes`
 `;
 
 const WelcomeHeader = styled.div`
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 
   h2 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text);
     margin: 0;
@@ -233,32 +233,34 @@ const WelcomeHeader = styled.div`
 const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 12px;
   margin: 0 auto;
   max-width: 1200px;
   color: var(--text);
-  gap: 24px;
+  gap: 16px;
 
   @media (max-width: 768px) {
-    padding: 12px;
-    gap: 16px;
+    padding: 8px;
+    gap: 12px;
   }
 `;
 
 const SideWrapper = styled.div`
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 24px;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
   width: 100%;
+  margin-bottom: 12px;
 
   @media (max-width: 1024px) {
-    grid-template-columns: 260px 1fr;
-    gap: 20px;
+    grid-template-columns: 240px 1fr;
+    gap: 12px;
   }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 8px;
+    margin-bottom: 8px;
   }
 `;
 
@@ -272,21 +274,21 @@ const Sidebar = styled.div`
 const SidebarTop = styled.div`
   background: var(--surface);
   border: 1px solid var(--surface-border);
-  padding: 20px;
-  border-radius: 12px 12px 0 0;
+  padding: 16px;
+  border-radius: 8px 8px 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
 const ProfileImage = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--surface-border);
+  border: 2px solid var(--surface-border);
   transition: all 0.2s ease;
 
   &:hover {
@@ -302,14 +304,14 @@ const GridItem = styled.div`
 
 const NameFields = styled.div`
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text);
-  line-height: 1.4;
+  line-height: 1.3;
   
   &:first-of-type {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 `;
 
@@ -322,16 +324,16 @@ const StyledSpan = styled.span`
 const EditProfile = styled.button`
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
+  gap: 4px;
+  font-size: 0.8rem;
   color: var(--primary-start);
   background: transparent;
   border: 1px solid var(--primary-start);
-  border-radius: 6px;
-  padding: 6px 12px;
+  border-radius: 4px;
+  padding: 4px 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 4px;
+  margin-top: 2px;
 
   &:hover {
     background: var(--primary-start);
@@ -342,11 +344,11 @@ const EditProfile = styled.button`
 const StatsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  padding: 16px;
+  padding: 12px;
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-top: none;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
@@ -373,18 +375,18 @@ const MainContent = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 `;
 
 const SectionWrapper = styled.div`
   width: 100%;
 
   & h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--text);
-    margin: 0 0 16px 0;
-    padding-bottom: 6px;
+    margin: 0 0 12px 0;
+    padding-bottom: 4px;
     border-bottom: 1px solid var(--surface-border);
   }
 `;
