@@ -53,6 +53,38 @@ import {
   Flower2,
   Briefcase,
   Palette,
+  Activity,
+  Navigation,
+  Utensils as FaUtensils,
+  ShoppingCart as FaShoppingCart,
+  Hospital as FaHospital,
+  Box as FaBox,
+  Truck as FaTruck,
+  GraduationCap as FaGraduationCap,
+  University as FaUniversity,
+  ShoppingBag as FaShoppingBag,
+  Warehouse as FaWarehouse,
+  Shield as FaShieldAlt,
+  Gem as FaGem,
+  Music as FaMusic,
+  Plane as FaPlane,
+  Building as FaBuilding,
+  Wine as FaGlassWhiskey,
+  Sparkles as FaSpa,
+  Dumbbell as MdFitnessCenter,
+  Scissors as FaCut,
+  Flower as FaSeedling,
+  Palette as FaPalette,
+  Book as FaBook,
+  Home as FaHome,
+  Building as FaCity,
+  Calculator as FaCalculator,
+  Zap as FaBolt,
+  Hammer as FaTools,
+  Lock as FaLock,
+  Film as MdLocalMovies,
+  Baby as MdChildCare,
+  UserCheck as FaUserMd,
 } from "lucide-react";
 
 // Keep your original serviceTypes for backward compatibility
@@ -289,67 +321,67 @@ export const googleServiceTypes = {
   car_dealer: {
     id: "car_dealer",
     name: "Car dealer",
-    icon: FaCar,
+    icon: Car,
     color: "#2563EB",
   },
   "car dealer": {
     id: "car dealer",
     name: "Car dealer",
-    icon: FaCar,
+    icon: Car,
     color: "#2563EB",
   },
   motor_vehicle_dealer: {
     id: "motor_vehicle_dealer",
     name: "Motor vehicle dealer",
-    icon: FaCar,
+    icon: Car,
     color: "#1D4ED8",
   },
   "motor vehicle dealer": {
     id: "motor vehicle dealer",
     name: "Motor vehicle dealer",
-    icon: FaCar,
+    icon: Car,
     color: "#1D4ED8",
   },
   "car repair": {
     id: "car repair",
     name: "Car repair",
-    icon: FaWrench,
+    icon: Wrench,
     color: "#374151",
   },
   clothing_store: {
     id: "clothing_store",
     name: "Clothing store",
-    icon: FaStore,
+    icon: Store,
     color: "#EC4899",
   },
   "clothing store": {
     id: "clothing store",
     name: "Clothing store",
-    icon: FaStore,
+    icon: Store,
     color: "#EC4899",
   },
   department_store: {
     id: "department_store",
     name: "Department store",
-    icon: FaStore,
+    icon: Store,
     color: "#059669",
   },
   furniture_store: {
     id: "furniture_store",
     name: "Furniture store",
-    icon: FaStore,
+    icon: Store,
     color: "#0EA5A0",
   },
   "furniture store": {
     id: "furniture store",
     name: "Furniture store",
-    icon: FaStore,
+    icon: Store,
     color: "#0EA5A0",
   },
   "department store": {
     id: "department store",
     name: "Department store",
-    icon: FaStore,
+    icon: Store,
     color: "#059669",
   },
   doctor: {
@@ -379,13 +411,13 @@ export const googleServiceTypes = {
   home_goods_store: {
     id: "home_goods_store",
     name: "Home goods store",
-    icon: FaStore,
+    icon: Store,
     color: "#10B981",
   },
   "home goods store": {
     id: "home goods store",
     name: "Home goods store",
-    icon: FaStore,
+    icon: Store,
     color: "#10B981",
   },
   "grocery or supermarket": {
@@ -397,7 +429,7 @@ export const googleServiceTypes = {
   health: {
     id: "health",
     name: "Health",
-    icon: FaHeartbeat,
+    icon: Heart,
     color: "#EF4444",
   },
   hospital: {
@@ -469,13 +501,13 @@ export const googleServiceTypes = {
   shoe_store: {
     id: "shoe_store",
     name: "Shoe store",
-    icon: FaStore,
+    icon: Store,
     color: "#374151",
   },
   "shoe store": {
     id: "shoe store",
     name: "Shoe store",
-    icon: FaStore,
+    icon: Store,
     color: "#374151",
   },
   shopping_mall: {
@@ -499,7 +531,7 @@ export const googleServiceTypes = {
   store: {
     id: "store",
     name: "Store",
-    icon: FaStore,
+    icon: Store,
     color: "#059669",
   },
   supermarket: {
@@ -590,25 +622,25 @@ export const googleServiceTypes = {
   beauty_salon: {
     id: "beauty_salon",
     name: "Beauty salon",
-    icon: FaStore,
+    icon: Store,
     color: "#EC4899",
   },
   "beauty salon": {
     id: "beauty salon",
     name: "Beauty salon",
-    icon: FaStore,
+    icon: Store,
     color: "#EC4899",
   },
   convenience_store: {
     id: "convenience_store",
     name: "Convenience store",
-    icon: FaStore,
+    icon: Store,
     color: "#6B7280",
   },
   "convenience store": {
     id: "convenience store",
     name: "Convenience store",
-    icon: FaStore,
+    icon: Store,
     color: "#6B7280",
   },
   // Additional common Google types
@@ -627,13 +659,13 @@ export const googleServiceTypes = {
   hardware_store: {
     id: "hardware_store",
     name: "Hardware store",
-    icon: FaStore,
+    icon: Store,
     color: "#6B7280",
   },
   electronics_store: {
     id: "electronics_store",
     name: "Electronics store",
-    icon: FaStore,
+    icon: Store,
     color: "#3B82F6",
   },
   liquor_store: {
@@ -699,7 +731,7 @@ export const googleServiceTypes = {
   parking: {
     id: "parking",
     name: "Parking",
-    icon: FaCar,
+    icon: Car,
     color: "#6B7280",
   },
   museum: {
@@ -832,49 +864,49 @@ export const googleServiceTypes = {
   hockey: {
     id: "hockey",
     name: "Hockey",
-    icon: MdSportsHockey,
+    icon: Trophy,
     color: "#EC4899",
   },
   tourist_attraction: {
     id: "tourist_attraction",
     name: "Tourist attraction",
-    icon: MdTour,
+    icon: Navigation,
     color: "#EC4899",
   },
   "tourist attraction": {
     id: "tourist attraction",
     name: "Tourist attraction",
-    icon: MdTour,
+    icon: Navigation,
     color: "#EC4899",
   },
   real_estate: {
     id: "real_estate",
     name: "Real estate",
-    icon: FaHouseUser,
+    icon: HouseUser,
     color: "#6B7280",
   },
   "real estate": {
     id: "real estate",
     name: "Real estate",
-    icon: FaHouseUser,
+    icon: HouseUser,
     color: "#6B7280",
   },
   real_estate_agency: {
     id: "real_estate_agency",
     name: "Real estate agency",
-    icon: FaHouseUser,
+    icon: HouseUser,
     color: "#6B7280",
   },
   "real estate agency": {
     id: "real estate agency",
     name: "Real estate agency",
-    icon: FaHouseUser,
+    icon: HouseUser,
     color: "#6B7280",
   },
   fitness: {
     id: "fitness",
     name: "Fitness",
-    icon: FaDumbbell,
+    icon: Dumbbell,
     color: "#EC4899",
   },
 };
@@ -917,7 +949,7 @@ export const serviceCategories = {
   healthcare: {
     id: "healthcare",
     name: "Healthcare",
-    icon: FaHeartbeat,
+    icon: Heart,
     color: "#EF4444",
     description: "Medical services including doctors, hospitals, clinics, pharmacies, and veterinary care",
     services: [
@@ -1107,7 +1139,7 @@ export const serviceCategories = {
   other: {
     id: "other", 
     name: "Other Services",
-    icon: FaMapMarkerAlt,
+    icon: MapPin,
     color: "#6B7280",
     description: "Miscellaneous services",
     services: [
