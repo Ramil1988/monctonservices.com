@@ -60,12 +60,22 @@ const MainHomePage = () => {
         });
 
         let unionList = Array.from(unionMap.values());
-        // Manual overrides: always include Auto dealers
+        // Manual overrides: always include Auto dealers and Massage therapist
         if (!unionList.some((t) => t.id === "car_dealer")) {
           const m = googleServiceTypes["car_dealer"];
           unionList.push({
             id: "car_dealer",
             name: m?.name || "Car dealer",
+            icon: m?.icon || null,
+            color: m?.color || null,
+            hasIcon: !!m?.icon,
+          });
+        }
+        if (!unionList.some((t) => t.id === "massage_therapist")) {
+          const m = googleServiceTypes["massage_therapist"] || googleServiceTypes["massage therapist"];
+          unionList.push({
+            id: "massage_therapist",
+            name: m?.name || "Massage therapist",
             icon: m?.icon || null,
             color: m?.color || null,
             hasIcon: !!m?.icon,
@@ -111,6 +121,16 @@ const MainHomePage = () => {
               hasIcon: !!m?.icon,
             });
           }
+          if (!unionList.some((t) => t.id === "massage_therapist")) {
+            const m = googleServiceTypes["massage_therapist"] || googleServiceTypes["massage therapist"];
+            unionList.push({
+              id: "massage_therapist",
+              name: m?.name || "Massage therapist",
+              icon: m?.icon || null,
+              color: m?.color || null,
+              hasIcon: !!m?.icon,
+            });
+          }
           unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
           setTypes(unionList);
         } else {
@@ -124,6 +144,16 @@ const MainHomePage = () => {
                 cached.push({
                   id: "car_dealer",
                   name: m?.name || "Car dealer",
+                  icon: m?.icon || null,
+                  color: m?.color || null,
+                  hasIcon: !!m?.icon,
+                });
+              }
+              if (!cached.some((t) => t.id === "massage_therapist")) {
+                const m = googleServiceTypes["massage_therapist"] || googleServiceTypes["massage therapist"];
+                cached.push({
+                  id: "massage_therapist",
+                  name: m?.name || "Massage therapist",
                   icon: m?.icon || null,
                   color: m?.color || null,
                   hasIcon: !!m?.icon,

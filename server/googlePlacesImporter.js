@@ -275,7 +275,7 @@ module.exports.discoverPlaceTypes = async (req, res) => {
     }
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
     const onlyNew = req.query.onlyNew === "true";
-    const seeds = (req.query.seeds || "restaurant,store,service,clinic,school,shop").split(",");
+    const seeds = (req.query.seeds || "restaurant,store,service,clinic,school,shop, massage therapist, spa, physiotherapist, chiropractor, beauty salon").split(",");
     const pages = Math.min(parseInt(req.query.pages || "1", 10) || 1, 3);
     const set = new Set();
     for (const seed of seeds) {
