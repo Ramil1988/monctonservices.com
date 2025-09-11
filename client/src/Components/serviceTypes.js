@@ -510,6 +510,145 @@ export const googleServiceTypes = {
     icon: FaStore,
     color: "#6B7280",
   },
+  // Additional common Google types
+  pharmacy: {
+    id: "pharmacy",
+    name: "Pharmacy",
+    icon: FaHospital,
+    color: "#10B981",
+  },
+  gas_station: {
+    id: "gas_station",
+    name: "Gas station",
+    icon: FaTruck,
+    color: "#F59E0B",
+  },
+  hardware_store: {
+    id: "hardware_store",
+    name: "Hardware store",
+    icon: FaStore,
+    color: "#6B7280",
+  },
+  electronics_store: {
+    id: "electronics_store",
+    name: "Electronics store",
+    icon: FaStore,
+    color: "#3B82F6",
+  },
+  liquor_store: {
+    id: "liquor_store",
+    name: "Liquor store",
+    icon: FaGlassWhiskey,
+    color: "#7C3AED",
+  },
+  gym: {
+    id: "gym",
+    name: "Gym",
+    icon: FaHeartbeat,
+    color: "#DC2626",
+  },
+  barber: {
+    id: "barber",
+    name: "Barber",
+    icon: FaPalette,
+    color: "#EC4899",
+  },
+  hair_care: {
+    id: "hair_care",
+    name: "Hair care",
+    icon: FaPalette,
+    color: "#EC4899",
+  },
+  spa: {
+    id: "spa",
+    name: "Spa",
+    icon: FaPalette,
+    color: "#EC4899",
+  },
+  pet_store: {
+    id: "pet_store",
+    name: "Pet store",
+    icon: FaSeedling,
+    color: "#10B981",
+  },
+  veterinary_care: {
+    id: "veterinary_care",
+    name: "Veterinary care",
+    icon: FaSeedling,
+    color: "#10B981",
+  },
+  post_office: {
+    id: "post_office",
+    name: "Post office",
+    icon: FaBuilding,
+    color: "#374151",
+  },
+  parking: {
+    id: "parking",
+    name: "Parking",
+    icon: FaCar,
+    color: "#6B7280",
+  },
+  museum: {
+    id: "museum",
+    name: "Museum",
+    icon: FaPalette,
+    color: "#7C3AED",
+  },
+  library: {
+    id: "library",
+    name: "Library",
+    icon: FaBook,
+    color: "#1D4ED8",
+  },
+  park: {
+    id: "park",
+    name: "Park",
+    icon: FaSeedling,
+    color: "#059669",
+  },
+  zoo: {
+    id: "zoo",
+    name: "Zoo",
+    icon: FaSeedling,
+    color: "#EC4899",
+  },
+  aquarium: {
+    id: "aquarium",
+    name: "Aquarium",
+    icon: FaSeedling,
+    color: "#3B82F6",
+  },
+  movie_theater: {
+    id: "movie_theater",
+    name: "Movie theater",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  bowling_alley: {
+    id: "bowling_alley",
+    name: "Bowling alley",
+    icon: FaMusic,
+    color: "#7C3AED",
+  },
+  stadium: {
+    id: "stadium",
+    name: "Stadium",
+    icon: FaMusic,
+    color: "#7C3AED",
+  },
+  campground: {
+    id: "campground",
+    name: "Campground",
+    icon: FaHome,
+    color: "#059669",
+  },
+  lodging: {
+    id: "lodging",
+    name: "Lodging",
+    icon: FaHome,
+    color: "#8B5CF6",
+  },
 };
 
 // Service categories structure
@@ -527,6 +666,9 @@ export const serviceCategories = {
       "department store",
       "convenience_store",
       "convenience store",
+      "hardware_store",
+      "electronics_store",
+      "liquor_store",
       "shoe_store",
       "shoe store",
       "book_store",
@@ -551,11 +693,13 @@ export const serviceCategories = {
     description: "Medical services and health facilities",
     services: [
       "doctor",
+      "pharmacy",
       "hospital",
       "health",
       "walkinClinics",
       "petclinics",
-      "dentalclinics"
+      "dentalclinics",
+      "veterinary_care"
     ]
   },
   food: {
@@ -587,6 +731,7 @@ export const serviceCategories = {
       "car rental",
       "car_dealer",
       "car dealer",
+      "gas_station",
       "autodealerships",
       "autoservice"
     ]
@@ -606,7 +751,8 @@ export const serviceCategories = {
       "university",
       "drivingschool",
       "tutoringcenters",
-      "daycares"
+      "daycares",
+      "library"
     ]
   },
   services: {
@@ -622,6 +768,7 @@ export const serviceCategories = {
       "insurance_agency",
       "insurance agency",
       "realestate",
+      "post_office",
       "travel",
       "travel_agency",
       "travel agency",
@@ -641,7 +788,9 @@ export const serviceCategories = {
     description: "Hotels and accommodation services",
     services: [
       "hotels",
-      "propertymanagement"
+      "propertymanagement",
+      "lodging",
+      "campground"
     ]
   },
   personal_care: {
@@ -653,7 +802,10 @@ export const serviceCategories = {
     services: [
       "beautysalons",
       "beauty_salon",
-      "beauty salon"
+      "beauty salon",
+      "barber",
+      "hair_care",
+      "spa"
     ]
   },
   entertainment: {
@@ -667,6 +819,13 @@ export const serviceCategories = {
       "night club",
       "art_gallery", 
       "art gallery",
+      "movie_theater",
+      "bowling_alley",
+      "stadium",
+      "museum",
+      "park",
+      "zoo",
+      "aquarium",
       "shopping_mall",
       "shopping mall"
     ]
@@ -681,6 +840,7 @@ export const serviceCategories = {
       "taxis",
       "moving_company",
       "moving company",
+      "parking",
       "storage"
     ]
   },
