@@ -48,13 +48,26 @@ const SearchResults = () => {
     }
   }, [value, companies, searchType]);
 
+  const humanize = (raw) => {
+    if (!raw) return "";
+    let s = String(raw).replace(/[_-]+/g, " ").trim();
+    s = s.replace(/walk\s*in\s*clinics?/i, "Walk in Clinic");
+    s = s.replace(/walkin\s*clinics?/i, "Walk in Clinic");
+    s = s.replace(/([a-z])([A-Z])/g, "$1 $2");
+    s = s.toLowerCase().replace(/\s+/g, " ");
+    const words = s.split(" ");
+    const small = new Set(["and","or","in","of","for","to","a","an","the"]);
+    return words.map((w,i)=> (i!==0 && small.has(w))? w : w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+  };
+
   const groupCompaniesByType = (companies) => {
     const groups = {};
     companies.forEach((company) => {
-      if (!groups[company.serviceType]) {
-        groups[company.serviceType] = [];
+      const key = humanize(company.serviceType);
+      if (!groups[key]) {
+        groups[key] = [];
       }
-      groups[company.serviceType].push(company);
+      groups[key].push(company);
     });
     return groups;
   };
@@ -89,7 +102,7 @@ const SearchResults = () => {
               {searchType === "Name"
                 ? highlightMatches(company.name, value)
                 : company.name}{" "}
-              - {company.serviceType}
+              - {humanize(company.serviceType)}
             </NavLink>
           </StyledLi>
         );
