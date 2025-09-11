@@ -673,6 +673,115 @@ export const googleServiceTypes = {
     icon: FaHome,
     color: "#8B5CF6",
   },
+  // Additional service types
+  city_hall: {
+    id: "city_hall",
+    name: "City hall",
+    icon: FaBuilding,
+    color: "#374151",
+  },
+  "city hall": {
+    id: "city hall",
+    name: "City hall",
+    icon: FaBuilding,
+    color: "#374151",
+  },
+  accounting: {
+    id: "accounting",
+    name: "Accounting",
+    icon: FaBuilding,
+    color: "#6B7280",
+  },
+  electrician: {
+    id: "electrician",
+    name: "Electrician",
+    icon: FaWrench,
+    color: "#6B7280",
+  },
+  general_contractor: {
+    id: "general_contractor",
+    name: "General contractor",
+    icon: FaWrench,
+    color: "#6B7280",
+  },
+  "general contractor": {
+    id: "general contractor",
+    name: "General contractor",
+    icon: FaWrench,
+    color: "#6B7280",
+  },
+  locksmith: {
+    id: "locksmith",
+    name: "Locksmith",
+    icon: FaWrench,
+    color: "#6B7280",
+  },
+  movietheatres: {
+    id: "movietheatres",
+    name: "Movie theatres",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  "movie theatres": {
+    id: "movie theatres",
+    name: "Movie theatres",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  childrenentertainment: {
+    id: "childrenentertainment",
+    name: "Children entertainment",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  "children entertainment": {
+    id: "children entertainment",
+    name: "Children entertainment",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  hockey: {
+    id: "hockey",
+    name: "Hockey",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  tourist_attraction: {
+    id: "tourist_attraction",
+    name: "Tourist attraction",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  "tourist attraction": {
+    id: "tourist attraction",
+    name: "Tourist attraction",
+    icon: FaMusic,
+    color: "#EC4899",
+  },
+  real_estate: {
+    id: "real_estate",
+    name: "Real estate",
+    icon: FaBuilding,
+    color: "#6B7280",
+  },
+  "real estate": {
+    id: "real estate",
+    name: "Real estate",
+    icon: FaBuilding,
+    color: "#6B7280",
+  },
+  real_estate_agency: {
+    id: "real_estate_agency",
+    name: "Real estate agency",
+    icon: FaBuilding,
+    color: "#6B7280",
+  },
+  "real estate agency": {
+    id: "real estate agency",
+    name: "Real estate agency",
+    icon: FaBuilding,
+    color: "#6B7280",
+  },
 };
 
 // Service categories structure
@@ -682,7 +791,7 @@ export const serviceCategories = {
     name: "Stores",
     icon: FaStore,
     color: "#059669",
-    description: "All kinds of retail stores and shopping",
+    description: "Retail stores including clothing, electronics, books, groceries, and specialty shops",
     services: [
       "clothing_store",
       "clothing store",
@@ -715,7 +824,7 @@ export const serviceCategories = {
     name: "Healthcare",
     icon: FaHeartbeat,
     color: "#EF4444",
-    description: "Medical services and health facilities",
+    description: "Medical services including doctors, hospitals, clinics, pharmacies, and veterinary care",
     services: [
       "doctor",
       "pharmacy",
@@ -732,7 +841,7 @@ export const serviceCategories = {
     name: "Food & Dining",
     icon: FaUtensils,
     color: "#F59E0B", 
-    description: "Restaurants, cafes, and food services",
+    description: "Restaurants, cafes, bars, bakeries, and food delivery services",
     services: [
       "restaurant",
       "cafe",
@@ -748,7 +857,7 @@ export const serviceCategories = {
     name: "Automotive",
     icon: FaWrench,
     color: "#374151",
-    description: "Car services and automotive needs",
+    description: "Car repairs, dealerships, rentals, gas stations, and automotive services",
     services: [
       "car_repair",
       "car repair", 
@@ -768,7 +877,7 @@ export const serviceCategories = {
     name: "Education",
     icon: FaGraduationCap,
     color: "#3B82F6",
-    description: "Schools, universities and learning centers",
+    description: "Schools, universities, libraries, tutoring centers, and educational services",
     services: [
       "school",
       "primary_school",
@@ -787,7 +896,7 @@ export const serviceCategories = {
     name: "Professional Services", 
     icon: FaBuilding,
     color: "#6B7280",
-    description: "Business and professional services (includes Insurance, Travel agency, and Local government)",
+    description: "Business services including banks, insurance, accounting, electricians, contractors, and plumbing",
     services: [
       "bank",
       "banks",
@@ -795,16 +904,21 @@ export const serviceCategories = {
       "insurance_agency",
       "insurance agency",
       "realestate",
+      "real_estate",
+      "real estate",
       "post_office",
       "travel",
       "travel_agency",
       "travel agency",
       "cleaning",
       "event",
-      "local_government_office",
-      "local government office",
       "computermobilerepair",
-      "plumbing"
+      "plumbing",
+      "accounting",
+      "electrician",
+      "general_contractor",
+      "general contractor",
+      "locksmith"
     ]
   },
   hospitality: {
@@ -812,7 +926,7 @@ export const serviceCategories = {
     name: "Hospitality & Accommodation",
     icon: FaHome,
     color: "#8B5CF6", 
-    description: "Hotels and accommodation services",
+    description: "Hotels, lodging, rental properties, and accommodation services",
     services: [
       "hotels",
       "propertymanagement",
@@ -825,7 +939,7 @@ export const serviceCategories = {
     name: "Personal Care",
     icon: FaPalette,
     color: "#EC4899",
-    description: "Beauty and personal care services", 
+    description: "Beauty salons, spas, barbers, massage therapy, and personal wellness services", 
     services: [
       "beautysalons",
       "beauty_salon",
@@ -842,13 +956,15 @@ export const serviceCategories = {
     name: "Entertainment",
     icon: FaMusic,
     color: "#EC4899", 
-    description: "Entertainment and leisure activities",
+    description: "Movies, sports, museums, parks, attractions, and recreational activities",
     services: [
       "night_club",
       "night club",
       "art_gallery", 
       "art gallery",
       "movie_theater",
+      "movietheatres",
+      "movie theatres",
       "bowling_alley",
       "stadium",
       "museum",
@@ -856,7 +972,12 @@ export const serviceCategories = {
       "zoo",
       "aquarium",
       "shopping_mall",
-      "shopping mall"
+      "shopping mall",
+      "childrenentertainment",
+      "children entertainment",
+      "hockey",
+      "tourist_attraction",
+      "tourist attraction"
     ]
   },
   transportation: {
@@ -864,13 +985,26 @@ export const serviceCategories = {
     name: "Transportation",
     icon: FaTruck,
     color: "#6B7280",
-    description: "Transportation and logistics services",
+    description: "Taxis, moving companies, storage, and transportation services",
     services: [
       "taxis",
       "moving_company",
       "moving company",
       "parking",
       "storage"
+    ]
+  },
+  government: {
+    id: "government",
+    name: "Government",
+    icon: FaBuilding,
+    color: "#374151",
+    description: "Government offices and municipal services",
+    services: [
+      "local_government_office",
+      "local government office",
+      "city_hall",
+      "city hall"
     ]
   },
   other: {
@@ -960,10 +1094,18 @@ export const getCategoryForService = (serviceKey) => {
     has("post_office") || has("post office") ||
     has("travel_agency") || has("travel agency") ||
     has("real_estate") || has("real estate") ||
-    has("local_government") || has("government") ||
     has("plumber") || has("plumbing") ||
-    has("computer_repair") || has("computer repair")
+    has("computer_repair") || has("computer repair") ||
+    has("accounting") ||
+    has("electrician") ||
+    has("contractor") ||
+    has("locksmith")
   ) return "services";
+
+  if (
+    has("local_government") || has("government") ||
+    has("city_hall") || has("city hall")
+  ) return "government";
 
   if (
     has("hotel") ||
@@ -983,6 +1125,7 @@ export const getCategoryForService = (serviceKey) => {
   if (
     has("night_club") || has("night club") ||
     has("movie_theater") || has("movie theater") ||
+    has("movietheatres") || has("movie theatres") ||
     has("bowling_alley") || has("bowling alley") ||
     has("stadium") ||
     has("museum") ||
@@ -990,7 +1133,10 @@ export const getCategoryForService = (serviceKey) => {
     has("zoo") ||
     has("aquarium") ||
     has("art_gallery") || has("art gallery") ||
-    has("shopping_mall") || has("shopping mall")
+    has("shopping_mall") || has("shopping mall") ||
+    has("childrenentertainment") || has("children entertainment") ||
+    has("hockey") ||
+    has("tourist_attraction") || has("tourist attraction")
   ) return "entertainment";
 
   if (
