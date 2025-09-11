@@ -34,6 +34,11 @@ const CategorizedServices = ({ data }) => {
         .sort(([categoryIdA], [categoryIdB]) => {
           const categoryA = serviceCategories[categoryIdA];
           const categoryB = serviceCategories[categoryIdB];
+          
+          // Put "Other Services" at the end
+          if (categoryIdA === 'other') return 1;
+          if (categoryIdB === 'other') return -1;
+          
           return categoryA?.name.localeCompare(categoryB?.name) || 0;
         })
         .map(([categoryId, services]) => {
