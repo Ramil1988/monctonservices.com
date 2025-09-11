@@ -553,6 +553,18 @@ export const googleServiceTypes = {
     icon: FaGlassWhiskey,
     color: "#7C3AED",
   },
+  massage_therapist: {
+    id: "massage_therapist",
+    name: "Massage therapist",
+    icon: FaHeartbeat,
+    color: "#FB7185",
+  },
+  "massage therapist": {
+    id: "massage therapist",
+    name: "Massage therapist",
+    icon: FaHeartbeat,
+    color: "#FB7185",
+  },
   gym: {
     id: "gym",
     name: "Gym",
@@ -820,7 +832,9 @@ export const serviceCategories = {
       "beauty salon",
       "barber",
       "hair_care",
-      "spa"
+      "spa",
+      "massage_therapist",
+      "massage therapist"
     ]
   },
   entertainment: {

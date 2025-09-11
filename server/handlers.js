@@ -314,6 +314,7 @@ const TYPE_SYNONYMS = {
   "taxi service": ["Taxis"],
   "gas station": ["Gas stations"],
   "computer repair": ["Computer and mobile repairs"],
+  "massage therapist": ["Massage therapist", "Massage therapists"],
   supermarket: ["Supermarkets"],
   grocery: ["Grocery stores"],
   lodging: ["Hotels"],

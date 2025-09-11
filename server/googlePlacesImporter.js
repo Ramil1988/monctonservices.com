@@ -29,6 +29,7 @@ const PLACE_TYPES = [
   { id: "insurance", name: "Insurance companies", query: "insurance agency" },
   { id: "autodealerships", name: "Auto dealers", query: "car dealer" },
   { id: "autoservice", name: "Auto services", query: "car repair" },
+  { id: "massage_therapist", name: "Massage therapists", query: "massage therapist" },
   { id: "gas", name: "Gas stations", query: "gas station" },
   { id: "petclinics", name: "Pet clinics", query: "veterinary care" },
   { id: "dentalclinics", name: "Dental clinics", query: "dentist" },
