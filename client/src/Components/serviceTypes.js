@@ -101,12 +101,6 @@ export const serviceTypes = {
     icon: Sparkles,
     color: "#EC4899",
   },
-  autodealerships: {
-    id: "autodealerships",
-    name: "Auto dealers",
-    icon: Car,
-    color: "#2563EB",
-  },
   walkinClinics: {
     id: "walkinClinics",
     name: "Walk in clinics",
@@ -137,12 +131,6 @@ export const serviceTypes = {
     icon: PiggyBank,
     color: "#2563EB",
   },
-  insurance: {
-    id: "insurance",
-    name: "Insurance companies",
-    icon: Shield,
-    color: "#1E40AF",
-  },
   autoservice: {
     id: "autoservice",
     name: "Auto services",
@@ -154,18 +142,6 @@ export const serviceTypes = {
     name: "Rental apartments",
     icon: Home,
     color: "#8B5CF6",
-  },
-  realestate: {
-    id: "realestate",
-    name: "Real Estate agencies",
-    icon: HouseUser,
-    color: "#6B7280",
-  },
-  travel: {
-    id: "travel",
-    name: "Travel agencies",
-    icon: Plane,
-    color: "#0369A1",
   },
   cleaning: {
     id: "cleaning",
@@ -320,13 +296,7 @@ export const googleServiceTypes = {
   },
   car_dealer: {
     id: "car_dealer",
-    name: "Car dealer",
-    icon: Car,
-    color: "#2563EB",
-  },
-  "car dealer": {
-    id: "car dealer",
-    name: "Car dealer",
+    name: "Auto dealers",
     icon: Car,
     color: "#2563EB",
   },
@@ -542,14 +512,8 @@ export const googleServiceTypes = {
   },
   insurance_agency: {
     id: "insurance_agency",
-    name: "Insurance agency",
-    icon: FaShieldAlt,
-    color: "#1E40AF",
-  },
-  "insurance agency": {
-    id: "insurance agency",
-    name: "Insurance agency",
-    icon: FaShieldAlt,
+    name: "Insurance agencies",
+    icon: Shield,
     color: "#1E40AF",
   },
   jewelry_store: {
@@ -578,14 +542,8 @@ export const googleServiceTypes = {
   },
   travel_agency: {
     id: "travel_agency",
-    name: "Travel agency",
-    icon: FaPlane,
-    color: "#0369A1",
-  },
-  "travel agency": {
-    id: "travel agency",
-    name: "Travel agency",
-    icon: FaPlane,
+    name: "Travel agencies",
+    icon: Plane,
     color: "#0369A1",
   },
   university: {
@@ -879,27 +837,9 @@ export const googleServiceTypes = {
     icon: Navigation,
     color: "#EC4899",
   },
-  real_estate: {
-    id: "real_estate",
-    name: "Real estate",
-    icon: HouseUser,
-    color: "#6B7280",
-  },
-  "real estate": {
-    id: "real estate",
-    name: "Real estate",
-    icon: HouseUser,
-    color: "#6B7280",
-  },
   real_estate_agency: {
     id: "real_estate_agency",
-    name: "Real estate agency",
-    icon: HouseUser,
-    color: "#6B7280",
-  },
-  "real estate agency": {
-    id: "real estate agency",
-    name: "Real estate agency",
+    name: "Real estate agencies",
     icon: HouseUser,
     color: "#6B7280",
   },
@@ -991,11 +931,10 @@ export const serviceCategories = {
       "car_rental",
       "car rental",
       "car_dealer",
-      "car dealer",
+      "autodealerships",
       "motor_vehicle_dealer",
       "motor vehicle dealer",
       "gas_station",
-      "autodealerships",
       "autoservice"
     ]
   },
@@ -1033,6 +972,8 @@ export const serviceCategories = {
       "realestate",
       "real_estate",
       "real estate",
+      "real_estate_agency",
+      "real estate agency",
       "post_office",
       "travel",
       "travel_agency",
