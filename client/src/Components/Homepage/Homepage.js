@@ -4,7 +4,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import CategorizedServices from "./CategorizedServices";
 import PopularServices from "./PopularServices";
 import Reviews from "./Reviews";
-import { NavLink } from "react-router-dom";
 import MonctonImage from "../../Pictures/Moncton.jpg";
 import MonctonImage1 from "../../Pictures/Moncton1.jpg";
 import MonctonImage2 from "../../Pictures/Moncton2.jpg";
