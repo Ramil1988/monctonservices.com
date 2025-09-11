@@ -60,11 +60,9 @@ const CategorizedServices = ({ data }) => {
                       </ServiceIconTile>
                       <ServiceAccent />
                       <ServiceName>{service.name}</ServiceName>
-                      {service.source && (
-                        <SourceBadge title={service.source === 'google' ? 'Discovered via Google' : 'Added from companies'}>
-                          {service.source === 'google' ? 'Google' : 'Custom'}
-                        </SourceBadge>
-                      )}
+                      <SourceBadge title={(service.source === 'google') ? 'Discovered via Google' : 'Added from companies'}>
+                        {service.source === 'google' ? 'Google' : 'Custom'}
+                      </SourceBadge>
                     </StyledLink>
                   </ServiceCard>
                 ))}
