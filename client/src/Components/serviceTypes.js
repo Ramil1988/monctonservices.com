@@ -1,166 +1,224 @@
-// serviceTypes.js - Google API service types with React Icons
+// serviceTypes.js - Service types with Lucide React icons
 import {
-  FaPalette, // Art gallery
-  FaCookie, // Bakery
-  FaGlassWhiskey, // Bar
-  FaBook, // Book store
-  FaCoffee, // Cafe
-  FaWrench, // Car repair
-  FaStore, // Clothing/Department/Store
-  FaUserMd, // Doctor
-  FaSeedling, // Florist
-  FaUtensils, // Food/Restaurant
-  FaShoppingCart, // Grocery/Supermarket
-  FaHeartbeat, // Health
-  FaHospital, // Hospital
-  FaBox, // Meal takeaway
-  FaTruck, // Moving company
-  FaCar, // Car rental
-  FaGraduationCap, // Schools
-  FaUniversity, // University
-  FaShoppingBag, // Shopping mall
-  FaWarehouse, // Storage
-  FaShieldAlt, // Insurance agency
-  FaGem, // Jewelry store
-  FaMusic, // Night club
-  FaPlane, // Travel agency
-  FaBuilding, // Government/Buildings
-  FaHome, // Default fallback
-  FaMapMarkerAlt, // General location
-  FaDumbbell, // Fitness
-  FaCut, // Barber
-  FaSpa, // Spa/massage
-  FaTheaterMasks, // Entertainment
-  FaLandmark, // Government
-  FaHouseUser, // Real estate
-  FaTools, // General contractor
-  FaLock, // Locksmith
-  FaBolt, // Electrician
-  FaCalculator, // Accounting
-  FaCity, // City hall
-} from "react-icons/fa";
-
-import {
-  MdChildCare, // Children entertainment
-  MdSportsHockey, // Hockey
-  MdTour, // Tourist attraction
-  MdFitnessCenter, // Fitness center
-  MdLocalMovies, // Movies
-} from "react-icons/md";
-
-import {
-  IoStorefront, // Stores
-  IoRestaurant, // Food
-  IoCar, // Automotive
-  IoSchool, // Education
-  IoBusiness, // Professional services
-  IoHome, // Hospitality
-  IoHeart, // Personal care
-  IoGameController, // Entertainment
-  IoAirplane, // Transportation
-} from "react-icons/io5";
+  Store,
+  Utensils,
+  Car,
+  GraduationCap,
+  Building2,
+  Home,
+  Heart,
+  Gamepad2,
+  Plane,
+  Landmark,
+  Hotel,
+  ShoppingBag,
+  ShoppingCart,
+  Coffee,
+  Wine,
+  Book,
+  Gem,
+  Stethoscope,
+  Hospital,
+  Pill,
+  Scissors,
+  Dumbbell,
+  Sparkles,
+  MapPin,
+  PaintBucket,
+  Cookie,
+  Flower,
+  Warehouse,
+  Shield,
+  Music,
+  Truck,
+  University,
+  Calculator,
+  Zap,
+  Hammer,
+  Lock,
+  Users,
+  Film,
+  Baby,
+  Trophy,
+  Camera,
+  HouseIcon as HouseUser,
+  Wrench,
+  PiggyBank,
+  Shirt,
+  Dog,
+  Fuel,
+  Plane as AirplaneIcon,
+  Laptop,
+  Shirt as ShirtIcon,
+  Flower2,
+  Briefcase,
+  Palette,
+} from "lucide-react";
 
 // Keep your original serviceTypes for backward compatibility
 export const serviceTypes = {
   hotels: {
     id: "hotels",
     name: "Hotels",
-    imageSrc: "/assets/Hotels.jpg",
+    icon: Hotel,
+    color: "#8B5CF6",
   },
   beautysalons: {
     id: "beautysalons",
     name: "Beauty salon",
-    imageSrc: "/assets/BeautySalon.jpg",
+    icon: Sparkles,
+    color: "#EC4899",
   },
   autodealerships: {
     id: "autodealerships",
     name: "Auto dealers",
-    imageSrc: "/assets/AutoDealers.jpg",
+    icon: Car,
+    color: "#2563EB",
   },
   walkinClinics: {
     id: "walkinClinics",
     name: "Walk in clinics",
-    imageSrc: "/assets/WalkinClinics.jpg",
+    icon: Stethoscope,
+    color: "#EF4444",
   },
   petclinics: {
     id: "petclinics",
     name: "Pet clinics",
-    imageSrc: "/assets/PetClinics.jpg",
+    icon: Dog,
+    color: "#10B981",
   },
   dentalclinics: {
     id: "dentalclinics",
     name: "Dental clinics",
-    imageSrc: "/assets/DentalClinic.jpg",
+    icon: Stethoscope,
+    color: "#3B82F6",
   },
   plumbing: {
     id: "plumbing",
     name: "Plumbing companies",
-    imageSrc: "/assets/plumbing.jpg",
+    icon: Wrench,
+    color: "#6B7280",
   },
   banks: {
     id: "banks",
     name: "Banks",
-    imageSrc: "/assets/Banks.jpg",
+    icon: PiggyBank,
+    color: "#2563EB",
   },
   insurance: {
     id: "insurance",
     name: "Insurance companies",
-    imageSrc: "/assets/Insurance.jpg",
+    icon: Shield,
+    color: "#1E40AF",
   },
   autoservice: {
     id: "autoservice",
     name: "Auto services",
-    imageSrc: "/assets/Autoservice.jpg",
+    icon: Wrench,
+    color: "#374151",
   },
   propertymanagement: {
     id: "propertymanagement",
-    name: "Rental appartments",
-    imageSrc: "/assets/Propertymanagement.jpg",
+    name: "Rental apartments",
+    icon: Home,
+    color: "#8B5CF6",
   },
   realestate: {
     id: "realestate",
     name: "Real Estate agencies",
-    imageSrc: "/assets/RealEstateAgencies.jpg",
+    icon: HouseUser,
+    color: "#6B7280",
   },
   travel: {
     id: "travel",
     name: "Travel agencies",
-    imageSrc: "/assets/Travel.jpg",
+    icon: Plane,
+    color: "#0369A1",
   },
   cleaning: {
     id: "cleaning",
     name: "Cleaning service",
-    imageSrc: "/assets/Cleaning.jpg",
+    icon: Sparkles,
+    color: "#10B981",
   },
   event: {
     id: "event",
     name: "Event agencies",
-    imageSrc: "/assets/Eventagencies.jpg",
+    icon: Users,
+    color: "#EC4899",
   },
   daycares: {
     id: "daycares",
     name: "Daycares, Afterschools, Summer camps",
-    imageSrc: "/assets/Daycares.jpg",
+    icon: Baby,
+    color: "#3B82F6",
   },
   drivingschool: {
     id: "drivingschool",
     name: "Driving schools",
-    imageSrc: "/assets/Drivingshool.jpg",
+    icon: Car,
+    color: "#3B82F6",
   },
   tutoringcenters: {
     id: "tutoringcenters",
     name: "Tutoring centers",
-    imageSrc: "/assets/Tutoringcenter.jpg",
+    icon: GraduationCap,
+    color: "#3B82F6",
   },
   computermobilerepair: {
     id: "computermobilerepair",
     name: "Computer and mobile repairs",
-    imageSrc: "/assets/Computermobilerepair.jpg",
+    icon: Laptop,
+    color: "#6B7280",
   },
   taxis: {
     id: "taxis",
     name: "Taxis",
-    imageSrc: "/assets/Taxis.jpg",
+    icon: Car,
+    color: "#F59E0B",
+  },
+  // New service types
+  drugstore: {
+    id: "drugstore",
+    name: "Drug Store",
+    icon: Pill,
+    color: "#10B981",
+  },
+  petstore: {
+    id: "petstore",
+    name: "Pet Store",
+    icon: Dog,
+    color: "#10B981",
+  },
+  shoestore: {
+    id: "shoestore",
+    name: "Shoe Store",
+    icon: ShirtIcon,
+    color: "#EC4899",
+  },
+  airport: {
+    id: "airport",
+    name: "Airport",
+    icon: AirplaneIcon,
+    color: "#0EA5E9",
+  },
+  finance: {
+    id: "finance",
+    name: "Finance",
+    icon: PiggyBank,
+    color: "#2563EB",
+  },
+  laundry: {
+    id: "laundry",
+    name: "Laundry",
+    icon: Shirt,
+    color: "#6B7280",
+  },
+  mealdelivery: {
+    id: "mealdelivery",
+    name: "Meal Delivery",
+    icon: Truck,
+    color: "#F59E0B",
   },
 };
 
@@ -170,62 +228,62 @@ export const googleServiceTypes = {
   art_gallery: {
     id: "art_gallery",
     name: "Art gallery",
-    icon: FaPalette,
+    icon: Palette,
     color: "#8B5CF6",
   },
   // Space format (API might use this)
   "art gallery": {
     id: "art gallery",
     name: "Art gallery",
-    icon: FaPalette,
+    icon: Palette,
     color: "#8B5CF6",
   },
   bakery: {
     id: "bakery",
     name: "Bakery",
-    icon: FaCookie,
+    icon: Cookie,
     color: "#D97706",
   },
   bar: {
     id: "bar",
     name: "Bar",
-    icon: FaGlassWhiskey,
+    icon: Wine,
     color: "#DC2626",
   },
   book_store: {
     id: "book_store",
     name: "Book store",
-    icon: FaBook,
+    icon: Book,
     color: "#1D4ED8",
   },
   "book store": {
     id: "book store",
     name: "Book store",
-    icon: FaBook,
+    icon: Book,
     color: "#1D4ED8",
   },
   cafe: {
     id: "cafe",
     name: "Cafe",
-    icon: FaCoffee,
+    icon: Coffee,
     color: "#92400E",
   },
   car_repair: {
     id: "car_repair",
     name: "Car repair",
-    icon: FaWrench,
+    icon: Wrench,
     color: "#374151",
   },
   car_rental: {
     id: "car_rental",
     name: "Car rental",
-    icon: FaCar,
+    icon: Car,
     color: "#0EA5E9",
   },
   "car rental": {
     id: "car rental",
     name: "Car rental",
-    icon: FaCar,
+    icon: Car,
     color: "#0EA5E9",
   },
   car_dealer: {
@@ -826,7 +884,7 @@ export const serviceCategories = {
   stores: {
     id: "stores",
     name: "Stores",
-    icon: IoStorefront,
+    icon: Store,
     color: "#059669",
     description: "Retail stores including clothing, electronics, books, groceries, and specialty shops",
     services: [
@@ -876,7 +934,7 @@ export const serviceCategories = {
   food: {
     id: "food",
     name: "Food & Dining",
-    icon: IoRestaurant,
+    icon: Utensils,
     color: "#F59E0B", 
     description: "Restaurants, cafes, bars, bakeries, and food delivery services",
     services: [
@@ -892,7 +950,7 @@ export const serviceCategories = {
   automotive: {
     id: "automotive",
     name: "Automotive",
-    icon: IoCar,
+    icon: Car,
     color: "#374151",
     description: "Car repairs, dealerships, rentals, gas stations, and automotive services",
     services: [
@@ -912,7 +970,7 @@ export const serviceCategories = {
   education: {
     id: "education", 
     name: "Education",
-    icon: IoSchool,
+    icon: GraduationCap,
     color: "#3B82F6",
     description: "Schools, universities, libraries, tutoring centers, and educational services",
     services: [
@@ -931,7 +989,7 @@ export const serviceCategories = {
   services: {
     id: "services",
     name: "Professional Services", 
-    icon: IoBusiness,
+    icon: Briefcase,
     color: "#6B7280",
     description: "Business services including banks, insurance, accounting, electricians, contractors, and plumbing",
     services: [
@@ -961,7 +1019,7 @@ export const serviceCategories = {
   hospitality: {
     id: "hospitality",
     name: "Hospitality & Accommodation",
-    icon: IoHome,
+    icon: Hotel,
     color: "#8B5CF6", 
     description: "Hotels, lodging, rental properties, and accommodation services",
     services: [
@@ -974,7 +1032,7 @@ export const serviceCategories = {
   personal_care: {
     id: "personal_care",
     name: "Personal Care",
-    icon: IoHeart,
+    icon: Heart,
     color: "#EC4899",
     description: "Beauty salons, spas, barbers, massage therapy, fitness centers, and personal wellness services", 
     services: [
@@ -993,7 +1051,7 @@ export const serviceCategories = {
   entertainment: {
     id: "entertainment",
     name: "Entertainment",
-    icon: IoGameController,
+    icon: Gamepad2,
     color: "#EC4899", 
     description: "Movies, sports, museums, parks, attractions, and recreational activities",
     services: [
@@ -1022,7 +1080,7 @@ export const serviceCategories = {
   transportation: {
     id: "transportation",
     name: "Transportation",
-    icon: IoAirplane,
+    icon: Plane,
     color: "#6B7280",
     description: "Taxis, moving companies, storage, and transportation services",
     services: [
@@ -1036,7 +1094,7 @@ export const serviceCategories = {
   government: {
     id: "government",
     name: "Government",
-    icon: FaLandmark,
+    icon: Landmark,
     color: "#374151",
     description: "Government offices and municipal services",
     services: [
@@ -1255,7 +1313,7 @@ export const getServiceType = (key) => {
   return {
     id: key,
     name: humanize(key),
-    icon: FaMapMarkerAlt,
+    icon: MapPin,
     color: "#6B7280",
   };
 };

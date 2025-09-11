@@ -119,6 +119,9 @@ const CategoryCard = styled.div`
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     border-color: var(--primary-start);
@@ -130,6 +133,7 @@ const CategoryHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  height: 100%;
 `;
 
 const CategoryIconWrapper = styled.div`
