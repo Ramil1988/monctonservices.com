@@ -7,7 +7,8 @@ const Reviews = ({ reviews }) => {
   const [recentReviews, setRecentReviews] = useState([]);
 
   useEffect(() => {
-    const sortedReviews = [...reviews].sort(
+    const list = Array.isArray(reviews) ? reviews : [];
+    const sortedReviews = [...list].sort(
       (a, b) => new Date(b.date) - new Date(a.date)
     );
     setRecentReviews(sortedReviews.slice(0, 9));

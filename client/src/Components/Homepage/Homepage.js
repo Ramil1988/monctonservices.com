@@ -42,24 +42,28 @@ const Homepage = (props) => {
   const fetchAllReviews = async () => {
     try {
       const response = await fetch(`${ROOT_API}/allReviews`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      setReviews(data.data);
+      setReviews(Array.isArray(data.data) ? data.data : []);
     } catch (error) {
       console.error("Error fetching all reviews:", error);
+      setReviews([]);
     }
   };
 
   const fetchAllcompanies = async () => {
     try {
       const response = await fetch(`${ROOT_API}/allCompanies`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       const triCities = ["moncton", "dieppe", "riverview"];
-      const filtered = (data.data || []).filter((c) =>
+      const filtered = (Array.isArray(data.data) ? data.data : []).filter((c) =>
         triCities.some((city) => (c.address || "").toLowerCase().includes(city))
       );
       setAllCompanies(filtered);
     } catch (error) {
       console.error("Error fetching all companies:", error);
+      setAllCompanies([]);
     }
   };
 
