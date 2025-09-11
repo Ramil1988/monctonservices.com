@@ -22,47 +22,40 @@ const Admin = () => {
   const [purgeStatus, setPurgeStatus] = useState("");
   const [dryRun, setDryRun] = useState(false);
 
-  // Admin dropdown: show a union list for the cities in the input
-  // Build from cached per-city results in localStorage; fall back to stored union
+  // Admin dropdown: build union directly from server (/service-types) for the entered cities
   useEffect(() => {
-    const inputCities = (importCity || "")
-      .split(/[,;\n]/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-    const defaultCities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
-    const cities = inputCities.length ? Array.from(new Set(inputCities)) : defaultCities;
-    const unionMap = new Map();
-    cities.forEach((c) => {
-      try {
-        const raw = localStorage.getItem(`placeTypes:${c}`);
-        if (!raw) return;
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) return;
-        parsed.forEach((t) => {
-          if (!unionMap.has(t.id)) unionMap.set(t.id, t);
-        });
-      } catch (_) {}
-    });
-    let union = [];
-    if (unionMap.size > 0) {
-      union = Array.from(unionMap.values());
-    } else {
-      try {
-        const raw = localStorage.getItem("placeTypes:TriCitiesUnion");
-        const parsed = raw ? JSON.parse(raw) : [];
-        union = Array.isArray(parsed) ? parsed : [];
-      } catch (_) {}
-    }
-    // Manual overrides: ensure key types appear regardless of discovery
-    if (!union.some((t) => t.id === "car_dealer")) {
-      union.push({ id: "car_dealer", name: "Car dealer" });
-    }
-    if (!union.some((t) => t.id === "massage_therapist")) {
-      union.push({ id: "massage_therapist", name: "Massage therapist" });
-    }
-    union = union.sort((a, b) => a.name.localeCompare(b.name));
-    setPlaceTypes(union);
-    setSelectedServiceType(union[0]?.id || "");
+    const loadUnionFromServer = async () => {
+      const inputCities = (importCity || "")
+        .split(/[,;\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const defaultCities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+      const cities = inputCities.length ? Array.from(new Set(inputCities)) : defaultCities;
+
+      const unionMap = new Map();
+      for (const c of cities) {
+        try {
+          const resp = await fetch(`${ROOT_API}/service-types?city=${encodeURIComponent(c)}`);
+          const data = await resp.json();
+          const list = Array.isArray(data.data) ? data.data : [];
+          list.forEach((t) => {
+            if (!unionMap.has(t.id)) unionMap.set(t.id, t);
+          });
+        } catch (_) {}
+      }
+      let union = Array.from(unionMap.values());
+      // Manual overrides: ensure key types appear regardless of discovery
+      if (!union.some((t) => t.id === "car_dealer")) {
+        union.push({ id: "car_dealer", name: "Car dealer" });
+      }
+      if (!union.some((t) => t.id === "massage_therapist")) {
+        union.push({ id: "massage_therapist", name: "Massage therapist" });
+      }
+      union = union.sort((a, b) => a.name.localeCompare(b.name));
+      setPlaceTypes(union);
+      setSelectedServiceType(union[0]?.id || "");
+    };
+    loadUnionFromServer();
   }, [importCity]);
 
   const fetchCompanies = async () => {
@@ -307,18 +300,17 @@ const Admin = () => {
                   localStorage.setItem("placeTypes:LastCitiesUnion", JSON.stringify(uniqueCities));
                 } catch (_) {}
 
-                // Rebuild union for dropdown (union of the same cities input)
+                // Rebuild union for dropdown from server for the entered cities
                 try {
                   const unionMap = new Map();
-                  uniqueCities.forEach((c) => {
-                    const raw = localStorage.getItem(`placeTypes:${c}`);
-                    if (!raw) return;
-                    const parsed = JSON.parse(raw);
-                    if (!Array.isArray(parsed)) return;
-                    parsed.forEach((t) => {
+                  for (const c of uniqueCities) {
+                    const resp2 = await fetch(`${ROOT_API}/service-types?city=${encodeURIComponent(c)}`);
+                    const d2 = await resp2.json();
+                    const list2 = Array.isArray(d2.data) ? d2.data : [];
+                    list2.forEach((t) => {
                       if (!unionMap.has(t.id)) unionMap.set(t.id, t);
                     });
-                  });
+                  }
                   let union = Array.from(unionMap.values());
                   if (!union.some((t) => t.id === "car_dealer")) {
                     union.push({ id: "car_dealer", name: "Car dealer" });
@@ -329,10 +321,7 @@ const Admin = () => {
                   union = union.sort((a, b) => a.name.localeCompare(b.name));
                   setPlaceTypes(union);
                   setSelectedServiceType(union[0]?.id || "");
-                  localStorage.setItem("placeTypes:TriCitiesUnion", JSON.stringify(union));
-                } catch (_) {
-                  // ignore
-                }
+                } catch (_) {}
               } catch (e) {
                 setImportStatus(`Error: ${e.message}`);
               }
