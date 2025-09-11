@@ -1047,10 +1047,28 @@ export const getServiceType = (key) => {
     return googleServiceTypes[underscoreKey];
   }
 
-  // Return default fallback
+  // Return default fallback with humanized name
+  const humanize = (raw) => {
+    if (!raw) return "";
+    let s = String(raw).replace(/[_-]+/g, " ").trim();
+    // common fixups
+    s = s.replace(/walk\s*in\s*clinics?/i, "Walk in Clinic");
+    s = s.replace(/walkin\s*clinics?/i, "Walk in Clinic");
+    s = s.replace(/walkin\s*clinic/i, "Walk in Clinic");
+    // insert space between lowercase and uppercase boundaries (camelCase)
+    s = s.replace(/([a-z])([A-Z])/g, "$1 $2");
+    s = s.replace(/\s+/g, " ").trim();
+    const lowerSmall = new Set(["and", "or", "the", "in", "of", "for", "to", "a", "an"]);
+    const words = s.split(" ").map((w, i) => {
+      const lw = w.toLowerCase();
+      if (i !== 0 && lowerSmall.has(lw)) return lw;
+      return lw.charAt(0).toUpperCase() + lw.slice(1);
+    });
+    return words.join(" ");
+  };
   return {
     id: key,
-    name: key.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase()),
+    name: humanize(key),
     icon: FaMapMarkerAlt,
     color: "#6B7280",
   };

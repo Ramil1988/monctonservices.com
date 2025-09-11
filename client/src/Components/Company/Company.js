@@ -62,10 +62,22 @@ const Company = () => {
     } else if (thingsToDo && thingsToDo[serviceTypeLower]?.name) {
       selectedServicetype = thingsToDo[serviceTypeLower].name;
     } else {
-      // Fallback: show raw serviceType nicely
-      selectedServicetype = company.serviceType
-        .replace(/_/g, " ")
-        .replace(/^\w/, (c) => c.toUpperCase());
+      // Fallback: humanize raw serviceType
+      const humanize = (raw) => {
+        let s = String(raw || "").replace(/[_-]+/g, " ").trim();
+        s = s.replace(/walk\s*in\s*clinics?/i, "Walk in Clinic");
+        s = s.replace(/walkin\s*clinics?/i, "Walk in Clinic");
+        s = s.replace(/([a-z])([A-Z])/g, "$1 $2");
+        s = s.replace(/\s+/g, " ").trim();
+        const lowerSmall = new Set(["and", "or", "the", "in", "of", "for", "to", "a", "an"]);
+        const words = s.split(" ").map((w, i) => {
+          const lw = w.toLowerCase();
+          if (i !== 0 && lowerSmall.has(lw)) return lw;
+          return lw.charAt(0).toUpperCase() + lw.slice(1);
+        });
+        return words.join(" ");
+      };
+      selectedServicetype = humanize(company.serviceType);
     }
   }
 
