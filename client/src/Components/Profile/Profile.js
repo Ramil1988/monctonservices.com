@@ -157,7 +157,6 @@ const Profile = () => {
             </Sidebar>
             <WelcomeHeader>
               <h2>Welcome back, {user.name}!</h2>
-              <p>Manage your reviews and favorite businesses</p>
             </WelcomeHeader>
           </SideWrapper>
           <MainContent>
@@ -217,22 +216,12 @@ const blinkCursor = keyframes`
 `;
 
 const WelcomeHeader = styled.div`
-  background: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: 12px;
-  padding: 16px 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 8px;
 
   h2 {
-    font-size: 1.4rem;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--text);
-    margin: 0 0 4px 0;
-  }
-  
-  p {
-    font-size: 0.9rem;
-    color: var(--muted);
     margin: 0;
   }
 
