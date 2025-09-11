@@ -60,7 +60,10 @@ const CategorizedServices = ({ data }) => {
                       </ServiceIconTile>
                       <ServiceAccent />
                       <ServiceName>{service.name}</ServiceName>
-                      <SourceBadge title={(service.source === 'google') ? 'Discovered via Google' : 'Added from companies'}>
+                      <SourceBadge
+                        variant={service.source === 'google' ? 'google' : 'custom'}
+                        title={(service.source === 'google') ? 'Discovered via Google' : 'Added from companies'}
+                      >
                         {service.source === 'google' ? 'Google' : 'Custom'}
                       </SourceBadge>
                     </StyledLink>
@@ -81,29 +84,28 @@ const Container = styled.div`
 `;
 
 const CategorySection = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 `;
 
 const CategoryCard = styled.div`
   background: var(--surface);
   border: 1px solid var(--surface-border);
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     border-color: var(--primary-start);
+    background: rgba(255,255,255,0.02);
   }
 `;
 
 const CategoryHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 `;
 
 const CategoryIconWrapper = styled.div`
@@ -161,33 +163,32 @@ const ServicesGrid = styled.div`
   transition: all 0.3s ease;
   max-height: ${props => props.isExpanded ? 'none' : '0'};
   opacity: ${props => props.isExpanded ? '1' : '0'};
-  margin-top: ${props => props.isExpanded ? '16px' : '0'};
+  margin-top: ${props => props.isExpanded ? '12px' : '0'};
 `;
 
 const ServicesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 16px 0;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 12px 0;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
   }
 `;
 
 const ServiceCard = styled.div`
   background: var(--surface);
   border: 1px solid var(--surface-border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 12px;
   text-align: center;
-  transition: all 0.15s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
     border-color: var(--primary-start);
   }
 `;
@@ -199,15 +200,15 @@ const StyledLink = styled(Link)`
 `;
 
 const ServiceIconTile = styled.div`
-  height: 72px;
-  width: 72px;
-  margin: 0 auto 12px;
-  border-radius: 12px;
+  height: 60px;
+  width: 60px;
+  margin: 0 auto 8px;
+  border-radius: 10px;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
 const ServiceIconWrapper = styled.div`
@@ -215,28 +216,24 @@ const ServiceIconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.1);
-  }
+  
 `;
 
 const ServiceIcon = styled.img`
-  height: 48px;
-  width: 48px;
+  height: 40px;
+  width: 40px;
   object-fit: contain;
   border-radius: 8px;
 `;
 
 const ServiceFallbackIcon = styled.div`
-  height: 40px;
-  width: 40px;
+  height: 36px;
+  width: 36px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--pill-text);
   background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
@@ -245,13 +242,13 @@ const ServiceFallbackIcon = styled.div`
 const ServiceAccent = styled.div`
   background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
   height: 2px;
-  width: 70%;
-  margin: 0 auto 8px;
+  width: 60%;
+  margin: 0 auto 6px;
   border-radius: 999px;
 `;
 
 const ServiceName = styled.h4`
-  font-size: 0.875rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--text);
   margin: 0;
@@ -260,13 +257,15 @@ const ServiceName = styled.h4`
 
 const SourceBadge = styled.span`
   display: inline-block;
-  margin-top: 6px;
+  margin-top: 4px;
   padding: 2px 8px;
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
-  color: var(--pill-text);
-  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: #fff;
+  background: ${props => props.variant === 'google'
+    ? 'linear-gradient(90deg, #3b82f6, #60a5fa)'
+    : 'linear-gradient(90deg, #10b981, #34d399)'};
 `;
 
 export default CategorizedServices;
