@@ -58,9 +58,19 @@ const MainHomePage = () => {
           });
         });
 
-        const unionList = Array.from(unionMap.values()).sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
+        let unionList = Array.from(unionMap.values());
+        // Manual overrides: always include Auto dealers
+        if (!unionList.some((t) => t.id === "car_dealer")) {
+          const m = googleServiceTypes["car_dealer"];
+          unionList.push({
+            id: "car_dealer",
+            name: m?.name || "Car dealer",
+            icon: m?.icon || null,
+            color: m?.color || null,
+            hasIcon: !!m?.icon,
+          });
+        }
+        unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
         setTypes(unionList);
         try {
           localStorage.setItem(`placeTypes:TriCitiesUnion`, JSON.stringify(unionList));
@@ -86,15 +96,37 @@ const MainHomePage = () => {
           } catch (_) {}
         });
         if (unionMap.size > 0) {
-          const unionList = Array.from(unionMap.values()).sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
+          let unionList = Array.from(unionMap.values());
+          if (!unionList.some((t) => t.id === "car_dealer")) {
+            const m = googleServiceTypes["car_dealer"];
+            unionList.push({
+              id: "car_dealer",
+              name: m?.name || "Car dealer",
+              icon: m?.icon || null,
+              color: m?.color || null,
+              hasIcon: !!m?.icon,
+            });
+          }
+          unionList = unionList.sort((a, b) => a.name.localeCompare(b.name));
           setTypes(unionList);
         } else {
           // last resort
           try {
             const raw = localStorage.getItem(`placeTypes:TriCitiesUnion`);
-            if (raw) setTypes(JSON.parse(raw));
+            if (raw) {
+              let cached = JSON.parse(raw) || [];
+              if (!cached.some((t) => t.id === "car_dealer")) {
+                const m = googleServiceTypes["car_dealer"];
+                cached.push({
+                  id: "car_dealer",
+                  name: m?.name || "Car dealer",
+                  icon: m?.icon || null,
+                  color: m?.color || null,
+                  hasIcon: !!m?.icon,
+                });
+              }
+              setTypes(cached.sort((a, b) => a.name.localeCompare(b.name)));
+            }
           } catch (_) {}
         }
       }

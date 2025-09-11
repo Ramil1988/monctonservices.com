@@ -39,7 +39,7 @@ const Admin = () => {
     });
     let union = [];
     if (unionMap.size > 0) {
-      union = Array.from(unionMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+      union = Array.from(unionMap.values());
     } else {
       try {
         const raw = localStorage.getItem("placeTypes:TriCitiesUnion");
@@ -47,6 +47,11 @@ const Admin = () => {
         union = Array.isArray(parsed) ? parsed : [];
       } catch (_) {}
     }
+    // Manual override: ensure Auto dealers appears regardless of discovery
+    if (!union.some((t) => t.id === "car_dealer")) {
+      union.push({ id: "car_dealer", name: "Car dealer" });
+    }
+    union = union.sort((a, b) => a.name.localeCompare(b.name));
     setPlaceTypes(union);
     setSelectedServiceType(union[0]?.id || "");
   }, [importCity]);
@@ -233,14 +238,22 @@ const Admin = () => {
                       if (!unionMap.has(t.id)) unionMap.set(t.id, t);
                     });
                   });
-                  const union = Array.from(unionMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+                  let union = Array.from(unionMap.values());
+                  if (!union.some((t) => t.id === "car_dealer")) {
+                    union.push({ id: "car_dealer", name: "Car dealer" });
+                  }
+                  union = union.sort((a, b) => a.name.localeCompare(b.name));
                   setPlaceTypes(union);
                   setSelectedServiceType(union[0]?.id || "");
                   localStorage.setItem("placeTypes:TriCitiesUnion", JSON.stringify(union));
                 } catch (_) {
                   // Fallback: at least show the last discovered list
-                  setPlaceTypes(list);
-                  setSelectedServiceType(list[0]?.id || "");
+                  let fallback = list;
+                  if (!fallback.some((t) => t.id === "car_dealer")) {
+                    fallback = [...fallback, { id: "car_dealer", name: "Car dealer" }];
+                  }
+                  setPlaceTypes(fallback);
+                  setSelectedServiceType(fallback[0]?.id || "");
                 }
               } catch (e) {
                 setImportStatus(`Error: ${e.message}`);
