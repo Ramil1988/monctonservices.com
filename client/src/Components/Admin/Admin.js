@@ -21,19 +21,34 @@ const Admin = () => {
   const [onlyNew, setOnlyNew] = useState(true);
   const [purgeStatus, setPurgeStatus] = useState("");
 
-  // No curated list by default; use discovery to populate
-  // Load saved list for current city on mount and when the city changes
+  // Admin dropdown: show a tri-city union list (Moncton, Dieppe, Riverview)
+  // Build from cached per-city results or fall back to any stored union
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(`placeTypes:${importCity}`);
-      if (raw) {
+    const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+    const unionMap = new Map();
+    cities.forEach((c) => {
+      try {
+        const raw = localStorage.getItem(`placeTypes:${c}`);
+        if (!raw) return;
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          setPlaceTypes(parsed);
-          setSelectedServiceType(parsed[0]?.id || "");
-        }
-      }
-    } catch (_) {}
+        if (!Array.isArray(parsed)) return;
+        parsed.forEach((t) => {
+          if (!unionMap.has(t.id)) unionMap.set(t.id, t);
+        });
+      } catch (_) {}
+    });
+    let union = [];
+    if (unionMap.size > 0) {
+      union = Array.from(unionMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      try {
+        const raw = localStorage.getItem("placeTypes:TriCitiesUnion");
+        const parsed = raw ? JSON.parse(raw) : [];
+        union = Array.isArray(parsed) ? parsed : [];
+      } catch (_) {}
+    }
+    setPlaceTypes(union);
+    setSelectedServiceType(union[0]?.id || "");
   }, [importCity]);
 
   const fetchCompanies = async () => {
@@ -199,13 +214,34 @@ const Admin = () => {
                 const data = await resp.json();
                 if (!resp.ok) throw new Error(data.message || "Failed to discover");
                 const list = data.data || [];
-                setPlaceTypes(list);
-                setSelectedServiceType(list[0]?.id || "");
                 setImportStatus(`Discovered ${list.length} types for ${data.city}`);
+                // Save this city's list
                 try {
                   localStorage.setItem(`placeTypes:${importCity}`, JSON.stringify(list));
                   localStorage.setItem("placeTypesCity", importCity);
                 } catch (_) {}
+                // Rebuild union for dropdown
+                try {
+                  const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+                  const unionMap = new Map();
+                  cities.forEach((c) => {
+                    const raw = localStorage.getItem(`placeTypes:${c}`);
+                    if (!raw) return;
+                    const parsed = JSON.parse(raw);
+                    if (!Array.isArray(parsed)) return;
+                    parsed.forEach((t) => {
+                      if (!unionMap.has(t.id)) unionMap.set(t.id, t);
+                    });
+                  });
+                  const union = Array.from(unionMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+                  setPlaceTypes(union);
+                  setSelectedServiceType(union[0]?.id || "");
+                  localStorage.setItem("placeTypes:TriCitiesUnion", JSON.stringify(union));
+                } catch (_) {
+                  // Fallback: at least show the last discovered list
+                  setPlaceTypes(list);
+                  setSelectedServiceType(list[0]?.id || "");
+                }
               } catch (e) {
                 setImportStatus(`Error: ${e.message}`);
               }
