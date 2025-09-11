@@ -16,8 +16,8 @@ const PopularServices = ({ types = [] }) => {
   const fetchTopCompaniesByServiceTypes = async () => {
     const servicesWithTopCompanies = [];
 
-    // Check all service types to find those with reviews
-    for (const serviceType of types) {
+    // Make all API calls in parallel for much faster loading
+    const promises = types.map(async (serviceType) => {
       try {
         const response = await fetch(
           `${ROOT_API}/companies/${serviceType.id}?cities=Moncton,Dieppe,Riverview`
@@ -35,24 +35,31 @@ const PopularServices = ({ types = [] }) => {
             .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
             .slice(0, 5);
 
-          servicesWithTopCompanies.push({
+          return {
             ...serviceType,
             topCompanies: sortedCompanies,
             totalReviews,
-          });
+          };
         }
+        return null;
       } catch (error) {
         console.error(
           `Error fetching companies for ${serviceType.name}:`,
           error
         );
+        return null;
       }
-    }
+    });
 
-    // Order by total reviews desc and cap to 3
-    const ordered = servicesWithTopCompanies
+    // Wait for all requests to complete
+    const results = await Promise.all(promises);
+    
+    // Filter out null results and sort by total reviews
+    const validResults = results.filter(result => result !== null);
+    const ordered = validResults
       .sort((a, b) => (b.totalReviews || 0) - (a.totalReviews || 0))
       .slice(0, 3);
+      
     setServicesData(ordered);
   };
 

@@ -95,12 +95,6 @@ export const serviceTypes = {
     icon: Hotel,
     color: "#8B5CF6",
   },
-  beautysalons: {
-    id: "beautysalons",
-    name: "Beauty salon",
-    icon: Sparkles,
-    color: "#EC4899",
-  },
   walkinClinics: {
     id: "walkinClinics",
     name: "Walk in clinics",
@@ -579,14 +573,8 @@ export const googleServiceTypes = {
   // Additional common variations
   beauty_salon: {
     id: "beauty_salon",
-    name: "Beauty salon",
-    icon: Store,
-    color: "#EC4899",
-  },
-  "beauty salon": {
-    id: "beauty salon",
-    name: "Beauty salon",
-    icon: Store,
+    name: "Beauty salons",
+    icon: Sparkles,
     color: "#EC4899",
   },
   convenience_store: {
