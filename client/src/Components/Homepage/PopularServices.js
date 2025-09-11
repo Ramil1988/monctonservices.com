@@ -16,7 +16,8 @@ const PopularServices = ({ types = [] }) => {
   const fetchTopCompaniesByServiceTypes = async () => {
     const servicesWithTopCompanies = [];
 
-    const selectedServiceTypes = types.slice(0, 3);
+    // Prefer service types that have reviewed companies first
+    const selectedServiceTypes = types.slice(0, 6);
 
     for (const serviceType of selectedServiceTypes) {
       try {
@@ -32,9 +33,11 @@ const PopularServices = ({ types = [] }) => {
           .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
           .slice(0, 5);
 
+        const totalReviews = companies.reduce((sum, c) => sum + (c.reviews?.length || 0), 0);
         servicesWithTopCompanies.push({
           ...serviceType,
           topCompanies: sortedCompanies,
+          totalReviews,
         });
       } catch (error) {
         console.error(
@@ -44,7 +47,16 @@ const PopularServices = ({ types = [] }) => {
       }
     }
 
-    setServicesData(servicesWithTopCompanies);
+    // Order types with any reviews first, then by total reviews desc, and cap to 3
+    const ordered = servicesWithTopCompanies
+      .sort((a, b) => {
+        const aHas = a.totalReviews > 0 ? 1 : 0;
+        const bHas = b.totalReviews > 0 ? 1 : 0;
+        if (aHas !== bHas) return bHas - aHas;
+        return (b.totalReviews || 0) - (a.totalReviews || 0);
+      })
+      .slice(0, 3);
+    setServicesData(ordered);
   };
 
   return (
@@ -87,29 +99,29 @@ const PopularServices = ({ types = [] }) => {
 };
 
 const ServiceBoxesWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 24px;
 `;
 
 const ServiceBox = styled.div`
-  width: 360px;
-  padding: 18px 20px;
+  width: 100%;
+  padding: 14px 16px;
   background: rgba(255,255,255,0.06);
   color: var(--text);
   border: 1px solid var(--surface-border);
-  border-radius: 16px;
+  border-radius: 12px;
   font-family: "Raleway", sans-serif;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.20);
   backdrop-filter: blur(6px);
   transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 
   &:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     cursor: pointer;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.30);
     border-color: var(--primary-start);
   }
 `;
