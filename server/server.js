@@ -42,7 +42,7 @@ const {
   deleteUserById,
 } = require("./handlers1");
 
-const { importCompaniesFromGoogle, listPlaceTypes, discoverPlaceTypes, getServiceTypesForCity, geocodeAddress } = require("./googlePlacesImporter");
+const google = require("./googlePlacesImporter");
 
 const app = express()
   .use(morgan("tiny"))
@@ -92,11 +92,14 @@ const app = express()
 
 // Admin: import companies via Google Places (protected by ADMIN_SECRET)
 // Example: POST /.netlify/functions/api/admin/import/hotels?city=Moncton,%20NB
-app.post("/admin/import/:serviceType", importCompaniesFromGoogle);
-app.get("/admin/place-types", listPlaceTypes);
-app.get("/admin/discover-place-types", discoverPlaceTypes);
-app.get("/service-types", getServiceTypesForCity);
-app.get("/geocode", geocodeAddress);
+app.post("/admin/import/:serviceType", google.importCompaniesFromGoogle);
+app.get("/admin/place-types", google.listPlaceTypes);
+app.get("/admin/discover-place-types", google.discoverPlaceTypes);
+app.get("/service-types", google.getServiceTypesForCity);
+// Register geocode route only if available to avoid undefined handler in some builds
+if (typeof google.geocodeAddress === "function") {
+  app.get("/geocode", google.geocodeAddress);
+}
 
 // Admin: purge companies (non-google or all)
 app.post("/admin/companies/purge", async (req, res) => {
