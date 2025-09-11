@@ -295,7 +295,29 @@ const getAllCompanies = async (req, res) => {
 
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-// Build a case-insensitive regex array that matches singular/plural variants
+// Map of normalized type -> additional synonyms to match in DB (display names)
+const TYPE_SYNONYMS = {
+  "car dealer": ["auto dealer", "auto dealers", "Auto dealer", "Auto dealers"],
+  "car dealers": ["auto dealer", "auto dealers", "Auto dealer", "Auto dealers"],
+  "veterinary care": ["Pet clinics", "Veterinary care", "Veterinary Care"],
+  dentist: ["Dental clinic", "Dental clinics"],
+  doctor: ["Doctors"],
+  "driving school": ["Driving schools"],
+  "tutoring center": ["Tutoring centers"],
+  daycare: ["Daycares, Afterschools, Summer camps"],
+  "event planner": ["Event agencies"],
+  "insurance agency": ["Insurance companies"],
+  "apartment rental": ["Rental appartments"],
+  "real estate agency": ["Real Estate agencies"],
+  "taxi service": ["Taxis"],
+  "gas station": ["Gas stations"],
+  "computer repair": ["Computer and mobile repairs"],
+  supermarket: ["Supermarkets"],
+  grocery: ["Grocery stores"],
+  lodging: ["Hotels"],
+};
+
+// Build a case-insensitive regex array that matches singular/plural variants and synonyms
 const buildTypeRegexes = (raw) => {
   const forms = new Set();
   const norm = (raw || "").trim().replace(/_/g, " ");
@@ -311,6 +333,11 @@ const buildTypeRegexes = (raw) => {
     forms.add(norm.slice(0, -1));
   } else {
     forms.add(norm + "s");
+  }
+  // Add synonyms (display names we may have stored during imports)
+  const synonyms = TYPE_SYNONYMS[norm.toLowerCase()];
+  if (Array.isArray(synonyms)) {
+    synonyms.forEach((s) => forms.add(s));
   }
   // Deduplicate and convert to regexes
   return Array.from(forms).map((f) => new RegExp(`^${escapeRegex(f)}$`, "i"));
