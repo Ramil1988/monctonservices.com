@@ -933,7 +933,8 @@ export const getCategoryForService = (serviceKey) => {
     has("health") ||
     has("veterinary") || has("veterinarian") ||
     has("clinic") ||
-    has("gym")
+    has("gym") ||
+    has("physio") || has("physiotherapist") || has("chiro") || has("chiropractor")
   ) return "healthcare";
 
   if (
@@ -975,7 +976,8 @@ export const getCategoryForService = (serviceKey) => {
     has("beauty") ||
     has("barber") ||
     has("hair_care") || has("hair care") ||
-    has("spa")
+    has("spa") ||
+    has("massage") || has("therapist")
   ) return "personal_care";
 
   if (

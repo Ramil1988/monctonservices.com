@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Homepage from "./Homepage";
-import { googleServiceTypes } from "../serviceTypes"; // Import the Google service types
+import { googleServiceTypes, getServiceType } from "../serviceTypes"; // Import mappings and fallback builder
 
 const ROOT_API = "/.netlify/functions/api";
 
@@ -60,6 +60,31 @@ const MainHomePage = () => {
         });
 
         let unionList = Array.from(unionMap.values());
+        // Augment with types inferred from existing companies in tri-cities (to include custom/manual types)
+        try {
+          const compResp = await fetch(`${ROOT_API}/allCompanies`);
+          if (compResp.ok) {
+            const compJson = await compResp.json();
+            const tri = ["moncton", "dieppe", "riverview"];
+            const comps = Array.isArray(compJson.data) ? compJson.data.filter((c) =>
+              tri.some((t) => (c.address || "").toLowerCase().includes(t))
+            ) : [];
+            const existingIds = new Set(unionList.map((t) => t.id));
+            const extrasMap = new Map();
+            for (const c of comps) {
+              const raw = (c.serviceType || "").trim();
+              if (!raw) continue;
+              const id = raw.toLowerCase().replace(/\s+/g, "_");
+              if (existingIds.has(id)) continue;
+              if (extrasMap.has(id)) continue;
+              const st = getServiceType(id);
+              extrasMap.set(id, { id, name: st.name || raw, icon: st.icon || null, color: st.color || null, hasIcon: !!st.icon });
+            }
+            if (extrasMap.size) {
+              unionList = unionList.concat(Array.from(extrasMap.values()));
+            }
+          }
+        } catch (_) {}
         // Manual overrides: always include Auto dealers and Massage therapist
         if (!unionList.some((t) => t.id === "car_dealer")) {
           const m = googleServiceTypes["car_dealer"];
@@ -111,6 +136,27 @@ const MainHomePage = () => {
             if (!map.has(t.id)) map.set(t.id, t);
           });
           let unionList = Array.from(map.values());
+          // Also augment from cached companies if available
+          try {
+            const compRaw = localStorage.getItem(`allCompaniesCache`);
+            const compList = compRaw ? JSON.parse(compRaw) : [];
+            const tri = ["moncton", "dieppe", "riverview"];
+            const comps = Array.isArray(compList) ? compList.filter((c) => tri.some((t) => (c.address || "").toLowerCase().includes(t))) : [];
+            const existingIds = new Set(unionList.map((t) => t.id));
+            const extrasMap = new Map();
+            for (const c of comps) {
+              const raw = (c.serviceType || "").trim();
+              if (!raw) continue;
+              const id = raw.toLowerCase().replace(/\s+/g, "_");
+              if (existingIds.has(id)) continue;
+              if (extrasMap.has(id)) continue;
+              const st = getServiceType(id);
+              extrasMap.set(id, { id, name: st.name || raw, icon: st.icon || null, color: st.color || null, hasIcon: !!st.icon });
+            }
+            if (extrasMap.size) {
+              unionList = unionList.concat(Array.from(extrasMap.values()));
+            }
+          } catch (_) {}
           if (!unionList.some((t) => t.id === "car_dealer")) {
             const m = googleServiceTypes["car_dealer"];
             unionList.push({
