@@ -109,9 +109,9 @@ const CategoryHeader = styled.div`
 `;
 
 const CategoryIconWrapper = styled.div`
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   background: ${props => props.color}15;
   border: 2px solid ${props => props.color}30;
   display: flex;
@@ -126,26 +126,22 @@ const CategoryInfo = styled.div`
 `;
 
 const CategoryName = styled.h3`
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px 0;
 `;
 
 const CategoryDescription = styled.p`
-  font-size: 0.875rem;
-  color: var(--muted);
-  margin: 0 0 6px 0;
-  line-height: 1.4;
+  display: none;
 `;
 
 const ServiceCount = styled.span`
-  font-size: 0.75rem;
-  color: var(--primary-start);
+  display: inline-block;
+  font-size: 0.7rem;
+  color: var(--muted);
   font-weight: 600;
-  background: var(--primary-start)10;
-  padding: 2px 8px;
-  border-radius: 12px;
+  margin-left: 6px;
 `;
 
 const ExpandIcon = styled.div`
