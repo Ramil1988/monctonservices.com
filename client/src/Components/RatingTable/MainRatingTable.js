@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import RatingTable from "./RatingTable";
 import { Link } from "react-router-dom";
 
