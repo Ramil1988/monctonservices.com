@@ -101,7 +101,7 @@ const Homepage = (props) => {
         {serviceTypes && serviceTypes.length > 0 && (
           <>
             <BigText>Popular Services</BigText>
-            <PopularServices types={serviceTypes.slice(0, 3)} />
+            <PopularServices types={serviceTypes} />
           </>
         )}
         <BigText>Recent reviews</BigText>

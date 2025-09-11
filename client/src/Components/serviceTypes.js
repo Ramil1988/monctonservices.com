@@ -27,7 +27,38 @@ import {
   FaBuilding, // Government/Buildings
   FaHome, // Default fallback
   FaMapMarkerAlt, // General location
+  FaDumbbell, // Fitness
+  FaCut, // Barber
+  FaSpa, // Spa/massage
+  FaTheaterMasks, // Entertainment
+  FaLandmark, // Government
+  FaHouseUser, // Real estate
+  FaTools, // General contractor
+  FaLock, // Locksmith
+  FaBolt, // Electrician
+  FaCalculator, // Accounting
+  FaCity, // City hall
 } from "react-icons/fa";
+
+import {
+  MdChildCare, // Children entertainment
+  MdSportsHockey, // Hockey
+  MdTour, // Tourist attraction
+  MdFitnessCenter, // Fitness center
+  MdLocalMovies, // Movies
+} from "react-icons/md";
+
+import {
+  IoStorefront, // Stores
+  IoRestaurant, // Food
+  IoCar, // Automotive
+  IoSchool, // Education
+  IoBusiness, // Professional services
+  IoHome, // Hospitality
+  IoHeart, // Personal care
+  IoGameController, // Entertainment
+  IoAirplane, // Transportation
+} from "react-icons/io5";
 
 // Keep your original serviceTypes for backward compatibility
 export const serviceTypes = {
@@ -556,37 +587,37 @@ export const googleServiceTypes = {
   massage_therapist: {
     id: "massage_therapist",
     name: "Massage therapist",
-    icon: FaHeartbeat,
+    icon: FaSpa,
     color: "#FB7185",
   },
   "massage therapist": {
     id: "massage therapist",
     name: "Massage therapist",
-    icon: FaHeartbeat,
+    icon: FaSpa,
     color: "#FB7185",
   },
   gym: {
     id: "gym",
     name: "Gym",
-    icon: FaHeartbeat,
+    icon: MdFitnessCenter,
     color: "#DC2626",
   },
   barber: {
     id: "barber",
     name: "Barber",
-    icon: FaPalette,
+    icon: FaCut,
     color: "#EC4899",
   },
   hair_care: {
     id: "hair_care",
     name: "Hair care",
-    icon: FaPalette,
+    icon: FaCut,
     color: "#EC4899",
   },
   spa: {
     id: "spa",
     name: "Spa",
-    icon: FaPalette,
+    icon: FaSpa,
     color: "#EC4899",
   },
   pet_store: {
@@ -677,110 +708,116 @@ export const googleServiceTypes = {
   city_hall: {
     id: "city_hall",
     name: "City hall",
-    icon: FaBuilding,
+    icon: FaCity,
     color: "#374151",
   },
   "city hall": {
     id: "city hall",
     name: "City hall",
-    icon: FaBuilding,
+    icon: FaCity,
     color: "#374151",
   },
   accounting: {
     id: "accounting",
     name: "Accounting",
-    icon: FaBuilding,
+    icon: FaCalculator,
     color: "#6B7280",
   },
   electrician: {
     id: "electrician",
     name: "Electrician",
-    icon: FaWrench,
+    icon: FaBolt,
     color: "#6B7280",
   },
   general_contractor: {
     id: "general_contractor",
     name: "General contractor",
-    icon: FaWrench,
+    icon: FaTools,
     color: "#6B7280",
   },
   "general contractor": {
     id: "general contractor",
     name: "General contractor",
-    icon: FaWrench,
+    icon: FaTools,
     color: "#6B7280",
   },
   locksmith: {
     id: "locksmith",
     name: "Locksmith",
-    icon: FaWrench,
+    icon: FaLock,
     color: "#6B7280",
   },
   movietheatres: {
     id: "movietheatres",
     name: "Movie theatres",
-    icon: FaMusic,
+    icon: MdLocalMovies,
     color: "#EC4899",
   },
   "movie theatres": {
     id: "movie theatres",
     name: "Movie theatres",
-    icon: FaMusic,
+    icon: MdLocalMovies,
     color: "#EC4899",
   },
   childrenentertainment: {
     id: "childrenentertainment",
     name: "Children entertainment",
-    icon: FaMusic,
+    icon: MdChildCare,
     color: "#EC4899",
   },
   "children entertainment": {
     id: "children entertainment",
     name: "Children entertainment",
-    icon: FaMusic,
+    icon: MdChildCare,
     color: "#EC4899",
   },
   hockey: {
     id: "hockey",
     name: "Hockey",
-    icon: FaMusic,
+    icon: MdSportsHockey,
     color: "#EC4899",
   },
   tourist_attraction: {
     id: "tourist_attraction",
     name: "Tourist attraction",
-    icon: FaMusic,
+    icon: MdTour,
     color: "#EC4899",
   },
   "tourist attraction": {
     id: "tourist attraction",
     name: "Tourist attraction",
-    icon: FaMusic,
+    icon: MdTour,
     color: "#EC4899",
   },
   real_estate: {
     id: "real_estate",
     name: "Real estate",
-    icon: FaBuilding,
+    icon: FaHouseUser,
     color: "#6B7280",
   },
   "real estate": {
     id: "real estate",
     name: "Real estate",
-    icon: FaBuilding,
+    icon: FaHouseUser,
     color: "#6B7280",
   },
   real_estate_agency: {
     id: "real_estate_agency",
     name: "Real estate agency",
-    icon: FaBuilding,
+    icon: FaHouseUser,
     color: "#6B7280",
   },
   "real estate agency": {
     id: "real estate agency",
     name: "Real estate agency",
-    icon: FaBuilding,
+    icon: FaHouseUser,
     color: "#6B7280",
+  },
+  fitness: {
+    id: "fitness",
+    name: "Fitness",
+    icon: FaDumbbell,
+    color: "#EC4899",
   },
 };
 
@@ -789,7 +826,7 @@ export const serviceCategories = {
   stores: {
     id: "stores",
     name: "Stores",
-    icon: FaStore,
+    icon: IoStorefront,
     color: "#059669",
     description: "Retail stores including clothing, electronics, books, groceries, and specialty shops",
     services: [
@@ -839,7 +876,7 @@ export const serviceCategories = {
   food: {
     id: "food",
     name: "Food & Dining",
-    icon: FaUtensils,
+    icon: IoRestaurant,
     color: "#F59E0B", 
     description: "Restaurants, cafes, bars, bakeries, and food delivery services",
     services: [
@@ -855,7 +892,7 @@ export const serviceCategories = {
   automotive: {
     id: "automotive",
     name: "Automotive",
-    icon: FaWrench,
+    icon: IoCar,
     color: "#374151",
     description: "Car repairs, dealerships, rentals, gas stations, and automotive services",
     services: [
@@ -875,7 +912,7 @@ export const serviceCategories = {
   education: {
     id: "education", 
     name: "Education",
-    icon: FaGraduationCap,
+    icon: IoSchool,
     color: "#3B82F6",
     description: "Schools, universities, libraries, tutoring centers, and educational services",
     services: [
@@ -894,7 +931,7 @@ export const serviceCategories = {
   services: {
     id: "services",
     name: "Professional Services", 
-    icon: FaBuilding,
+    icon: IoBusiness,
     color: "#6B7280",
     description: "Business services including banks, insurance, accounting, electricians, contractors, and plumbing",
     services: [
@@ -924,7 +961,7 @@ export const serviceCategories = {
   hospitality: {
     id: "hospitality",
     name: "Hospitality & Accommodation",
-    icon: FaHome,
+    icon: IoHome,
     color: "#8B5CF6", 
     description: "Hotels, lodging, rental properties, and accommodation services",
     services: [
@@ -937,9 +974,9 @@ export const serviceCategories = {
   personal_care: {
     id: "personal_care",
     name: "Personal Care",
-    icon: FaPalette,
+    icon: IoHeart,
     color: "#EC4899",
-    description: "Beauty salons, spas, barbers, massage therapy, and personal wellness services", 
+    description: "Beauty salons, spas, barbers, massage therapy, fitness centers, and personal wellness services", 
     services: [
       "beautysalons",
       "beauty_salon",
@@ -948,13 +985,15 @@ export const serviceCategories = {
       "hair_care",
       "spa",
       "massage_therapist",
-      "massage therapist"
+      "massage therapist",
+      "fitness",
+      "gym"
     ]
   },
   entertainment: {
     id: "entertainment",
     name: "Entertainment",
-    icon: FaMusic,
+    icon: IoGameController,
     color: "#EC4899", 
     description: "Movies, sports, museums, parks, attractions, and recreational activities",
     services: [
@@ -983,7 +1022,7 @@ export const serviceCategories = {
   transportation: {
     id: "transportation",
     name: "Transportation",
-    icon: FaTruck,
+    icon: IoAirplane,
     color: "#6B7280",
     description: "Taxis, moving companies, storage, and transportation services",
     services: [
@@ -997,7 +1036,7 @@ export const serviceCategories = {
   government: {
     id: "government",
     name: "Government",
-    icon: FaBuilding,
+    icon: FaLandmark,
     color: "#374151",
     description: "Government offices and municipal services",
     services: [
@@ -1119,7 +1158,8 @@ export const getCategoryForService = (serviceKey) => {
     has("barber") ||
     has("hair_care") || has("hair care") ||
     has("spa") ||
-    has("massage") || has("therapist")
+    has("massage") || has("therapist") ||
+    has("fitness") || has("gym")
   ) return "personal_care";
 
   if (

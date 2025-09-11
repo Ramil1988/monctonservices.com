@@ -157,7 +157,10 @@ const CategoryName = styled.h3`
 `;
 
 const CategoryDescription = styled.p`
-  display: none;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 2px 0 0 0;
+  line-height: 1.3;
 `;
 
 const ServiceCount = styled.span`
