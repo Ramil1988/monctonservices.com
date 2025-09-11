@@ -14,21 +14,17 @@ const MainHomePage = () => {
       try {
         const rawCities = localStorage.getItem("placeTypes:LastCitiesUnion");
         const parsed = rawCities ? JSON.parse(rawCities) : null;
-        if (Array.isArray(parsed) && parsed.length) {
-          cities = parsed;
-        } else {
-          // try to infer from any cached placeTypes:<city> keys
-          const found = new Set();
-          for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (!key) continue;
-            if (key.startsWith("placeTypes:") && key !== "placeTypes:TriCitiesUnion" && key !== "placeTypesCity") {
-              const cityKey = key.slice("placeTypes:".length);
-              if (cityKey && !cityKey.includes("TriCitiesUnion")) found.add(cityKey);
-            }
+        const citySet = new Set(Array.isArray(parsed) && parsed.length ? parsed : cities);
+        // augment with any cached placeTypes:<city> keys so we don't miss previously discovered cities
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (!key) continue;
+          if (key.startsWith("placeTypes:") && key !== "placeTypes:TriCitiesUnion" && key !== "placeTypesCity") {
+            const cityKey = key.slice("placeTypes:".length);
+            if (cityKey && !cityKey.includes("TriCitiesUnion")) citySet.add(cityKey);
           }
-          if (found.size) cities = Array.from(found);
         }
+        cities = Array.from(citySet);
       } catch (_) {}
 
       // mapper from a raw Google type to our enriched type
@@ -66,19 +62,17 @@ const MainHomePage = () => {
           )
         );
 
-        const unionMap = new Map();
+        const combined = [];
         results.forEach(({ city, list }) => {
-          const mapped = list.map(mapWithIcons);
+          const mapped = list.map(mapWithIcons).map((t) => ({ ...t, _city: city }));
           // cache per-city for Admin use and offline fallback
           try {
             localStorage.setItem(`placeTypes:${city}`, JSON.stringify(mapped));
           } catch (_) {}
-          mapped.forEach((t) => {
-            if (!unionMap.has(t.id)) unionMap.set(t.id, t);
-          });
+          combined.push(...mapped);
         });
 
-        let unionList = Array.from(unionMap.values());
+        let unionList = combined;
         // Manual overrides: always include Auto dealers
         if (!unionList.some((t) => t.id === "car_dealer")) {
           const m = googleServiceTypes["car_dealer"];
@@ -98,7 +92,7 @@ const MainHomePage = () => {
         } catch (_) {}
       } catch (_) {
         // fallback to cache: merge any available per-city caches
-        const unionMap = new Map();
+        const fallback = [];
         cities.forEach((city) => {
           try {
             const raw = localStorage.getItem(`placeTypes:${city}`);
@@ -107,17 +101,17 @@ const MainHomePage = () => {
             if (!Array.isArray(parsed)) return;
             parsed.forEach((t) => {
               const serviceTypeData = googleServiceTypes[t.id];
-              const enriched = {
+              fallback.push({
                 ...t,
                 icon: t.icon || serviceTypeData?.icon || null,
                 color: t.color || serviceTypeData?.color || null,
-              };
-              if (!unionMap.has(enriched.id)) unionMap.set(enriched.id, enriched);
+                _city: city,
+              });
             });
           } catch (_) {}
         });
-        if (unionMap.size > 0) {
-          let unionList = Array.from(unionMap.values());
+        if (fallback.length > 0) {
+          let unionList = fallback;
           if (!unionList.some((t) => t.id === "car_dealer")) {
             const m = googleServiceTypes["car_dealer"];
             unionList.push({

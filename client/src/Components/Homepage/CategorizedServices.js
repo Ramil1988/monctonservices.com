@@ -43,7 +43,7 @@ const CategorizedServices = ({ data }) => {
             <ServicesGrid isExpanded={isExpanded}>
               <ServicesContainer>
                 {services.map((service) => (
-                  <ServiceCard key={service.id}>
+                  <ServiceCard key={`${service.id}-${service._city || 'all'}`}>
                     <StyledLink to={`/${service.id}`}>
                       <ServiceIconTile>
                         {service.icon ? (
