@@ -53,9 +53,12 @@ const Admin = () => {
         union = Array.isArray(parsed) ? parsed : [];
       } catch (_) {}
     }
-    // Manual override: ensure Auto dealers appears regardless of discovery
+    // Manual overrides: ensure key types appear regardless of discovery
     if (!union.some((t) => t.id === "car_dealer")) {
       union.push({ id: "car_dealer", name: "Car dealer" });
+    }
+    if (!union.some((t) => t.id === "massage_therapist")) {
+      union.push({ id: "massage_therapist", name: "Massage therapist" });
     }
     union = union.sort((a, b) => a.name.localeCompare(b.name));
     setPlaceTypes(union);
@@ -319,6 +322,9 @@ const Admin = () => {
                   let union = Array.from(unionMap.values());
                   if (!union.some((t) => t.id === "car_dealer")) {
                     union.push({ id: "car_dealer", name: "Car dealer" });
+                  }
+                  if (!union.some((t) => t.id === "massage_therapist")) {
+                    union.push({ id: "massage_therapist", name: "Massage therapist" });
                   }
                   union = union.sort((a, b) => a.name.localeCompare(b.name));
                   setPlaceTypes(union);
