@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const ROOT_API = "/.netlify/functions/api";
@@ -16,6 +17,8 @@ const PublicCompanyCreate = () => {
   const [status, setStatus] = useState("");
   const [allCompanies, setAllCompanies] = useState([]);
   const [matches, setMatches] = useState([]);
+  const [geo, setGeo] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadTypes = async () => {
@@ -83,11 +86,14 @@ const PublicCompanyCreate = () => {
     e.preventDefault();
     setStatus("Submitting...");
     try {
-      // Warn if address not in tri-city
+      // Validate tri-city
       const addr = (form.address || '').toLowerCase();
       const tri = ["moncton", "dieppe", "riverview"];
-      if (!tri.some(t => addr.includes(t))) {
-        setStatus("Warning: address seems outside Moncton/Dieppe/Riverview. You can still submit.");
+      let geocity = (geo?.city || '').toLowerCase();
+      const inTri = tri.some(t => addr.includes(t)) || tri.some(t => geocity.includes(t));
+      if (!inTri) {
+        const ok = window.confirm("The address appears outside Moncton/Dieppe/Riverview. Continue?");
+        if (!ok) { setStatus("Submission cancelled."); return; }
       }
       const resp = await fetch(`${ROOT_API}/company`, {
         method: "POST",
@@ -96,10 +102,34 @@ const PublicCompanyCreate = () => {
       });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.message || "Failed to create");
-      setStatus("Thank you! Company submitted successfully.");
-      setForm({ serviceType: serviceTypes[0]?.id || "", name: "", address: "", phoneNumber: "", website: "", image: "" });
+      const newId = data.createdCompanyId || data.createdCompany?._id;
+      setStatus("Thank you! Company submitted successfully. Redirecting...");
+      setTimeout(() => {
+        if (newId) {
+          navigate(`/company/${newId}`, { state: { toast: "Company submitted successfully" } });
+        }
+      }, 800);
     } catch (e) {
       setStatus(`Error: ${e.message}`);
+    }
+  };
+
+  const onDetectGeo = async () => {
+    if (!form.address) { setStatus("Enter an address first"); return; }
+    setStatus("Detecting location...");
+    try {
+      const resp = await fetch(`${ROOT_API}/geocode?address=${encodeURIComponent(form.address)}`);
+      const data = await resp.json();
+      if (data?.data) {
+        const g = data.data;
+        setGeo(g);
+        setForm((f)=>({ ...f, lat: g.lat || '', lang: g.lang || '', address: g.formatted || f.address }));
+        setStatus("Location detected");
+      } else {
+        setStatus("Could not detect location");
+      }
+    } catch (e) {
+      setStatus("Geocode failed");
     }
   };
 
@@ -136,7 +166,10 @@ const PublicCompanyCreate = () => {
           <Input name="name" value={form.name} onChange={onChange} required />
 
           <Label>Address</Label>
-          <Input name="address" value={form.address} onChange={onChange} required />
+          <Row>
+            <Input name="address" value={form.address} onChange={onChange} required />
+            <GeoButton type="button" onClick={onDetectGeo}>Detect lat/lng</GeoButton>
+          </Row>
 
           <Row>
             <Col>
@@ -271,4 +304,13 @@ const Small = styled.div`
 
 const DetailsRow = styled(Row)`
   margin-top: 6px;
+`;
+
+const GeoButton = styled.button`
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
 `;

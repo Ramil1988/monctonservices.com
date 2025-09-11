@@ -58,8 +58,9 @@ const createCompany = async (req, res) => {
       }
     }
 
+    const newId = uuidv4();
     await companies.insertOne({
-      _id: uuidv4(),
+      _id: newId,
       serviceType: serviceType,
       name: name,
       address: address,
@@ -67,12 +68,15 @@ const createCompany = async (req, res) => {
       image: newImage,
       website: website,
       reviews: [],
+      lat: lat || null,
+      lang: lang || null,
     });
 
     return res.status(201).json({
       status: 201,
       message: `Company ${name} successfully created.`,
-      createdCompany: company,
+      createdCompany: { _id: newId, ...company, image: newImage },
+      createdCompanyId: newId,
     });
   } catch (error) {
     console.error("Error adding company:", error);

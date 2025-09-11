@@ -35,6 +35,14 @@ const Company = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
+  // Show toast after redirect from creation
+  useEffect(() => {
+    if (location.state && location.state.toast) {
+      setNotification(location.state.toast);
+      setTimeout(() => setNotification(null), 3000);
+    }
+  }, [location.state]);
+
   const fetchCompanyById = async () => {
     try {
       const response = await fetch(`${ROOT_API}/company/${companyId}`);
