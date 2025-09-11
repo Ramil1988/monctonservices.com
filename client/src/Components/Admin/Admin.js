@@ -21,10 +21,15 @@ const Admin = () => {
   const [onlyNew, setOnlyNew] = useState(true);
   const [purgeStatus, setPurgeStatus] = useState("");
 
-  // Admin dropdown: show a tri-city union list (Moncton, Dieppe, Riverview)
-  // Build from cached per-city results or fall back to any stored union
+  // Admin dropdown: show a union list for the cities in the input
+  // Build from cached per-city results in localStorage; fall back to stored union
   useEffect(() => {
-    const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+    const inputCities = (importCity || "")
+      .split(/[,;\n]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const defaultCities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
+    const cities = inputCities.length ? Array.from(new Set(inputCities)) : defaultCities;
     const unionMap = new Map();
     cities.forEach((c) => {
       try {
@@ -156,6 +161,8 @@ const Admin = () => {
       );
       // Refresh companies cache in UI
       fetchCompanies();
+      // Trigger union rebuild via importCity change effect
+      setImportCity(uniqueCities.join(", "));
     } catch (e) {
       setImportStatus(`Error: ${e.message}`);
     }
@@ -244,11 +251,10 @@ const Admin = () => {
 
                 setImportStatus(`Discovered types for ${uniqueCities.length} city(ies); total ${totalDiscovered} entries.`);
 
-                // Rebuild union for dropdown (tri-city union)
+                // Rebuild union for dropdown (union of the same cities input)
                 try {
-                  const cities = ["Moncton, NB", "Dieppe, NB", "Riverview, NB"];
                   const unionMap = new Map();
-                  cities.forEach((c) => {
+                  uniqueCities.forEach((c) => {
                     const raw = localStorage.getItem(`placeTypes:${c}`);
                     if (!raw) return;
                     const parsed = JSON.parse(raw);
