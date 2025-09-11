@@ -3,7 +3,7 @@
 require("dotenv").config();
 const { MongoClient } = require("mongodb");
 
-const { MONGO_URI, GOOGLE_MAPS_API_KEY, IMPORT_CITY, ADMIN_SECRET, MAX_PLACES_RESULTS, MAX_DETAILS_LOOKUPS } =
+const { MONGO_URI, GOOGLE_MAPS_API_KEY, IMPORT_CITY, ADMIN_SECRET, MAX_PLACES_RESULTS, MAX_DETAILS_LOOKUPS, OPENCAGE_API_KEY } =
   process.env;
 
 const options = {
@@ -285,8 +285,9 @@ module.exports.geocodeAddress = async (req, res) => {
     };
 
     // Detect Canadian postal code (e.g., E1A 9B2 or E1A9B2)
-    const postalMatch = address.replace(/\s+/g, '').match(/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/);
-    const postal = postalMatch ? address.replace(/\s+/g, '').toUpperCase() : '';
+    const compact = address.replace(/\s+/g, '').toUpperCase();
+    const postalMatch = compact.match(/^[A-Z]\d[A-Z]\d[A-Z]\d$/);
+    const postal = postalMatch ? compact : '';
 
     // First attempt: given address + country (and postal if detected)
     let resp1 = await tryGeocode(address, postal);
@@ -299,15 +300,72 @@ module.exports.geocodeAddress = async (req, res) => {
     }
 
     if (!(data.status === 'OK' && Array.isArray(data.results) && data.results.length > 0)) {
-      // Fallback to OpenStreetMap Nominatim for light usage
+      // Optional: OpenCage fallback if API key provided (higher quality than raw Nominatim)
+      if (OPENCAGE_API_KEY) {
+        try {
+          const oc = new URL('https://api.opencagedata.com/geocode/v1/json');
+          oc.searchParams.set('q', address);
+          oc.searchParams.set('key', OPENCAGE_API_KEY);
+          oc.searchParams.set('countrycode', 'ca');
+          oc.searchParams.set('limit', '1');
+          oc.searchParams.set('no_annotations', '1');
+          const ocResp = await fetch(oc.href);
+          const ocJson = await ocResp.json();
+          if (ocJson && Array.isArray(ocJson.results) && ocJson.results.length > 0) {
+            const rO = ocJson.results[0];
+            const compsO = rO.components || {};
+            return res.status(200).json({ status: 200, data: {
+              lat: rO.geometry?.lat,
+              lang: rO.geometry?.lng,
+              formatted: rO.formatted,
+              city: compsO.city || compsO.town || compsO.village || '',
+              province: compsO.state || '',
+              country: compsO.country || '',
+              postal_code: compsO.postcode || '',
+            }, message: 'FALLBACK_OPENCAGE' });
+          }
+        } catch (_) { /* ignore */ }
+      }
+
+      // Fallback to OpenStreetMap Nominatim: prefer structured query when possible
       try {
-        const nomiUrl = new URL('https://nominatim.openstreetmap.org/search');
-        nomiUrl.searchParams.set('format', 'json');
-        nomiUrl.searchParams.set('q', address);
-        nomiUrl.searchParams.set('addressdetails', '1');
-        nomiUrl.searchParams.set('countrycodes', 'ca');
-        const respN = await fetch(nomiUrl.href, { headers: { 'User-Agent': 'MonctonServices/1.0 (+https://monctonservices.com)' } });
-        const jsonN = await respN.json();
+        const ua = { headers: { 'User-Agent': 'MonctonServices/1.0 (+https://monctonservices.com)' } };
+        const structured = (() => {
+          // naive parse: split by commas and map likely parts
+          const parts = address.split(',').map(s => s.trim());
+          let street = parts[0] || '';
+          let city = parts.find(p => /moncton|dieppe|riverview/i.test(p)) || '';
+          let state = parts.find(p => /\bNB\b|new brunswick/i.test(p)) || 'New Brunswick';
+          return { street, city, state };
+        })();
+
+        // Try structured endpoint first
+        let jsonN = null;
+        try {
+          const nomiStruct = new URL('https://nominatim.openstreetmap.org/search');
+          nomiStruct.searchParams.set('format', 'json');
+          nomiStruct.searchParams.set('street', structured.street);
+          if (structured.city) nomiStruct.searchParams.set('city', structured.city);
+          nomiStruct.searchParams.set('state', structured.state);
+          if (postal) nomiStruct.searchParams.set('postalcode', postal);
+          nomiStruct.searchParams.set('country', 'Canada');
+          nomiStruct.searchParams.set('limit', '1');
+          nomiStruct.searchParams.set('addressdetails', '1');
+          const respNs = await fetch(nomiStruct.href, ua);
+          jsonN = await respNs.json();
+        } catch (_) {}
+
+        if (!Array.isArray(jsonN) || jsonN.length === 0) {
+          // Fallback to free-form query
+          const nomiUrl = new URL('https://nominatim.openstreetmap.org/search');
+          nomiUrl.searchParams.set('format', 'json');
+          nomiUrl.searchParams.set('q', address);
+          nomiUrl.searchParams.set('addressdetails', '1');
+          nomiUrl.searchParams.set('countrycodes', 'ca');
+          nomiUrl.searchParams.set('limit', '1');
+          const respN = await fetch(nomiUrl.href, ua);
+          jsonN = await respN.json();
+        }
         if (Array.isArray(jsonN) && jsonN.length > 0) {
           const rN = jsonN[0];
           const compsN = rN.address || {};
