@@ -17,7 +17,12 @@ const SearchResults = () => {
       try {
         const response = await fetch(`${ROOT_API}/allCompanies`);
         const data = await response.json();
-        setCompanies(data.data);
+        const triCities = ["moncton", "dieppe", "riverview"];
+        const filtered = (data.data || []).filter((c) => {
+          const addr = (c.address || "").toLowerCase();
+          return triCities.some((city) => addr.includes(city));
+        });
+        setCompanies(filtered);
       } catch (error) {
         console.error("Error fetching companies:", error);
       }

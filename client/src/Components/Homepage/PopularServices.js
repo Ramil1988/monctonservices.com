@@ -20,7 +20,9 @@ const PopularServices = ({ types = [] }) => {
 
     for (const serviceType of selectedServiceTypes) {
       try {
-        const response = await fetch(`${ROOT_API}/companies/${serviceType.id}`);
+        const response = await fetch(
+          `${ROOT_API}/companies/${serviceType.id}?cities=Moncton,Dieppe,Riverview`
+        );
         const data = await response.json();
         const companies = data.data;
 
