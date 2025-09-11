@@ -873,11 +873,118 @@ export const serviceCategories = {
 
 // Helper function to get category for a service
 export const getCategoryForService = (serviceKey) => {
+  // 1) Explicit mapping list match
   for (const [categoryId, category] of Object.entries(serviceCategories)) {
     if (category.services.includes(serviceKey)) {
       return categoryId;
     }
   }
+
+  // 2) Heuristic keyword-based fallback to better align unmapped Google types
+  const k = (serviceKey || "").toLowerCase();
+  const has = (s) => k.includes(s);
+
+  if (
+    has("store") ||
+    has("shopping") ||
+    has("supermarket") ||
+    has("grocery") ||
+    has("department") ||
+    has("liquor") ||
+    has("hardware") ||
+    has("electronics") ||
+    has("home_goods") || has("home goods") ||
+    has("furniture") ||
+    has("shoe") ||
+    has("book") ||
+    has("jewelry") ||
+    has("pet_store") || has("pet store")
+  ) return "stores";
+
+  if (
+    has("car") ||
+    has("auto") ||
+    has("gas_station") || has("gas station") ||
+    has("parking") ||
+    has("car_rental") || has("car rental") ||
+    has("car_dealer") || has("car dealer") ||
+    has("motor_vehicle")
+  ) return "automotive";
+
+  if (
+    has("hospital") ||
+    has("pharmacy") ||
+    has("dentist") ||
+    has("doctor") ||
+    has("health") ||
+    has("veterinary") || has("veterinarian") ||
+    has("clinic") ||
+    has("gym")
+  ) return "healthcare";
+
+  if (
+    has("restaurant") ||
+    has("cafe") ||
+    has("bakery") ||
+    has("bar") ||
+    has("meal_takeaway") || has("meal takeaway") ||
+    has("food")
+  ) return "food";
+
+  if (
+    has("school") ||
+    has("university") ||
+    has("library") ||
+    has("tutoring") ||
+    has("driving")
+  ) return "education";
+
+  if (
+    has("bank") ||
+    has("insurance") ||
+    has("post_office") || has("post office") ||
+    has("travel_agency") || has("travel agency") ||
+    has("real_estate") || has("real estate") ||
+    has("local_government") || has("government") ||
+    has("plumber") || has("plumbing") ||
+    has("computer_repair") || has("computer repair")
+  ) return "services";
+
+  if (
+    has("hotel") ||
+    has("lodging") ||
+    has("campground") ||
+    has("apartment") || has("rental") || has("property")
+  ) return "hospitality";
+
+  if (
+    has("beauty") ||
+    has("barber") ||
+    has("hair_care") || has("hair care") ||
+    has("spa")
+  ) return "personal_care";
+
+  if (
+    has("night_club") || has("night club") ||
+    has("movie_theater") || has("movie theater") ||
+    has("bowling_alley") || has("bowling alley") ||
+    has("stadium") ||
+    has("museum") ||
+    has("park") ||
+    has("zoo") ||
+    has("aquarium") ||
+    has("art_gallery") || has("art gallery") ||
+    has("shopping_mall") || has("shopping mall")
+  ) return "entertainment";
+
+  if (
+    has("taxi") ||
+    has("moving_company") || has("moving company") ||
+    has("storage") ||
+    has("parking")
+  ) return "transportation";
+
+  // 3) Fallback
   return "other";
 };
 

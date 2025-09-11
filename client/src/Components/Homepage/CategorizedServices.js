@@ -156,7 +156,7 @@ const ExpandIcon = styled.div`
 const ServicesGrid = styled.div`
   overflow: hidden;
   transition: all 0.3s ease;
-  max-height: ${props => props.isExpanded ? '1000px' : '0'};
+  max-height: ${props => props.isExpanded ? 'none' : '0'};
   opacity: ${props => props.isExpanded ? '1' : '0'};
   margin-top: ${props => props.isExpanded ? '16px' : '0'};
 `;
