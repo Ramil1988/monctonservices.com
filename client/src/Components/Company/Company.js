@@ -508,7 +508,7 @@ const Company = () => {
           </CloseButton>
         </Notification>
       )}
-    </Wrapper>
+    </ModernWrapper>
   );
 };
 
