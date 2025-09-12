@@ -109,7 +109,7 @@ export const serviceTypes = {
   },
   dentalclinics: {
     id: "dentalclinics",
-    name: "Dental clinics",
+    name: "Dentist",
     icon: Stethoscope,
     color: "#3B82F6",
   },
@@ -296,15 +296,15 @@ export const googleServiceTypes = {
   },
   motor_vehicle_dealer: {
     id: "motor_vehicle_dealer",
-    name: "Motor vehicle dealer",
+    name: "Auto dealers",
     icon: Car,
-    color: "#1D4ED8",
+    color: "#2563EB",
   },
   "motor vehicle dealer": {
     id: "motor vehicle dealer",
-    name: "Motor vehicle dealer",
+    name: "Auto dealers",
     icon: Car,
-    color: "#1D4ED8",
+    color: "#2563EB",
   },
   "car repair": {
     id: "car repair",
@@ -506,7 +506,7 @@ export const googleServiceTypes = {
   },
   insurance_agency: {
     id: "insurance_agency",
-    name: "Insurance agencies",
+    name: "Insurance agency",
     icon: Shield,
     color: "#1E40AF",
   },
@@ -536,7 +536,7 @@ export const googleServiceTypes = {
   },
   travel_agency: {
     id: "travel_agency",
-    name: "Travel agencies",
+    name: "Travel agency",
     icon: Plane,
     color: "#0369A1",
   },
@@ -573,7 +573,7 @@ export const googleServiceTypes = {
   // Additional common variations
   beauty_salon: {
     id: "beauty_salon",
-    name: "Beauty salons",
+    name: "Beauty salon",
     icon: Sparkles,
     color: "#EC4899",
   },
@@ -827,7 +827,7 @@ export const googleServiceTypes = {
   },
   real_estate_agency: {
     id: "real_estate_agency",
-    name: "Real estate agencies",
+    name: "Real estate agency",
     icon: HouseUser,
     color: "#6B7280",
   },
@@ -919,7 +919,6 @@ export const serviceCategories = {
       "car_rental",
       "car rental",
       "car_dealer",
-      "autodealerships",
       "motor_vehicle_dealer",
       "motor vehicle dealer",
       "gas_station",
@@ -954,16 +953,13 @@ export const serviceCategories = {
     services: [
       "bank",
       "banks",
-      "insurance",
       "insurance_agency",
-      "insurance agency",
-      "realestate",
+      "insurance agency", 
       "real_estate",
       "real estate",
       "real_estate_agency",
       "real estate agency",
       "post_office",
-      "travel",
       "travel_agency",
       "travel agency",
       "cleaning",
@@ -997,7 +993,6 @@ export const serviceCategories = {
     color: "#EC4899",
     description: "Beauty salons, spas, barbers, massage therapy, fitness centers, and personal wellness services", 
     services: [
-      "beautysalons",
       "beauty_salon",
       "beauty salon",
       "barber",
