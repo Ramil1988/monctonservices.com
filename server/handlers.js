@@ -687,28 +687,26 @@ const updateCompany = async (req, res) => {
     await client.connect();
 
     const updatedFields = {};
-    if (serviceType) updatedFields.serviceType = serviceType;
-    if (name) updatedFields.name = name;
-    if (address) updatedFields.address = address;
-    if (phoneNumber) updatedFields.phoneNumber = phoneNumber;
-    if (website) updatedFields.website = website;
-    if (lat) updatedFields.lat = lat;
-    if (lang) updatedFields.lang = lang;
+    if (serviceType !== undefined) updatedFields.serviceType = serviceType;
+    if (name !== undefined) updatedFields.name = name;
+    if (address !== undefined) updatedFields.address = address;
+    if (phoneNumber !== undefined) updatedFields.phoneNumber = phoneNumber;
+    if (website !== undefined) updatedFields.website = website;
+    if (lat !== undefined) updatedFields.lat = lat;
+    if (lang !== undefined) updatedFields.lang = lang;
 
-    let newImage;
-
-    await cloudinary.uploader
-      .upload(image, {
-        upload_preset: "moncton_services",
-      })
-      .then((data) => {
-        newImage = data.secure_url;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    if (newImage.length >= 0) updatedFields.image = newImage;
+    // Handle image upload only if image data is provided
+    if (image && image.trim()) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(image, {
+          upload_preset: "moncton_services",
+        });
+        updatedFields.image = uploadResult.secure_url;
+      } catch (err) {
+        console.log("Image upload error:", err);
+        // Continue with update even if image upload fails
+      }
+    }
 
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { _id: id },
