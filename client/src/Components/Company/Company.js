@@ -3,6 +3,8 @@ import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight, AiFillStar } from "react-icons/ai";
+import { FiPhone, FiMapPin, FiExternalLink, FiNavigation, FiStar, FiHeart, FiEdit3 } from "react-icons/fi";
+import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
@@ -229,6 +231,46 @@ const Company = () => {
     setFormValid(isValidDate);
   };
 
+  const renderStars = (rating) => {
+    if (rating === 0) {
+      return "-";
+    }
+
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<BsStarFill key={i} />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<BsStarHalf key={"half"} />);
+    }
+
+    while (stars.length < 5) {
+      stars.push(<BsStar key={stars.length} />);
+    }
+
+    return stars;
+  };
+
+  const getPhoneLink = (phone) => {
+    if (!phone) return null;
+    const cleanPhone = phone.replace(/[^\d+]/g, '');
+    return `tel:${cleanPhone}`;
+  };
+
+  const getDirectionsLink = (address) => {
+    if (!address) return null;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  };
+
+  const getWebsiteLink = (website) => {
+    if (!website) return null;
+    return website.startsWith('http') ? website : `https://${website}`;
+  };
+
   if (showConfirmation) {
     return (
       <NotificationBox
@@ -241,106 +283,156 @@ const Company = () => {
   }
 
   return (
-    <Wrapper>
-      {/* <p>
-        <a href="mailto:someone@example.com">Send email</a>
-      </p> */}
-      <Header>
-        <Title>{company.name}</Title>
-        <ButtonContainer>
-          <StyledButton onClick={handleAddReviewClick}>Add Review</StyledButton>
-          <StyledButton onClick={handleAddFavoriteClick}>
+    <ModernWrapper>
+      <CompanyHeader>
+        <CompanyHeaderContent>
+          <CompanyTitle>{company.name}</CompanyTitle>
+          <ServiceTypeBadge>{selectedServicetype || "–"}</ServiceTypeBadge>
+          {company?.source && (
+            <SourceBadge title={company.source === 'google' ? 'Imported via Google Maps API' : 'Added by user'}>
+              {company.source === 'google' ? 'Google Maps' : 'Custom'}
+            </SourceBadge>
+          )}
+        </CompanyHeaderContent>
+        <ActionButtons>
+          <ActionButton onClick={handleAddReviewClick}>
+            <FiEdit3 size={16} />
+            Add Review
+          </ActionButton>
+          <ActionButton onClick={handleAddFavoriteClick}>
+            <FiHeart size={16} />
             Add to Favorites
-          </StyledButton>
-        </ButtonContainer>
-      </Header>
-      <Content>
-        <InfoWrapper>
-          {" "}
-          <Image src={company.image} />
-          {company.phoneNumber && (
-            <>
-              <InfoTitle>Phone Number</InfoTitle>
-              <StyledWrapper>
-                <PhoneNumber>{company.phoneNumber}</PhoneNumber>
+          </ActionButton>
+        </ActionButtons>
+      </CompanyHeader>
+
+      <CompanyContent>
+        <CompanyImageSection>
+          <CompanyImage src={company.image} alt={company.name} />
+          <RatingCard>
+            <RatingTitle>Customer Rating</RatingTitle>
+            <RatingDisplay>
+              <StarContainer>{renderStars(parseFloat(averageGrade))}</StarContainer>
+              <RatingValue>{averageGrade > 0 ? averageGrade : 'No rating'}</RatingValue>
+              <ReviewCount>
+                {company.reviews?.length || 0} {company.reviews?.length === 1 ? 'review' : 'reviews'}
+              </ReviewCount>
+            </RatingDisplay>
+          </RatingCard>
+        </CompanyImageSection>
+
+        <CompanyDetails>
+          <ContactCard>
+            <ContactHeader>
+              <FiMapPin size={20} />
+              <ContactTitle>Contact Information</ContactTitle>
+            </ContactHeader>
+            <ContactItem>
+              <FiMapPin size={16} />
+              <ContactInfo>{company.address}</ContactInfo>
+              <CopyButton textToCopy={company.address} />
+            </ContactItem>
+            {company.phoneNumber && (
+              <ContactItem>
+                <FiPhone size={16} />
+                <ContactInfo>{company.phoneNumber}</ContactInfo>
                 <CopyButton textToCopy={company.phoneNumber} />
-              </StyledWrapper>
-            </>
-          )}
-          {company.website && (
-            <>
-              <InfoTitle>Website</InfoTitle>
-              <StyledWrapper>
-                <Website>{company.website}</Website>
-                <CopyButton textToCopy={company.website} />
-              </StyledWrapper>
-            </>
-          )}
-          <InfoTitle>Average Rating</InfoTitle>
-          <AverageRating>
-            {" "}
-            <AverageGrade>
-              <AiFillStar />
-              {averageGrade}
-            </AverageGrade>
-          </AverageRating>
-        </InfoWrapper>
-        <InfoBox>
-          <InfoTitle>Service type</InfoTitle>
-          <ServiceTypeRow>
-            <Address>{selectedServicetype || "–"}</Address>
-            {company?.source && (
-              <SourcePill title={company.source === 'google' ? 'Imported via Google Maps API' : 'Added by user'}>
-                {company.source === 'google' ? 'Google Maps' : 'Custom'}
-              </SourcePill>
+              </ContactItem>
             )}
-          </ServiceTypeRow>
-          <InfoTitle>Address</InfoTitle>
-          <StyledWrapper>
-            <Address>{company.address}</Address>
-            <CopyButton textToCopy={company.address} />
-          </StyledWrapper>
-          <Maps address={company.address}></Maps>
-        </InfoBox>
-      </Content>
-      <BigText>Reviews left by customers</BigText>
-      <ReviewsWrapper>
+            {company.website && (
+              <ContactItem>
+                <FiExternalLink size={16} />
+                <ContactInfo>{company.website}</ContactInfo>
+                <CopyButton textToCopy={company.website} />
+              </ContactItem>
+            )}
+          </ContactCard>
+
+          <QuickActions>
+            {company.phoneNumber && (
+              <QuickActionButton 
+                as="a" 
+                href={getPhoneLink(company.phoneNumber)}
+                primary
+              >
+                <FiPhone size={18} />
+                Call Now
+              </QuickActionButton>
+            )}
+            <QuickActionButton 
+              as="a" 
+              href={getDirectionsLink(company.address)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FiNavigation size={18} />
+              Get Directions
+            </QuickActionButton>
+            {company.website && (
+              <QuickActionButton 
+                as="a" 
+                href={getWebsiteLink(company.website)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FiExternalLink size={18} />
+                Visit Website
+              </QuickActionButton>
+            )}
+          </QuickActions>
+
+          <MapContainer>
+            <Maps address={company.address} />
+          </MapContainer>
+        </CompanyDetails>
+      </CompanyContent>
+      <ReviewsSection>
+        <ReviewsHeader>
+          <ReviewsTitle>Customer Reviews</ReviewsTitle>
+          {recentReviews.length > 3 && (
+            <ReviewsNavigation>
+              <NavButton
+                disabled={startIndex === 0}
+                onClick={handlePrevious}
+              >
+                <AiOutlineLeft />
+              </NavButton>
+              <NavButton
+                disabled={startIndex >= recentReviews.length - 3}
+                onClick={handleNext}
+              >
+                <AiOutlineRight />
+              </NavButton>
+            </ReviewsNavigation>
+          )}
+        </ReviewsHeader>
+        
         {recentReviews.length > 0 ? (
-          <>
-            <ReviewNavigation
-              disabled={startIndex === 0}
-              onClick={handlePrevious}
-            >
-              <AiOutlineLeft />
-            </ReviewNavigation>
-            <ReviewsContainer>
-              {visibleReviews.map((review) => (
-                <Review key={review._id}>
-                  <StyledLink to={`/review/${review._id}`}>
-                    <ReviewTitle>{review.title}</ReviewTitle>
-                    <ReviewAuthor>By {review.userName}</ReviewAuthor>
-                    <ReviewDate>On {formatDate(review.date)}</ReviewDate>
-                    <ReviewGrade>
-                      <AiFillStar />
+          <ReviewsGrid>
+            {visibleReviews.map((review) => (
+              <ReviewCard key={review._id}>
+                <ReviewCardLink to={`/review/${review._id}`}>
+                  <ReviewCardHeader>
+                    <ReviewRating>
+                      <BsStarFill />
                       {review.grade}
-                    </ReviewGrade>
-                  </StyledLink>
-                </Review>
-              ))}
-            </ReviewsContainer>
-            <ReviewNavigation
-              disabled={startIndex >= recentReviews.length - 3}
-              onClick={handleNext}
-            >
-              <AiOutlineRight />
-            </ReviewNavigation>
-          </>
+                    </ReviewRating>
+                    <ReviewDateBadge>{formatDate(review.date)}</ReviewDateBadge>
+                  </ReviewCardHeader>
+                  <ReviewCardTitle>{review.title}</ReviewCardTitle>
+                  <ReviewCardAuthor>By {review.userName}</ReviewCardAuthor>
+                </ReviewCardLink>
+              </ReviewCard>
+            ))}
+          </ReviewsGrid>
         ) : (
-          <NoReviewsMessage>
-            Nobody has left reviews about this company yet
-          </NoReviewsMessage>
+          <EmptyReviews>
+            <FiStar size={48} />
+            <EmptyReviewsText>No reviews yet</EmptyReviewsText>
+            <EmptyReviewsSubtext>Be the first to leave a review for this business</EmptyReviewsSubtext>
+          </EmptyReviews>
         )}
-      </ReviewsWrapper>
+      </ReviewsSection>
       <StyledDialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add Review</DialogTitle>
         <form onSubmit={handleSubmit}>
@@ -424,6 +516,7 @@ const Warning = styled.p`
   color: red;
 `;
 
+// Modern Styled Components
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -431,191 +524,385 @@ const SpinnerContainer = styled.div`
   min-height: 100vh;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 50px 120px 50px;
-
-  @media (max-width: 768px) {
-    margin: 20px 20px 120px 20px;
-  }
+const ModernWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--app-bg);
+  color: var(--text);
 `;
 
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 30vw;
-
-  @media (max-width: 768px) {
-    width: 90vw;
-  }
-`;
-
-const Header = styled.div`
+const CompanyHeader = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin: 5px;
-  background: linear-gradient(135deg, #003262, #005492);
-  padding: 10px;
-  border-radius: 5px 5px 0 0;
-
-  @media (max-width: 767px) {
-    font-size: 24px;
-    width: 100%;
+  align-items: flex-start;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
   }
 `;
 
-const Title = styled.h1`
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--text);
-
-  @media (max-width: 767px) {
-    font-size: 20px;
-  }
-`;
-
-const ButtonContainer = styled.div`
+const CompanyHeaderContent = styled.div`
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
 
-  @media (max-width: 767px) {
-    gap: 5px;
+const CompanyTitle = styled.h1`
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
   }
 `;
 
-const StyledButton = styled.button`
+const ServiceTypeBadge = styled.div`
   background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-  border: none;
-  border-radius: 999px;
   color: var(--pill-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+  border-radius: 8px;
+  width: fit-content;
+`;
+
+const SourceBadge = styled.div`
+  background: var(--surface-border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  width: fit-content;
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: stretch;
+  }
+`;
+
+const ActionButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 10px 14px;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   }
-
-  @media (max-width: 767px) {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-`;
-
-const Content = styled.div`
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-  margin-top: 20px;
-  gap: 20px;
-
+  
   @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 10px;
+    flex: 1;
+    justify-content: center;
   }
 `;
 
-const Image = styled.img`
-  margin-bottom: 20px;
-  max-width: 500px;
-  max-height: 270px;
-  border-radius: 5px;
+const CompanyContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+`;
+
+const CompanyImageSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const CompanyImage = styled.img`
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 
   &:hover {
-    transform: scale(1.15);
+    transform: scale(1.02);
   }
+`;
 
-  @media (max-width: 768px) {
-    width: 100%;
-    height: auto;
+const RatingCard = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+`;
 
-    &:hover {
-      transform: none;
+const RatingTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.75rem 0;
+`;
+
+const RatingDisplay = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const StarContainer = styled.div`
+  display: flex;
+  color: #fbbf24;
+  gap: 2px;
+`;
+
+const RatingValue = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+`;
+
+const ReviewCount = styled.div`
+  font-size: 0.875rem;
+  color: var(--text-muted);
+`;
+
+const CompanyDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const ContactCard = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+`;
+
+const ContactHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+`;
+
+const ContactTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+`;
+
+const ContactItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-muted);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const ContactInfo = styled.span`
+  flex: 1;
+  font-size: 0.875rem;
+`;
+
+const QuickActions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+`;
+
+const QuickActionButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: ${({ primary }) => 
+    primary 
+      ? 'linear-gradient(90deg, var(--primary-start), var(--primary-end))'
+      : 'var(--surface)'
+  };
+  color: ${({ primary }) => primary ? 'var(--pill-text)' : 'var(--text)'};
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    ${({ primary }) => 
+      !primary && 'background: var(--primary-start); color: var(--pill-text); border-color: var(--primary-start);'
     }
   }
 `;
 
-const InfoBox = styled.div`
-  background: var(--surface);
-  color: var(--text);
-  width: 100%;
-  border-radius: 16px;
-  padding: 16px;
-  border: 1px solid var(--surface-border);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  backdrop-filter: blur(6px);
-`;
-
-const InfoTitle = styled.h2`
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 6px;
-  color: var(--text);
-`;
-
-const StyledWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  @media (max-width: 767px) {
-  }
-`;
-
-const Address = styled.p`
-  font-size: 18px;
-  font-weight: 500;
-  margin: 5px 0px 20px;
+const MapContainer = styled.div`
+  border-radius: 12px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 80%;
-  white-space: nowrap;
-  @media (max-width: 767px) {
-    max-width: 100%;
-    margin-bottom: 10px;
-  }
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 `;
 
-const PhoneNumber = styled(Address)``;
+// Reviews Section
+const ReviewsSection = styled.div`
+  margin-top: 2rem;
+`;
 
-const Website = styled(Address)``;
+const ReviewsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+`;
 
-const AverageRating = styled.span`
-  font-size: 1rem;
+const ReviewsTitle = styled.h2`
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #fbbf24;
+  color: var(--text);
+  margin: 0;
 `;
 
-const AverageGrade = styled.span`
+const ReviewsNavigation = styled.div`
   display: flex;
-  align-items: center;
-  font-size: 20px;
-  color: #333;
-  margin-right: 5px;
+  gap: 0.5rem;
+`;
 
-  svg {
-    color: gold;
-    margin-right: 2px;
+const NavButton = styled.button`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: all 0.2s ease;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+
+  &:hover {
+    background: var(--primary-start);
+    color: var(--pill-text);
+    border-color: var(--primary-start);
   }
 `;
 
-const BigText = styled.h2`
-  margin: 40px;
-  color: black;
-  font-family: Aeroport, -apple-system, "system-ui", "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  overflow: hidden;
-  white-space: nowrap;
+const ReviewsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
 `;
 
+const ReviewCard = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+`;
+
+const ReviewCardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+`;
+
+const ReviewCardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+`;
+
+const ReviewRating = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #fbbf24;
+  font-weight: 600;
+`;
+
+const ReviewDateBadge = styled.div`
+  background: var(--surface-border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+`;
+
+const ReviewCardTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+`;
+
+const ReviewCardAuthor = styled.p`
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
+`;
+
+const EmptyReviews = styled.div`
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const EmptyReviewsText = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+`;
+
+const EmptyReviewsSubtext = styled.p`
+  font-size: 0.875rem;
+  margin: 0;
+`;
+
+// Dialog Components
 const StyledDialog = styled(Dialog)`
   margin: auto;
   @media (min-width: 1024px) {
@@ -686,128 +973,43 @@ const StyledTextArea = styled.textarea`
   &:focus { border-color: var(--primary-start); }
 `;
 
-const NoReviewsMessage = styled.p`
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  margin: 0;
-`;
-
-const ReviewsWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 50px;
-`;
-
-const ReviewsContainer = styled.div`
-  display: flex;
-  gap: 20px;
-
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-`;
-
-const Review = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  width: calc(33.33% - 20px);
-
-  &:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    max-width: 250px;
-    margin-bottom: 20px;
-  }
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const ReviewTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const ReviewAuthor = styled.p`
-  font-size: 16px;
-  margin-bottom: 5px;
-`;
-
-const ReviewDate = styled.div`
-  font-size: 14px;
-  text-align: right;
-  color: #777;
-  margin-top: 10px;
-`;
-
-const ReviewGrade = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 30px;
-  margin: 15px;
-
-  svg {
-    color: gold;
-    margin-right: 2px;
-  }
-`;
-
-const ReviewNavigation = styled.button`
-  background-color: transparent;
-  margin: 20px;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
-  color: ${(props) => (props.disabled ? "#ccc" : "inherit")};
-  pointer-events: ${(props) => (props.disabled ? "none" : "inherit")};
-
-  &:hover {
-    color: ${(props) => (props.disabled ? "#ccc" : "#666")};
-  }
-`;
-
-const CancelButton = styled(StyledButton)`
-  margin-bottom: 20px;
+const CancelButton = styled.button`
   background: linear-gradient(90deg, #ef4444, #f97316);
   color: var(--pill-text);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
 `;
 
-const SubmitButton = styled(StyledButton)`
+const SubmitButton = styled.button`
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
   margin-bottom: 20px;
   margin-right: 20px;
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: ${({ disabled }) => disabled ? 'none' : 'translateY(-2px)'};
+    box-shadow: ${({ disabled }) => disabled ? 'none' : '0 8px 20px rgba(0,0,0,0.15)'};
+  }
 `;
 
 const Notification = styled.div`
