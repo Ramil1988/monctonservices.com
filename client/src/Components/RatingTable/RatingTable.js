@@ -4,15 +4,8 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Spinner from "../Helper/Spinner";
 import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import CopyButton from "../Company/CoppyButton";
-import Maps from "../Company/Maps";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { FiPhone, FiMapPin, FiExternalLink, FiNavigation } from "react-icons/fi";
+import { BiSort } from "react-icons/bi";
 import MapComponent from "./Map";
 
 const ROOT_API = "/.netlify/functions/api";
@@ -22,62 +15,91 @@ const RatingTable = () => {
   const [companies, setCompanies] = useState([]);
   const [selectedCity, setSelectedCity] = useState("All");
   const [filteredCompanies, setFilteredCompanies] = useState(companies);
-  const [open, setOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showTable, setShowTable] = useState(true);
+  const [sortBy, setSortBy] = useState("reviews");
+  const [minRating, setMinRating] = useState(0);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const filterCompanies = (companies) => {
-    return companies.filter((company) =>
-      company.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const getAverageRating = (company) => {
+    if (!company.reviews || company.reviews.length === 0) return 0;
+    return company.reviews.reduce((sum, review) => sum + review.grade, 0) / company.reviews.length;
+  };
+
+  const sortCompanies = (companies, sortBy) => {
+    const sorted = [...companies];
+    switch (sortBy) {
+      case "name":
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      case "rating":
+        return sorted.sort((a, b) => getAverageRating(b) - getAverageRating(a));
+      case "reviews":
+        return sorted.sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0));
+      default:
+        return sorted;
+    }
   };
 
   useEffect(() => {
     let filtered = companies;
 
+    // Filter by city
     if (selectedCity !== "All") {
       filtered = filtered.filter((company) =>
         company.address.toLowerCase().includes(selectedCity.toLowerCase())
       );
     }
 
+    // Filter by search query
     if (searchQuery) {
-      filtered = filterCompanies(filtered);
+      filtered = filtered.filter((company) =>
+        company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        company.address.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
 
+    // Filter by minimum rating
+    if (minRating > 0) {
+      filtered = filtered.filter((company) => getAverageRating(company) >= minRating);
+    }
+
+    // Sort companies
+    filtered = sortCompanies(filtered, sortBy);
+
     setFilteredCompanies(filtered);
-  }, [companies, selectedCity, searchQuery]);
+  }, [companies, selectedCity, searchQuery, minRating, sortBy]);
 
   const displayName = (serviceType || "")
     .replace(/_/g, " ")
     .replace(/^\w/, (c) => c.toUpperCase());
 
-  const handleDialogOpen = (company) => {
-    setSelectedCompany(company);
-    setOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpen(false);
-  };
-
   const handleCityFilterChange = (event) => {
-    const city = event.target.value;
-    setSelectedCity(city);
+    setSelectedCity(event.target.value);
+  };
 
-    if (city === "All") {
-      setFilteredCompanies(companies);
-    } else {
-      const filtered = companies.filter((company) =>
-        company.address.toLowerCase().includes(city.toLowerCase())
-      );
-      setFilteredCompanies(filtered);
+  const getPhoneLink = (phone) => {
+    if (!phone) return null;
+    const cleanPhone = phone.replace(/[^\d+]/g, '');
+    return `tel:${cleanPhone}`;
+  };
+
+  const getDirectionsLink = (address) => {
+    if (!address) return null;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  };
+
+  const formatCity = (address) => {
+    const parts = address.split(',');
+    for (const part of parts) {
+      const trimmed = part.trim();
+      if (['Moncton', 'Dieppe', 'Riverview'].includes(trimmed)) {
+        return trimmed;
+      }
     }
+    return 'Moncton Area';
   };
 
   useEffect(() => {
@@ -150,129 +172,124 @@ const RatingTable = () => {
 
   return (
     <Wrapper>
-      <TableHeading>
-        Where to find the best {displayName} in Moncton
-      </TableHeading>
-      <ButtonContainer>
-        <ToggleButton active={showTable} onClick={handleShowTable}>
-          Show Rating Table
-        </ToggleButton>
-        <ToggleButton active={!showTable} onClick={handleShowMap}>
-          Show on the Map
-        </ToggleButton>
-      </ButtonContainer>
+      <Header>
+        <Title>Best {displayName} in Moncton</Title>
+        <ViewToggle>
+          <ToggleButton active={showTable} onClick={handleShowTable}>
+            List View
+          </ToggleButton>
+          <ToggleButton active={!showTable} onClick={handleShowMap}>
+            Map View
+          </ToggleButton>
+        </ViewToggle>
+      </Header>
 
       {showTable ? (
         <>
-          <CenteredWrapper>
-            <FilterWrapper>
-              <FilterLabel>Filter by city:</FilterLabel>
-              <FilterSelect
-                value={selectedCity}
-                onChange={handleCityFilterChange}
-              >
-                <option value="All">All</option>
+          <FilterBar>
+            <FilterGroup>
+              <FilterSelect value={selectedCity} onChange={handleCityFilterChange}>
+                <option value="All">All Cities</option>
                 <option value="Moncton">Moncton</option>
                 <option value="Dieppe">Dieppe</option>
                 <option value="Riverview">Riverview</option>
               </FilterSelect>
-              <FilterLabel>Search by name:</FilterLabel>
-              <FilterInput
+              
+              <SearchInput
                 type="text"
+                placeholder="Search by name or location..."
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
-            </FilterWrapper>
-          </CenteredWrapper>
-          <Table>
-            <thead>
-              <tr>
-                <Th>Place</Th>
-                <Th>Company Name</Th>
-                <Th>Average Rating</Th>
-                <Th>Reviews</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCompanies.map((company, index) => {
-                const averageRating =
-                  company.reviews.length > 0
-                    ? (
-                        company.reviews.reduce(
-                          (sum, review) => sum + review.grade,
-                          0
-                        ) / company.reviews.length
-                      ).toFixed(1)
-                    : 0;
-                return (
-                  <tr key={company._id}>
-                    <Td>{index + 1}</Td>
-                    <Td>
-                      <StyledLink to={`/company/${company._id}`}>
-                        {company.name}
-                      </StyledLink>
-                      <QuestionButton onClick={() => handleDialogOpen(company)}>
-                        <AiOutlineQuestionCircle size="1.2em" />
-                      </QuestionButton>
-                    </Td>
-                    <Td>
-                      <StarWrapper>{renderStars(averageRating)}</StarWrapper>
-                    </Td>
-                    <Td>{company.reviews.length}</Td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-          <CenteredDialog
-            open={open}
-            onClose={handleDialogClose}
-            fullWidth={true}
-            onMouseEnter={() => handleDialogOpen(selectedCompany)}
-            onMouseLeave={() => handleDialogClose()}
-          >
-            {selectedCompany ? (
-              <>
-                <DialogTitle
-                  id="dialog-title"
-                  style={{ paddingRight: "100px" }}
-                >
-                  {selectedCompany.name}
-                  <IconButton
-                    edge="end"
-                    color="inherit"
-                    onClick={handleDialogClose}
-                    aria-label="close"
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "10px",
-                      marginRight: "20px",
-                    }}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentStyled>
-                    <span>Address</span>: {selectedCompany.address}
-                    <CopyButton textToCopy={selectedCompany.address} />
-                  </DialogContentStyled>
-                  {selectedCompany.phoneNumber && (
-                    <>
-                      <DialogContentStyled>
-                        <span>Phone number</span>: {selectedCompany.phoneNumber}
-                        <CopyButton textToCopy={selectedCompany.phoneNumber} />
-                      </DialogContentStyled>
-                    </>
-                  )}
-                  <DialogContentText>
-                    <Maps address={selectedCompany.address}></Maps>
-                  </DialogContentText>
-                </DialogContent>
-              </>
-            ) : null}
-          </CenteredDialog>
+              
+              <FilterSelect value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="reviews">Most Reviews</option>
+                <option value="rating">Highest Rated</option>
+                <option value="name">Name A-Z</option>
+              </FilterSelect>
+              
+              <FilterSelect value={minRating} onChange={(e) => setMinRating(Number(e.target.value))}>
+                <option value={0}>All Ratings</option>
+                <option value={4}>4+ Stars</option>
+                <option value={4.5}>4.5+ Stars</option>
+              </FilterSelect>
+            </FilterGroup>
+            
+            <ResultsCount>
+              {filteredCompanies.length} {filteredCompanies.length === 1 ? 'result' : 'results'}
+            </ResultsCount>
+          </FilterBar>
+
+          <CompanyGrid>
+            {filteredCompanies.map((company, index) => {
+              const averageRating = getAverageRating(company);
+              const reviewCount = company.reviews?.length || 0;
+              
+              return (
+                <CompanyCard key={company._id}>
+                  <CardHeader>
+                    <Rank>#{index + 1}</Rank>
+                    <CityBadge>{formatCity(company.address)}</CityBadge>
+                  </CardHeader>
+                  
+                  <CompanyName to={`/company/${company._id}`}>
+                    {company.name}
+                  </CompanyName>
+                  
+                  <RatingSection>
+                    <StarWrapper>{renderStars(averageRating)}</StarWrapper>
+                    <RatingText>
+                      {averageRating > 0 ? averageRating.toFixed(1) : 'No rating'} 
+                      ({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})
+                    </RatingText>
+                  </RatingSection>
+                  
+                  <Address>
+                    <FiMapPin size={14} />
+                    {company.address}
+                  </Address>
+                  
+                  <ActionBar>
+                    {company.phoneNumber && (
+                      <ActionButton as="a" href={getPhoneLink(company.phoneNumber)}>
+                        <FiPhone size={16} />
+                        Call
+                      </ActionButton>
+                    )}
+                    
+                    <ActionButton 
+                      as="a" 
+                      href={getDirectionsLink(company.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FiNavigation size={16} />
+                      Directions
+                    </ActionButton>
+                    
+                    {company.website && (
+                      <ActionButton 
+                        as="a" 
+                        href={company.website.startsWith('http') ? company.website : `https://${company.website}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FiExternalLink size={16} />
+                        Website
+                      </ActionButton>
+                    )}
+                  </ActionBar>
+                </CompanyCard>
+              );
+            })}
+          </CompanyGrid>
+          
+          {filteredCompanies.length === 0 && (
+            <EmptyState>
+              <p>No companies found matching your criteria.</p>
+              <p>Try adjusting your filters or search terms.</p>
+            </EmptyState>
+          )}
         </>
       ) : (
         <MapComponent companies={filteredCompanies} />
@@ -281,10 +298,43 @@ const RatingTable = () => {
   );
 };
 
-const ButtonContainer = styled.div`
+// New Modern Styled Components
+const Wrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--app-bg);
+  color: var(--text);
+`;
+
+const Header = styled.div`
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const ViewToggle = styled.div`
+  display: flex;
+  gap: 0.5rem;
 `;
 
 const ToggleButton = styled.button`
@@ -294,97 +344,210 @@ const ToggleButton = styled.button`
       : "var(--surface)"};
   color: ${({ active }) => (active ? "var(--pill-text)" : "var(--text)")};
   border: 1px solid var(--surface-border);
-  border-radius: 999px;
-  padding: 8px 14px;
-  margin: 0 0.5rem;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 700;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(34,211,238,0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 `;
 
-const FilterInput = styled.input`
-  margin-right: 20px;
-  padding: 0.5rem;
+const FilterBar = styled.div`
+  background: var(--surface);
   border: 1px solid var(--surface-border);
   border-radius: 12px;
-  background: var(--surface);
-  color: var(--text);
-  font-weight: bold;
-  outline: none;
-  cursor: pointer;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+`;
 
-  &:focus { border-color: var(--primary-start); }
-
+const FilterGroup = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  
   @media (max-width: 768px) {
-    margin: 0px 20px 20px 20px;
+    grid-template-columns: 1fr;
   }
-`;
-
-const CenteredDialog = styled(Dialog)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const DialogContentStyled = styled(DialogContentText)`
-  display: flex;
-
-  & span {
-    font-weight: bold;
-  }
-`;
-
-const CenteredWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const FilterWrapper = styled.div`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
-  background-color: #003262;
-  padding: 10px;
-  border-radius: 5px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: stretch;
-  }
-`;
-
-const FilterLabel = styled.label`
-  margin: 1rem;
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: bold;
 `;
 
 const FilterSelect = styled.select`
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #003262;
-  font-weight: bold;
-  outline: none;
+  padding: 0.625rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--app-bg);
+  color: var(--text);
+  font-size: 0.875rem;
   cursor: pointer;
-
-  &:hover {
-    background-color: #f2f2f2;
-  }
+  transition: border-color 0.2s ease;
 
   &:focus {
-    border-color: #003262;
+    outline: none;
+    border-color: var(--primary-start);
+  }
+`;
+
+const SearchInput = styled.input`
+  padding: 0.625rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--app-bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-start);
+  }
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+`;
+
+const ResultsCount = styled.div`
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-align: center;
+`;
+
+const CompanyGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const CompanyCard = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+`;
+
+const Rank = styled.div`
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: var(--pill-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+`;
+
+const CityBadge = styled.div`
+  background: var(--surface-border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+`;
+
+const CompanyName = styled(Link)`
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+
+  &:hover {
+    color: var(--primary-start);
+  }
+`;
+
+const RatingSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+`;
+
+const StarWrapper = styled.div`
+  display: flex;
+  color: #fbbf24;
+  gap: 1px;
+`;
+
+const RatingText = styled.div`
+  font-size: 0.875rem;
+  color: var(--text-muted);
+`;
+
+const Address = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+
+  svg {
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+  }
+`;
+
+const ActionBar = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+`;
+
+const ActionButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--app-bg);
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--primary-start);
+    color: var(--pill-text);
+    border-color: var(--primary-start);
+  }
+`;
+
+const EmptyState = styled.div`
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  
+  p {
+    margin: 0.5rem 0;
   }
 `;
 
@@ -392,104 +555,7 @@ const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-`;
-
-const Wrapper = styled.div`
-  border-radius: 10px;
-  padding: 2rem;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  background: var(--app-bg);
-  color: var(--text);
-
-  @media (max-width: 768px) {
-    padding: 0.2rem;
-  }
-`;
-
-const TableHeading = styled.h2`
-  font-size: 2rem;
-  font-weight: 500;
-  margin-bottom: 1.5rem;
-  color: var(--text);
-  text-align: center;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-`;
-
-const Table = styled.table`
-  font-size: 1.2rem;
-  margin: auto;
-  width: 70%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--surface);
-  border-radius: 16px;
-  border: 1px solid var(--surface-border);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
-`;
-
-const Th = styled.th`
-  text-align: center;
-  padding: 16px;
-  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-  color: var(--pill-text);
-  border: 1px solid transparent;
-  font-weight: 600;
-  &:first-child {
-    border-top-left-radius: 10px;
-  }
-  &:last-child {
-    border-top-right-radius: 10px;
-  }
-`;
-
-const Td = styled.td`
-  padding: 15px;
-  border: 1px solid var(--surface-border);
-  text-align: center;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
-`;
-
-const StarWrapper = styled.span`
-  display: inline-flex;
-  color: gold;
-`;
-
-const StyledLink = styled(Link)`
-  color: var(--text);
-  text-decoration: none;
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: var(--surface);
-  }
-`;
-
-const QuestionButton = styled.button`
-  background-color: transparent;
-  border: none;
-  color: var(--text);
-  margin-left: 20px;
-  cursor: pointer;
-
-  &:hover {
-    color: #fbbf24;
-  }
+  min-height: 50vh;
 `;
 
 export default RatingTable;
