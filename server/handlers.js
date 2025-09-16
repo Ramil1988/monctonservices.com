@@ -10,7 +10,8 @@ const { MONGO_URI } = process.env;
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  maxPoolSize: 10,
+  maxPoolSize: 2,
+  minPoolSize: 0,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
 };
