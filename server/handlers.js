@@ -10,6 +10,9 @@ const { MONGO_URI } = process.env;
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
 };
 
 const client = new MongoClient(MONGO_URI, options);
@@ -17,8 +20,6 @@ const database = client.db("MonctonServicesCom");
 const companies = database.collection("companies");
 const users = database.collection("users");
 const events = database.collection("events");
-
-client.connect();
 
 const createCompany = async (req, res) => {
   try {
@@ -33,7 +34,6 @@ const createCompany = async (req, res) => {
       lang,
     } = req.body;
 
-    await client.connect();
 
     const company = {
       serviceType: serviceType,
@@ -100,7 +100,6 @@ const createCompany = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding company:", error);
-    await client.close();
     return {
       status: 500,
       message: "An error occurred while creating the company.",
@@ -150,7 +149,6 @@ const createReview = async (req, res) => {
     const { userId, userName, company, date, title, text, grade, comments } =
       req.body;
 
-    await client.connect();
 
     const review = {
       _id: uuidv4(),
@@ -186,7 +184,6 @@ const createReview = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding review:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while adding the review.",
@@ -199,13 +196,11 @@ const createFavorite = async (req, res) => {
   try {
     const { userId, companyId, companyName, serviceType } = req.body;
 
-    await client.connect();
 
     const user = await users.findOne({ _id: userId });
 
     if (!user) {
-      await client.close();
-      return res.status(404).json({
+        return res.status(404).json({
         status: 404,
         message: "User not found.",
         data: null,
@@ -217,8 +212,7 @@ const createFavorite = async (req, res) => {
     );
 
     if (alreadyAdded) {
-      await client.close();
-      return res.status(409).json({
+        return res.status(409).json({
         status: 409,
         message: "The company is already in the user's favorites.",
         data: null,
@@ -245,7 +239,6 @@ const createFavorite = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding favorite:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while adding the favorite.",
@@ -258,7 +251,6 @@ const createEvent = async (req, res) => {
   try {
     const { title, startDate, endDate, location, description, link } = req.body;
 
-    await client.connect();
 
     const newEvent = {
       _id: uuidv4(),
@@ -280,7 +272,6 @@ const createEvent = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding company:", error);
-    await client.close();
     return {
       status: 500,
       message: "An error occurred while creating the company.",
@@ -291,7 +282,6 @@ const createEvent = async (req, res) => {
 
 const getAllCompanies = async (req, res) => {
   try {
-    await client.connect();
 
     const allCompanies = await companies.find().toArray();
 
@@ -302,7 +292,6 @@ const getAllCompanies = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching companies:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching companies.",
@@ -377,7 +366,6 @@ const getCompaniesByServiceType = async (req, res) => {
     // Support google type ids like "art_gallery" and display/display plural forms
     const regexes = buildTypeRegexes(serviceType);
 
-    await client.connect();
 
     // City filtering: default to tri-cities unless explicitly overridden
     // Accepts query param `cities` as comma/semicolon/newline-separated list, or `scope=all` to disable filter
@@ -418,7 +406,6 @@ const getCompaniesByServiceType = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching companies by service type:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching companies by service type.",
@@ -431,7 +418,6 @@ const getCompanyById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
 
     const company = await companies.findOne({ _id: id });
 
@@ -448,7 +434,6 @@ const getCompanyById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting company by ID:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching the company.",
@@ -458,7 +443,6 @@ const getCompanyById = async (req, res) => {
 
 const getAllReviews = async (req, res) => {
   try {
-    await client.connect();
 
     const allCompanies = await companies.find().toArray();
     const allReviews = allCompanies.flatMap((company) =>
@@ -476,7 +460,6 @@ const getAllReviews = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching all reviews:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching all reviews.",
@@ -489,7 +472,6 @@ const getReviewById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
     const database = client.db("MonctonServicesCom");
     const companies = database.collection("companies");
 
@@ -519,7 +501,6 @@ const getReviewById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching review by ID:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching the review by ID.",
@@ -530,10 +511,8 @@ const getReviewById = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    await client.connect();
 
     const allUsers = await users.find().toArray();
-    await client.close();
 
     return res.status(200).json({
       status: 200,
@@ -542,7 +521,6 @@ const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching all users:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching all users.",
@@ -556,7 +534,6 @@ const getUserById = async (req, res) => {
     const { id } = req.params;
 
     console.log(id, "Test");
-    await client.connect();
     const user = await users.findOne({ _id: id });
 
     if (!user) {
@@ -574,7 +551,6 @@ const getUserById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching user by ID:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching the user by ID.",
@@ -587,7 +563,6 @@ const getUserReviews = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
     const user = await users.findOne({ _id: id });
 
     if (!user) {
@@ -618,7 +593,6 @@ const getUserFavorites = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    await client.connect();
     const user = await users.findOne({ _id: userId });
 
     if (!user) {
@@ -650,7 +624,6 @@ const getUserFavorites = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    await client.connect();
 
     const allEvents = await events.find().toArray();
 
@@ -661,7 +634,6 @@ const getAllEvents = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching events:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while fetching events.",
@@ -684,7 +656,6 @@ const updateCompany = async (req, res) => {
       lang,
     } = req.body;
 
-    await client.connect();
 
     const updatedFields = {};
     if (serviceType !== undefined) updatedFields.serviceType = serviceType;
@@ -729,7 +700,6 @@ const updateCompany = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating company:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while updating the company.",
@@ -743,7 +713,6 @@ const updateUser = async (req, res) => {
     const { id } = req.params;
     const { name, email, nickname, favorites, image, reviews } = req.body;
 
-    await client.connect();
 
     const updatedFields = {};
     if (name) updatedFields.name = name;
@@ -788,7 +757,6 @@ const updateUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating user:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: `An error occurred while updating the user: ${error.message}`,
@@ -802,7 +770,6 @@ const updateReview = async (req, res) => {
     const { id } = req.params;
     const { date, title, text, grade, comment } = req.body;
 
-    await client.connect();
 
     const updatedFields = {};
     if (date) updatedFields["reviews.$.date"] = date;
@@ -852,7 +819,6 @@ const deleteCompany = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
     const result = await companies.deleteOne({ _id: id });
 
     if (result.deletedCount === 0) {
@@ -868,7 +834,6 @@ const deleteCompany = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting company:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while deleting the company.",
@@ -880,7 +845,6 @@ const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
 
     const result = await users.deleteOne({ _id: id });
 
@@ -897,7 +861,6 @@ const deleteUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting user:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while deleting the user.",
@@ -909,7 +872,6 @@ const deleteAllReviewsForCompany = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
 
     // Find all reviews related to the specified company
     const companyReviews = await companies.findOne(
@@ -937,7 +899,6 @@ const deleteAllReviewsForCompany = async (req, res) => {
       { $pull: { reviews: { _id: { $in: reviewIds } } } }
     );
 
-    await client.close();
 
     return res.status(200).json({
       status: 200,
@@ -945,7 +906,6 @@ const deleteAllReviewsForCompany = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting all reviews for the company:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while deleting all reviews for the company.",
@@ -957,7 +917,6 @@ const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await client.connect();
 
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { "reviews._id": id },
@@ -971,7 +930,6 @@ const deleteReview = async (req, res) => {
       { returnOriginal: false }
     );
 
-    await client.close();
 
     if (!updatedCompany || !updatedUser) {
       return res.status(404).json({
@@ -986,7 +944,6 @@ const deleteReview = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting review:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while deleting the review.",
@@ -999,13 +956,11 @@ const removeFavorite = async (req, res) => {
     const { userId } = req.params;
     const { companyId } = req.body;
 
-    await client.connect();
 
     const user = await users.findOne({ _id: userId });
 
     if (!user) {
-      await client.close();
-      return res.status(404).json({
+        return res.status(404).json({
         status: 404,
         message: "User not found.",
       });
@@ -1016,8 +971,7 @@ const removeFavorite = async (req, res) => {
     );
 
     if (!favoriteCompany) {
-      await client.close();
-      return res.status(404).json({
+        return res.status(404).json({
         status: 404,
         message: "User not found or company not in favorites.",
       });
@@ -1034,7 +988,6 @@ const removeFavorite = async (req, res) => {
     });
   } catch (error) {
     console.error("Error removing favorite:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while removing the favorite.",
@@ -1045,7 +998,6 @@ const removeFavorite = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const { reviewId, commentDate } = req.params;
-    await client.connect();
 
     const { value: updatedCompany } = await companies.findOneAndUpdate(
       { "reviews._id": reviewId },
@@ -1053,7 +1005,6 @@ const deleteComment = async (req, res) => {
       { returnOriginal: false }
     );
 
-    await client.close();
 
     if (!updatedCompany) {
       return res.status(404).json({
@@ -1069,7 +1020,6 @@ const deleteComment = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting comment:", error);
-    await client.close();
     return res.status(500).json({
       status: 500,
       message: "An error occurred while deleting the comment.",
