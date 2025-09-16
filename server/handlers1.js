@@ -9,13 +9,15 @@ const { MongoClient } = require("mongodb");
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  maxPoolSize: 2,
+  minPoolSize: 0,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
 };
 
 const client = new MongoClient(MONGO_URI, options);
 const database = client.db("CvGenetator");
 const users = database.collection("users");
-
-client.connect();
 
 const createNewUser = async (req, res) => {
   try {

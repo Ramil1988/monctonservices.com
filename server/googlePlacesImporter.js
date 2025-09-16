@@ -9,6 +9,10 @@ const { MONGO_URI, GOOGLE_MAPS_API_KEY, IMPORT_CITY, ADMIN_SECRET, MAX_PLACES_RE
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  maxPoolSize: 2,
+  minPoolSize: 0,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
 };
 
 const client = new MongoClient(MONGO_URI, options);

@@ -114,7 +114,14 @@ app.post("/admin/companies/purge", async (req, res) => {
       return res.status(400).json({ status: 400, message: "Invalid mode" });
     }
     const { MongoClient } = require("mongodb");
-    const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = new MongoClient(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 1,
+      minPoolSize: 0,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000
+    });
     await client.connect();
     const db = client.db("MonctonServicesCom");
     const companies = db.collection("companies");
