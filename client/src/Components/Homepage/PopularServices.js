@@ -13,53 +13,114 @@ const PopularServices = ({ types = [] }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(types)]);
 
+  const getCacheKey = (serviceTypeId) => `companies_${serviceTypeId}`;
+  const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+  const getCachedData = (serviceTypeId) => {
+    try {
+      const cached = localStorage.getItem(getCacheKey(serviceTypeId));
+      if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < CACHE_DURATION) {
+          return data;
+        }
+        localStorage.removeItem(getCacheKey(serviceTypeId));
+      }
+    } catch (error) {
+      console.error("Error reading cache:", error);
+    }
+    return null;
+  };
+
+  const setCachedData = (serviceTypeId, data) => {
+    try {
+      localStorage.setItem(getCacheKey(serviceTypeId), JSON.stringify({
+        data,
+        timestamp: Date.now()
+      }));
+    } catch (error) {
+      console.error("Error setting cache:", error);
+    }
+  };
+
   const fetchTopCompaniesByServiceTypes = async () => {
     const servicesWithTopCompanies = [];
+    const uncachedTypes = [];
+    const cachedResults = [];
 
-    // Make all API calls in parallel for much faster loading
-    const promises = types.map(async (serviceType) => {
-      try {
-        const response = await fetch(
-          `${ROOT_API}/companies/${serviceType.id}?cities=Moncton,Dieppe,Riverview`
-        );
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        const companies = Array.isArray(data.data) ? data.data : [];
-
-        const totalReviews = companies.reduce((sum, c) => sum + (c.reviews?.length || 0), 0);
-        
-        // Only include service types that have reviews
-        if (totalReviews > 0) {
-          const sortedCompanies = companies
-            .slice()
-            .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
-            .slice(0, 5);
-
-          return {
-            ...serviceType,
-            topCompanies: sortedCompanies,
-            totalReviews,
-          };
-        }
-        return null;
-      } catch (error) {
-        console.error(
-          `Error fetching companies for ${serviceType.name}:`,
-          error
-        );
-        return null;
+    // Check cache first
+    types.forEach(serviceType => {
+      const cached = getCachedData(serviceType.id);
+      if (cached) {
+        cachedResults.push(cached);
+      } else {
+        uncachedTypes.push(serviceType);
       }
     });
 
-    // Wait for all requests to complete
-    const results = await Promise.all(promises);
-    
-    // Filter out null results and sort by total reviews
-    const validResults = results.filter(result => result !== null);
-    const ordered = validResults
+    // Batch uncached requests with delay to prevent connection surge
+    const batchSize = 3; // Process 3 at a time instead of all at once
+    const delay = 200; // 200ms delay between batches
+
+    for (let i = 0; i < uncachedTypes.length; i += batchSize) {
+      const batch = uncachedTypes.slice(i, i + batchSize);
+
+      const promises = batch.map(async (serviceType) => {
+        try {
+          const response = await fetch(
+            `${ROOT_API}/companies/${serviceType.id}?cities=Moncton,Dieppe,Riverview`
+          );
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          const companies = Array.isArray(data.data) ? data.data : [];
+
+          const totalReviews = companies.reduce((sum, c) => sum + (c.reviews?.length || 0), 0);
+
+          // Only include service types that have reviews
+          if (totalReviews > 0) {
+            const sortedCompanies = companies
+              .slice()
+              .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
+              .slice(0, 5);
+
+            const result = {
+              ...serviceType,
+              topCompanies: sortedCompanies,
+              totalReviews,
+            };
+
+            // Cache the result
+            setCachedData(serviceType.id, result);
+            return result;
+          }
+          return null;
+        } catch (error) {
+          console.error(
+            `Error fetching companies for ${serviceType.name}:`,
+            error
+          );
+          return null;
+        }
+      });
+
+      // Wait for batch to complete
+      const batchResults = await Promise.all(promises);
+      servicesWithTopCompanies.push(...batchResults.filter(result => result !== null));
+
+      // Add delay between batches to prevent connection surge
+      if (i + batchSize < uncachedTypes.length) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    // Combine cached and fresh results
+    const allResults = [...cachedResults, ...servicesWithTopCompanies];
+
+    // Sort by total reviews and take top 3
+    const ordered = allResults
       .sort((a, b) => (b.totalReviews || 0) - (a.totalReviews || 0))
       .slice(0, 3);
-      
+
     setServicesData(ordered);
   };
 

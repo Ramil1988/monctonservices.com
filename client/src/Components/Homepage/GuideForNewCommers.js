@@ -30,8 +30,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="0s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 1: Before arriving reach out to Monctoncares
+              <SectionTitle step="1">
+                Before arriving reach out to Monctoncares
               </SectionTitle>
               <SectionText>
                 If you are newcomers to Canada and planning your settlement in
@@ -53,8 +53,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="1s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 2: Start searching for an apartment
+              <SectionTitle step="2">
+                Start searching for an apartment
               </SectionTitle>
               <SectionText>
                 We gathered for you local companies that provide apartments for
@@ -76,9 +76,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="2s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 3: Once found an apartment, reach out to NB Power and
-                Internet provider to get your power and Internet set up
+              <SectionTitle step="3">
+                Set up Power and Internet with NB Power
               </SectionTitle>
               <SectionText>
                 You will need to call to NB Power by phone + 1 800 663 622 upon
@@ -106,8 +105,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="3s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 4: Get your Social Insurance Number (SIN)
+              <SectionTitle step="4">
+                Get your Social Insurance Number (SIN)
               </SectionTitle>
               <SectionText>
                 SIN - can be issued online, but it may be unpredictable to
@@ -129,8 +128,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="4s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 5: Update Your Current Address for recieving your PR Cards
+              <SectionTitle step="5">
+                Update Current Address for PR Cards
               </SectionTitle>
               <SectionText>
                 Usually, you provide your future residence address at the border
@@ -152,8 +151,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="5s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 6: Apply for a Medicare Health Insurance card
+              <SectionTitle step="6">
+                Apply for Medicare Health Insurance
               </SectionTitle>
               <SectionText>
                 You need to visit any of two located in Moncton Service of New
@@ -175,7 +174,7 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="6s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>Step 7: Open Bank account</SectionTitle>
+              <SectionTitle step="7">Open Bank Account</SectionTitle>
               <SectionText>
                 You will need to open bank account to make any bank
                 transactions. There are some branches in Moncton. For openning
@@ -198,7 +197,7 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="7s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>Step 8: Get driver license</SectionTitle>
+              <SectionTitle step="8">Get Driver License</SectionTitle>
               <SectionText>
                 First, you will need to pass theory test. Yo can practice tests
                 here in this
@@ -247,8 +246,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="8s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 9: Apply for Canada child benefit and GST/HST credit
+              <SectionTitle step="9">
+                Apply for Child Benefit and GST/HST Credit
               </SectionTitle>
               <SectionText>
                 Once all above steps done you will need to apply for a Canada
@@ -277,7 +276,7 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="9s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>Step 10: Find a family doctor</SectionTitle>
+              <SectionTitle step="10">Find a Family Doctor</SectionTitle>
               <SectionText>
                 Getting a family doctor in Moncton may take some time. Through
                 Service NB you can register to be assigned a family doctor. If
@@ -300,8 +299,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="10s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 11: Register your children in school
+              <SectionTitle step="11">
+                Register Children in School
               </SectionTitle>
               <SectionText>
                 To register your children in school, contact the school where
@@ -333,8 +332,8 @@ const Guide = () => {
         <BounceInLeftAnimationIcon delay="11s">
           <Section>
             <SectionTextWrapper>
-              <SectionTitle>
-                Step 12: Additional support you might apply for
+              <SectionTitle step="12">
+                Additional Support Resources
               </SectionTitle>
               <SectionText>
                 <span>Visit Magma/Cafi</span>: Both of these organizations can
@@ -413,138 +412,165 @@ const fadeIn = keyframes`
 `;
 
 const AboutWrapper = styled.div`
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 50px 20px;
-  font-family: "Raleway", sans-serif;
-  border-radius: 12px;
-  background: var(--surface);
-  border: 1px solid var(--surface-border);
-
-  @media (max-width: 1040px) {
-    padding: 30px 15px;
-    margin: 15px auto;
-  }
+  max-width: 1000px;
+  margin: 16px auto;
+  padding: 32px 20px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--background);
+  min-height: calc(100vh - 120px);
 
   @media (max-width: 768px) {
-    padding: 20px 12px;
-    margin: 10px;
-    border-radius: 8px;
+    padding: 20px 16px;
+    margin: 12px;
   }
 
   @media (max-width: 480px) {
-    padding: 15px 10px;
-    margin: 5px;
+    padding: 16px 12px;
+    margin: 8px;
   }
 `;
 
 const Header = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 48px;
+  background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+  border-radius: 16px;
+  padding: 40px 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
 
-  @media (max-width: 1040px) {
-    flex-direction: column;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
   }
 
-  @media (max-width: 480px) {
-    margin-bottom: 20px;
+  @media (max-width: 768px) {
+    margin-bottom: 32px;
+    padding: 32px 20px;
   }
 `;
 
 const TitleWrapper = styled.div`
-  text-align: left;
-  margin-left: 30px;
-  flex: 1;
-
-  @media (max-width: 1040px) {
-    margin-left: 0;
-    text-align: center;
-  }
+  position: relative;
+  z-index: 1;
 `;
 
 const AboutTitle = styled.h1`
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 15px;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  margin-bottom: 16px;
   line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
 const AboutSubtitle = styled.h2`
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
   font-weight: 400;
-  color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.5;
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto;
 `;
 
 const AboutContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 `;
 
 const Section = styled.div`
-  margin: 0px 15px;
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: start;
-  min-height: 120px;
-  animation: ${fadeIn} 2s ease-in;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  animation: ${fadeIn} 0.6s ease-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 18px;
-    margin: 0px 8px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 15px;
-    margin: 0px 5px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-start);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     border-color: var(--primary-start);
+
+    &::before {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
   }
 `;
 
 const SectionTextWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex-grow: 1;
-  flex-basis: 0;
-  min-width: 0;
-
-  @media (max-width: 768px) {
-    margin-top: 10px;
-  }
+  position: relative;
+  z-index: 1;
 `;
 
 const SectionTitle = styled.h3`
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 600;
   color: var(--text);
   margin-bottom: 12px;
-  line-height: 1.3;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &::before {
+    content: '${props => props.step}';
+    background: var(--primary-start);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
 `;
 
 const SectionText = styled.p`
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text);
+  color: var(--muted);
   margin: 0;
 
   & span {
     font-weight: 600;
-    color: var(--primary-start);
+    color: var(--text);
+    background: rgba(var(--primary-rgb), 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
   }
 `;
 
@@ -552,15 +578,27 @@ const StyledAnchor = styled.a`
   font-weight: 600;
   color: var(--primary-start);
   text-decoration: none;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   margin: 0 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(var(--primary-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
+
+  &::after {
+    content: '↗';
+    font-size: 0.8em;
+    opacity: 0.7;
+  }
 
   &:hover {
-    background-color: var(--primary-start);
-    color: var(--pill-text);
+    background: var(--primary-start);
+    color: white;
     transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(var(--primary-rgb), 0.3);
   }
 `;
 
