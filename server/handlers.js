@@ -112,7 +112,6 @@ const createCompany = async (req, res) => {
 const createUser = async (req, res) => {
   const { user } = req.body;
   const { userId, name, nickname, image, email } = user;
-  await client.connect();
 
   try {
     const existingUser = await users.findOne({ _id: userId });

@@ -28,7 +28,6 @@ const createNewUser = async (req, res) => {
       companyName,
       jobTitle,
     } = req.body;
-    await client.connect();
 
     const currentDate = new Date();
     const formattedDate = `${String(currentDate.getDate()).padStart(

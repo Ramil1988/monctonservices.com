@@ -238,6 +238,7 @@ const ProfileWrapper = styled.div`
   max-width: 1200px;
   color: var(--text);
   gap: 16px;
+  min-height: calc(100vh - 120px);
 
   @media (max-width: 768px) {
     padding: 8px;

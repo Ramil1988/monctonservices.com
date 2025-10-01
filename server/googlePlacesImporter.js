@@ -158,7 +158,6 @@ const importCompaniesFromGoogle = async (req, res) => {
     }
 
     const query = `${mapping.query} in ${city}`;
-    await client.connect();
     const pages = Math.min(parseInt(req.query.pages || "1", 10) || 1, 3);
     const maxResults = parseInt(req.query.max || MAX_PLACES_RESULTS || "20", 10) || 20;
     const results = await fetchTextSearchAllPages(query, pages, maxResults);
@@ -440,7 +439,6 @@ module.exports.discoverPlaceTypes = async (req, res) => {
       .map((t) => ({ id: t, name: humanizeType(t), query: t.replace(/_/g, " ") }));
     // Persist to Mongo so clients can read from DB rather than Google
     try {
-      await client.connect();
       const existingDoc = await serviceTypesCol.findOne({ _id: city });
       const existing = Array.isArray(existingDoc?.types) ? existingDoc.types : [];
       let toStore = data;
@@ -471,7 +469,6 @@ module.exports.discoverPlaceTypes = async (req, res) => {
 module.exports.getServiceTypesForCity = async (req, res) => {
   try {
     const city = req.query.city || IMPORT_CITY || "Moncton, NB";
-    await client.connect();
     const doc = await serviceTypesCol.findOne({ _id: city });
     const types = doc?.types || [];
     return res.status(200).json({ status: 200, city, data: types });
